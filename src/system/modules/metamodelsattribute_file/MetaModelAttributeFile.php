@@ -30,7 +30,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function getSQLDataType()
+	public function getSQLDataType()
 	{
 		return 'varchar(255) NOT NULL default \'\'';
 	}
