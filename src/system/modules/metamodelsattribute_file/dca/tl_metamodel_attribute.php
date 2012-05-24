@@ -3,7 +3,7 @@
  * Table tl_metamodel_attribute 
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simplefield_'] = array
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simpleattribute_'] = array
 (
 	'+advanced' => array('file_showImage', 'file_customFiletree', 'file_multiple'),
 	'+backenddisplay'	=> array('-width50'),
