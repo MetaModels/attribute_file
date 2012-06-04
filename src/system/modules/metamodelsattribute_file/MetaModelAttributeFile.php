@@ -38,7 +38,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function getAttributeSettingNames()
+	public function getAttributeSettingNames()
 	{
 		return array_merge(parent::getAttributeSettingNames(), array(
 			'parentCheckbox',
