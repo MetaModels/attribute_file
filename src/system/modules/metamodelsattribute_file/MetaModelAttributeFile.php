@@ -34,6 +34,9 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 	protected $auxDate = array();
 	protected $multiSRC = array();
 
+	protected $arrFiles = array();
+	protected $arrSource = array();
+
 	/**
 	 * Parse the meta.txt file of a folder. This is an altered version and differs from the
 	 * Contao core funtion as it also checks the fallback language.
@@ -81,11 +84,6 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 
 	protected function renderFile($strFile, $objSettings, $strId)
 	{
-		if (!file_exists(TL_ROOT . '/' . $strFile))
-		{
-			return;
-		}
-
 		$allowedDownload = trimsplit(',', strtolower($GLOBALS['TL_CONFIG']['allowedDownload']));
 		if (strlen($this->get('file_validFileTypes')))
 		{
@@ -220,102 +218,59 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		return $arrFieldDef;
 	}
 
-	/**
-	 * when rendered via a template, this returns the values to be stored in the template.
-	 */
-	protected function prepareTemplate(MetaModelTemplate $objTemplate, $arrRowData, $objSettings = null)
+	protected function sortFiles()
 	{
-		parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
-
-		$strId = $this->getMetaModel()->getTableName() . '.' . $arrRowData['id'];
-
-		$this->auxDate = array();
-
-		$arrFiles = array();                
-                                
-                if($arrRowData[$this->getColName()] == '')
-                {
-                    $arrRowData[$this->getColName()] = array();
-                }
-                else if(!is_array($arrRowData[$this->getColName()]))
-                {
-                    $arrRowData[$this->getColName()] =  array($arrRowData[$this->getColName()]);
-                }
-
-		foreach ($arrRowData[$this->getColName()] as $strFile)
-		{
-			if (is_file(TL_ROOT . '/' . $strFile))
-			{
-				$arrFiles[] = $strFile;
-				$arrSource[] = $this->renderFile($strFile, $objSettings, $strId);
-			}
-			else if (is_dir(TL_ROOT . '/' . $strFile))
-			{
-				// Folders
-				$arrSubFiles = scan(TL_ROOT . '/' . $strFile);
-				foreach ($arrSubFiles as $strSubfile)
-				{
-					if (is_file(TL_ROOT . '/' . $strFile . '/' . $strSubfile))
-					{
-						$arrFiles[] = $strFile . '/' . $strSubfile;
-						$arrSource[] = $this->renderFile($strFile . '/' . $strSubfile, $objSettings, $strId);
-					}
-				}
-			}
-		}
-
 		$files = array();
 		$source = array();
-		$values = array();
 
 		switch ($objSettings->file_sortBy)
 		{
 			default:
 			case 'name_asc':
-				uksort($arrFiles, 'basename_natcasecmp');
+				uksort($this->arrFiles, 'basename_natcasecmp');
 				break;
 
 			case 'name_desc':
-				uksort($arrFiles, 'basename_natcasercmp');
+				uksort($this->arrFiles, 'basename_natcasercmp');
 				break;
 
 			case 'date_asc':
-				array_multisort($arrFiles, SORT_NUMERIC, $this->auxDate, SORT_ASC);
+				array_multisort($this->arrFiles, SORT_NUMERIC, $this->auxDate, SORT_ASC);
 				break;
 
 			case 'date_desc':
-				array_multisort($arrFiles, SORT_NUMERIC, $this->auxDate, SORT_DESC);
+				array_multisort($this->arrFiles, SORT_NUMERIC, $this->auxDate, SORT_DESC);
 				break;
 
 			case 'meta':
 				foreach ($this->arrAux as $aux)
 				{
-					$k = array_search($aux, $arrFiles);
+					$k = array_search($aux, $this->arrFiles);
 					if ($k !== false)
 					{
-						$files[] = $arrFiles[$k];
-						$source[] = $arrSource[$k];
+						$files[] = $this->arrFiles[$k];
+						$source[] = $this->arrSource[$k];
 					}
 				}
 				break;
 
 			case 'random':
-				$keys = array_keys($arrFiles);
+				$keys = array_keys($this->arrFiles);
 				shuffle($keys);
 				foreach($keys as $key)
 				{
-					$files[$key] = $arrFiles[$key];
+					$files[$key] = $this->arrFiles[$key];
 				}
-				$arrFiles = $files;
+				$this->arrFiles = $files;
 				break;
 		}
 		if ($objSettings->file_sortBy != 'meta')
 		{
 			// re-sort the values
-			foreach($arrFiles as $k=>$v)
+			foreach($this->arrFiles as $k=>$v)
 			{
-				$files[] = $arrFiles[$k];
-				$source[] = $arrSource[$k];
+				$files[] = $this->arrFiles[$k];
+				$source[] = $this->arrSource[$k];
 			}
 		}
 
@@ -328,14 +283,62 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 				. ((($k % 2) == 0) ? ' even' : ' odd');
 		}
 
-		$objTemplate->files	= $files;
-		$objTemplate->src 	= $source;
+		$this->arrFiles = $files;
+		$this->arrSource = $source;
+	}
+
+	protected function handlePath($strPath, $objSettings, $strId)
+	{
+		if (is_file(TL_ROOT . '/' . $strPath))
+		{
+			$this->arrFiles[] = $strPath;
+			$this->arrSource[] = $this->renderFile($strPath, $objSettings, $strId);
+		}
+		else if (is_dir(TL_ROOT . '/' . $strPath))
+		{
+			// Folders
+			foreach (scan(TL_ROOT . '/' . $strPath) as $strSubfile)
+			{
+				$this->handlePath(TL_ROOT . '/' . $strPath . '/' . $strSubfile);
+			}
+		}
+	}
+
+	/**
+	 * when rendered via a template, this returns the values to be stored in the template.
+	 */
+	protected function prepareTemplate(MetaModelTemplate $objTemplate, $arrRowData, $objSettings = null)
+	{
+		parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
+
+		$strId = $this->getMetaModel()->getTableName() . '.' . $arrRowData['id'];
+
+		$this->auxDate = array();
+
+		$this->arrFiles  = array();
+		$this->arrSource = array();
+
+		if ($arrRowData[$this->getColName()])
+		{
+			foreach ($arrRowData[$this->getColName()] as $strFile)
+			{
+				$this->handlePath($strFile, $objSettings, $strId);
+			}
+			$this->sortFiles();
+		}
+
+		$objTemplate->files	= $this->arrFiles;
+		$objTemplate->src 	= $this->arrSource;
 
 		$this->arrMeta = array();
 		$this->arrAux = array();
 		$this->arrProcessed = array();
 		$this->auxDate = array();
 		$this->multiSRC = array();
+
+		$this->arrFiles = array();
+		$this->arrSource = array();
+
 	}
 }
 
