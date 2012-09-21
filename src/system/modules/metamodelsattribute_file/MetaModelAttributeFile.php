@@ -231,7 +231,16 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 
 		$this->auxDate = array();
 
-		$arrFiles = array();
+		$arrFiles = array();                
+                                
+                if($arrRowData[$this->getColName()] == '')
+                {
+                    $arrRowData[$this->getColName()] = array();
+                }
+                else if(!is_array($arrRowData[$this->getColName()]))
+                {
+                    $arrRowData[$this->getColName()] =  array($arrRowData[$this->getColName()]);
+                }
 
 		foreach ($arrRowData[$this->getColName()] as $strFile)
 		{
