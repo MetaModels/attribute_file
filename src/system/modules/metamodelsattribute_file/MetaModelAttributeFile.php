@@ -320,9 +320,16 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 
 		if ($arrRowData[$this->getColName()])
 		{
-			foreach ($arrRowData[$this->getColName()] as $strFile)
+			if (is_array($arrRowData[$this->getColName()]))
 			{
-				$this->handlePath($strFile, $objSettings, $strId);
+				foreach ($arrRowData[$this->getColName()] as $strFile)
+				{
+					$this->handlePath($strFile, $objSettings, $strId);
+				}
+			}
+			else
+			{
+				$this->handlePath($arrRowData[$this->getColName()], $objSettings, $strId);
 			}
 			$this->sortFiles();
 		}
