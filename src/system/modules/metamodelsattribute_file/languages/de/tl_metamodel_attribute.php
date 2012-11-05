@@ -21,6 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * Fields
  */
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['file']        = 'Datei';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree'] = array('Dateibaum anpassen', 'Mit dieser Option können Sie individuelle Optionen für die Einbindung von Dateien erstellen.');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder']   = array('Wurzelverzeichnis', 'Wählen Sie das Verzeichnis aus, das Nutzern als Wurzelverzeichnis im Dateibaum dienen soll, wenn sie in der Dateiauswahl eine Auswahl treffen.');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes'] = array('Gültige Dateitypen', 'Bitte geben Sie eine kommagetrennte Liste der Dateitypen ein, die für dieses Feld gültig sind.');
