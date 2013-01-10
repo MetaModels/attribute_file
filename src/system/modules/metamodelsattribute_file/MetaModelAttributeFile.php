@@ -189,9 +189,9 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getFieldDefinition()
+	public function getFieldDefinition($arrOverrides = array())
 	{
-		$arrFieldDef=parent::getFieldDefinition();
+		$arrFieldDef=parent::getFieldDefinition($arrOverrides);
 		$arrFieldDef['inputType'] = 'fileTree';
 
 		$arrFieldDef['eval']['files'] = true;
