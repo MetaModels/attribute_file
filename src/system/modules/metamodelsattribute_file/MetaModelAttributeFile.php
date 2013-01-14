@@ -183,6 +183,8 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 			'file_uploadFolder',
 			'file_validFileTypes',
 			'file_filesOnly',
+			'filterable',
+			'searchable',
 		));
 	}
 
