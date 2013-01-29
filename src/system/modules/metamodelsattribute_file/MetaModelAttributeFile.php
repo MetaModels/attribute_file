@@ -185,6 +185,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 			'file_filesOnly',
 			'filterable',
 			'searchable',
+			'mandatory',
 		));
 	}
 
