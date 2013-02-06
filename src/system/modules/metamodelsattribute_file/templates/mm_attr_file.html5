@@ -9,7 +9,9 @@
 	<?php endif; ?>
 <?php endif; ?>
 <?php if ($this->settings->file_showImage): ?>
-	<?php echo $this->generateImage($arrFile['src'], $arrFile['caption']); ?>
+	<?php if ($arrFile['isGdImage']): ?>
+		<?php echo $this->generateImage($arrFile['src'], $arrFile['caption']); ?>
+	<?php endif; ?>
 <?php else: ?>
 	<img src="<?php echo $arrFile['icon']; ?>" alt="" /> <?php echo $arrFile['alt']?$arrFile['alt']:$arrFile['file']; ?> <?php echo $arrFile['sizetext']; ?>
 <?php endif; ?>

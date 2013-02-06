@@ -93,11 +93,10 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 
 		$objFile = new File($strFile);
 		// check if we want to show as image or if the file is allowed for download.
-		if (!(in_array($objFile->extension, $allowedDownload)) || $showImage)
+		if (!(in_array($objFile->extension, $allowedDownload) || $objSettings->file_showImage))
 		{
 			return;
 		}
-
 
 		// TODO: maybe we want to provide a better option to send the files here as in Catalog v2.0 but for the moment this is the best position.
 		// send the file to browser if download is requested.
@@ -136,7 +135,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		);
 
 		// images
-		if ($objFile->isGdImage)
+		if ($arrSource['isGdImage'] = $objFile->isGdImage)
 		{
 			$intWidth = $objSettings->file_imageSize[0] ? $objSettings->file_imageSize[0] : '';
 			$intHeight = $objSettings->file_imageSize[1] ? $objSettings->file_imageSize[1] : '';
@@ -302,7 +301,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 			// Folders
 			foreach (scan(TL_ROOT . '/' . $strPath) as $strSubfile)
 			{
-				$this->handlePath(TL_ROOT . '/' . $strPath . '/' . $strSubfile);
+				$this->handlePath($strPath . '/' . $strSubfile, $objSettings, $strId);
 			}
 		}
 	}
