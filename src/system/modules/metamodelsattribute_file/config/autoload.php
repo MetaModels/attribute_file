@@ -10,17 +10,25 @@
  * @package    MetaModels
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file'] = array
+/**
+ * Register the classes
+ */
+ClassLoader::addClasses(array
 (
-	'presentation' => array(
-		'tl_class',
-	),
-	'functions'  => array(
-		'mandatory',
-	)
-);
+	'MetaModelAttributeFile'              => 'system/modules/metamodelsattribute_file/MetaModelAttributeFile',
+));
+
+
+/**
+ * Register the templates
+ */
+TemplateLoader::addFiles(array
+(
+	'mm_attr_file'              => 'system/modules/metamodelsattribute_file/templates',
+));
