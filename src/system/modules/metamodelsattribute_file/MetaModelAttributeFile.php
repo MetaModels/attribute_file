@@ -78,6 +78,13 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		}
 		$this->arrProcessed[] = $strPath;
 	}
+	
+	public function getDownloadLink($strFile) {
+		$strRequest = Environment::getInstance()->request;
+		$strRequest .= strpos($strRequest, '?') === false ? '?' : '&';
+		$strRequest .= 'file=' . urlencode($strFile);
+		return $strRequest;
+	}
 
 	protected function renderFile($strFile, $objSettings, $strId)
 	{
@@ -127,8 +134,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 			'icon' => $strIcon,
 			'size' => $objFile->filesize,
 			'sizetext' => sprintf('(%s)', MetaModelController::getReadableSize($objFile->filesize, 2)),
-			'url' => Environment::getInstance()->request . (($GLOBALS['TL_CONFIG']['disableAlias'] || !$GLOBALS['TL_CONFIG']['rewriteURL']
-&& count($_GET) || strlen($_GET['page'])) ? '&amp;' : '?'). 'file=' . MetaModelController::urlEncode($strFile)
+			'url' => specialchars($this->getDownloadLink($strFile))
 		);
 
 		// images
