@@ -78,10 +78,22 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		}
 		$this->arrProcessed[] = $strPath;
 	}
-	
-	public function getDownloadLink($strFile) {
+
+	/**
+	 * Generate an URL for downloading the given file.
+	 *
+	 * @param string $strFile The file that shall be downloaded.
+	 *
+	 * @return string
+	 */
+	public function getDownloadLink($strFile)
+	{
 		$strRequest = Environment::getInstance()->request;
-		$strRequest .= strpos($strRequest, '?') === false ? '?' : '&';
+		if (($intPos = strpos($strRequest, '?')) !== false)
+		{
+			$strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
+		}
+		$strRequest .= (strpos($strRequest, '?') === false ? '?' : '&');
 		$strRequest .= 'file=' . urlencode($strFile);
 		return $strRequest;
 	}
@@ -125,16 +137,16 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		$strIcon = 'system/themes/' . MetaModelController::getTheme() . '/images/' . $objFile->icon;
 		$arrSource = array
 		(
-			'file'	=> $strFile,
-			'mtime'	=> $objFile->mtime,
-			'alt'	=> $strAltText,
-			'caption' => (strlen($arrMeta[2]) ? $arrMeta[2] : ''),
-			'title' => $strBasename,
+			'file'     => $strFile,
+			'mtime'    => $objFile->mtime,
+			'alt'      => $strAltText,
+			'caption'  => (strlen($arrMeta[2]) ? $arrMeta[2] : ''),
+			'title'    => $strBasename,
 			'metafile' => $arrMeta,
-			'icon' => $strIcon,
-			'size' => $objFile->filesize,
+			'icon'     => $strIcon,
+			'size'     => $objFile->filesize,
 			'sizetext' => sprintf('(%s)', MetaModelController::getReadableSize($objFile->filesize, 2)),
-			'url' => specialchars($this->getDownloadLink($strFile))
+			'url'      => specialchars($this->getDownloadLink($strFile))
 		);
 
 		// images
