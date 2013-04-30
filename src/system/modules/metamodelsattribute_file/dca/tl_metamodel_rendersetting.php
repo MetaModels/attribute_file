@@ -36,7 +36,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = arra
 	'inputType'               => 'select',
 	'options'                 => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'meta', 'random'),
 	'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array(
+		'tl_class'            => 'w50',
+		'chosen'              => true,
+	)
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = array
@@ -50,7 +53,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = a
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('submitOnChange'=>true)
+	'eval'                    => array(
+		'submitOnChange'      => true, 
+		'tl_class'            => 'clr'
+	)
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = array
@@ -60,7 +66,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = a
 	'inputType'               => 'imageSize',
 	'options'                 => $GLOBALS['TL_CROP'],
 	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-	'eval'                    => array('rgxp'=>'digit', 'nospace'=>true, 'helpwizard'=>true, 'tl_class'=>'w50')
+	'eval'                    => array(
+		'rgxp'                => 'digit', 
+		'nospace'             => true, 
+		'helpwizard'          => true, 
+		'tl_class'            => 'w50'
+	)
 );
-
-?>
