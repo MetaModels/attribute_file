@@ -47,6 +47,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 			'file_uploadFolder',
 			'file_validFileTypes',
 			'file_filesOnly',
+			'file_filePicker',
 			'filterable',
 			'searchable',
 			'mandatory',
@@ -80,6 +81,18 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 				$arrFieldDef['eval']['filesOnly'] = true;
 			}
 		}
+		
+		// Set all options for the file picker.
+		if($this->get('file_filePicker'))
+		{
+			$arrFieldDef['inputType'] = 'text';
+			$arrFieldDef['eval']['tl_class'] .= ' wizard';
+			$arrFieldDef['wizard'] = array
+			(
+				array('TableMetaModelsAttributeFile', 'filePicker')
+			);
+		}
+		
 		return $arrFieldDef;
 	}
 
