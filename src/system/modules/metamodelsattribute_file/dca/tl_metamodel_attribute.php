@@ -20,13 +20,18 @@
  */
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simpleattribute_'] = array
 (
-	'+advanced' => array('file_showImage', 'file_customFiletree', 'file_multiple', 'file_filePicker'),
+	'+advanced' => array('file_showImage', 'file_customFiletree', 'file_multiple'),
 	'+backenddisplay'	=> array('-width50'),
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = array
 (
 	'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly'
+);
+
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubselectpalettes']['file_multiple']['!1'] = array
+(
+	'file_filePicker'
 );
 
 /**
@@ -43,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = array
