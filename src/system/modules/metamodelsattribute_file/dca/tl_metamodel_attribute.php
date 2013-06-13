@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr')
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = array
