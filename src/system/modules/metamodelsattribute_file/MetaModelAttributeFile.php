@@ -83,7 +83,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		}
 		
 		// Set all options for the file picker.
-		if($this->get('file_filePicker'))
+		if($this->get('file_filePicker') && !$this->get('file_multiple'))
 		{
 			$arrFieldDef['inputType'] = 'text';
 			$arrFieldDef['eval']['tl_class'] .= ' wizard';
