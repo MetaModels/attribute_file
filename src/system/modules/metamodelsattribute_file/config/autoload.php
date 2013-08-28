@@ -22,6 +22,7 @@
 ClassLoader::addClasses(array
 (
 	'MetaModelAttributeFile'              => 'system/modules/metamodelsattribute_file/MetaModelAttributeFile',
+	'TableMetaModelsAttributeFile'        => 'system/modules/metamodelsattribute_file/TableMetaModelsAttributeFile',
 ));
 
 
