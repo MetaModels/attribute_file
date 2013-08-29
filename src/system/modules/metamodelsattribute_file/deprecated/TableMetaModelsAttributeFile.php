@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The MetaModels extension allows the creation of multiple collections of custom items,
  * each with its own unique set of selectable attributes, with attribute extendability.
@@ -8,16 +7,12 @@
  *
  * PHP version 5
  * @package    MetaModels
- * @subpackage AttributeFile
+ * @subpackage Deprecated
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
  */
 
-$GLOBALS['METAMODELS']['attributes']['file']['class'] = 'MetaModels\Attribute\File\File';
-$GLOBALS['METAMODELS']['attributes']['file']['image'] = 'system/modules/metamodelsattribute_file/html/file.png';
-
-// non composerized Contao 2.X autoload support.
-$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__);
-$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'deprecated';
+trigger_error('Usage of deprecated '. __FILE__, E_USER_DEPRECATED);
+class_alias('MetaModels\Dca\AttributeFile', 'TableMetaModelsAttributeFile');

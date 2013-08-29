@@ -15,19 +15,22 @@
  * @filesource
  */
 
+namespace MetaModels\Attribute\File;
+
+use MetaModels\Attribute\BaseSimple;
+use MetaModels\Helper\ContaoController;
+use MetaModels\Render\Template;
+use MetaModels\Helper\ToolboxFile;
+
 /**
- * This is the MetaModelAttribute class for handling file fields.
+ * This is the MetaModel attribute class for handling file fields.
  *
  * @package    MetaModels
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class MetaModelAttributeFile extends MetaModelAttributeSimple
+class File extends BaseSimple
 {
-	/////////////////////////////////////////////////////////
-	// interface IMetaModelAttribute
-	/////////////////////////////////////////////////////////
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -81,7 +84,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 				$arrFieldDef['eval']['filesOnly'] = true;
 			}
 		}
-		
+
 		// Set all options for the file picker.
 		if($this->get('file_filePicker') && !$this->get('file_multiple'))
 		{
@@ -89,18 +92,17 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 			$arrFieldDef['eval']['tl_class'] .= ' wizard';
 			$arrFieldDef['wizard'] = array
 			(
-				array('TableMetaModelsAttributeFile', 'filePicker')
+				array('MetaModels\Dca\AttributeFile', 'filePicker')
 			);
 		}
-		
+
 		return $arrFieldDef;
 	}
 
 	/**
 	 * {@inheritdoc}
-	 *
 	 */
-	protected function prepareTemplate(MetaModelTemplate $objTemplate, $arrRowData, $objSettings = null)
+	protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
 	{
 		parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
