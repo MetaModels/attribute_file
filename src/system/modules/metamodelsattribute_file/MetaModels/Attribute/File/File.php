@@ -132,12 +132,26 @@ class File extends BaseSimple
 			{
 				foreach ($arrRowData[$this->getColName()] as $strFile)
 				{
-					$objToolbox->addPath($strFile);
+					if (version_compare(VERSION, '3.0', '<'))
+					{
+						$objToolbox->addPath($strFile);
+					}
+					else
+					{
+						$objToolbox->addPathById($strFile);
+					}
 				}
 			}
 			else
 			{
-				$objToolbox->addPath($arrRowData[$this->getColName()]);
+				if (version_compare(VERSION, '3.0', '<'))
+				{
+					$objToolbox->addPath($arrRowData[$this->getColName()]);
+				}
+				else
+				{
+					$objToolbox->addPathById($arrRowData[$this->getColName()]);
+				}
 			}
 		}
 
