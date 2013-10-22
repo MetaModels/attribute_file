@@ -64,6 +64,7 @@ class MetaModelAttributeFile extends MetaModelAttributeSimple
 		$arrFieldDef['inputType']          = 'fileTree';
 		$arrFieldDef['eval']['files']      = true;
 		$arrFieldDef['eval']['fieldType']  = $this->get('file_multiple') ? 'checkbox' : 'radio';
+		$arrFieldDef['eval']['multiple']   = $this->get('file_multiple') ? true : false;
 		$arrFieldDef['eval']['extensions'] = $GLOBALS['TL_CONFIG']['allowedDownload'];
 
 		if ($this->get('file_customFiletree'))
