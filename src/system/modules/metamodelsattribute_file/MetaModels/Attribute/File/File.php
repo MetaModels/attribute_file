@@ -36,7 +36,14 @@ class File extends BaseSimple
 	 */
 	public function getSQLDataType()
 	{
-		return 'text NULL';
+		if(version_compare(VERSION, '3.2', '<'))
+		{
+			return 'text NULL';
+		}
+		else
+		{
+			return 'blob NULL';
+		}
 	}
 
 	/**
