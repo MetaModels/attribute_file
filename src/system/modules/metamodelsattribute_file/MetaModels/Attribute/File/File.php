@@ -76,10 +76,10 @@ class File extends BaseSimple
 		if (version_compare(VERSION, '3.0', '>='))
 		{
 			$arrReturn = array();
-			foreach ($arrValues as $intValue)
+			foreach ($arrValues as $mixValue)
 			{
-				$arrReturn['value'][]	 = $intValue;
-				$arrReturn['path'][]	 = \FilesModel::findByPk($intValue)->path;
+				$arrReturn['value'][]	 = (version_compare(VERSION, '3.2', '>=')) ? \String::binToUuid($mixValue) : $mixValue;
+				$arrReturn['path'][]	 = \FilesModel::findByPk($mixValue)->path;
 			}
 			$arrValues = $arrReturn;
 		}
