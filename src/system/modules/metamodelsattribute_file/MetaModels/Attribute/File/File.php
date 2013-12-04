@@ -65,6 +65,29 @@ class File extends BaseSimple
 	}
 
 	/**
+	 * Take the raw data from the DB column and unserialize it.
+	 * 
+	 * @param type $value
+	 */
+	public function unserializeData($value)
+	{
+		$arrValues = deserialize($value, true);
+
+		if (version_compare(VERSION, '3.0', '>='))
+		{
+			$arrReturn = array();
+			foreach ($arrValues as $intValue)
+			{
+				$arrReturn['value'][]	 = $intValue;
+				$arrReturn['path'][]	 = \FilesModel::findByPk($intValue)->path;
+			}
+			$arrValues = $arrReturn;
+		}
+
+		return $arrValues;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function getFieldDefinition($arrOverrides = array())
@@ -124,6 +147,21 @@ class File extends BaseSimple
 		}
 
 		return $arrFieldDef;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function valueToWidget($varValue)
+	{
+		if (version_compare(VERSION, '3.0', '>='))
+		{
+			return serialize($varValue['value']);
+		}
+		else
+		{
+			return parent::valueToWidget($varValue);
+		}
 	}
 
 	/**
