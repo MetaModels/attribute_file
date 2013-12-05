@@ -191,32 +191,14 @@ class File extends BaseSimple
 			$objToolbox->setResizeImages($objSettings->get('file_imageSize'));
 		}
 
-		if ($arrRowData[$this->getColName()])
+		$mixFiles = $arrRowData[$this->getColName()];
+		if ($mixFiles)
 		{
-			if (is_array($arrRowData[$this->getColName()]))
+			if (version_compare(VERSION, '3.2', '<'))
 			{
-				foreach ($arrRowData[$this->getColName()] as $strFile)
-				{
-					if (version_compare(VERSION, '3.0', '<'))
-					{
-						$objToolbox->addPath($strFile);
-					}
-					else
-					{
-						$objToolbox->addPathById($strFile);
-					}
-				}
-			}
-			else
-			{
-				if (version_compare(VERSION, '3.0', '<'))
-				{
-					$objToolbox->addPath($arrRowData[$this->getColName()]);
-				}
-				else
-				{
-					$objToolbox->addPathById($arrRowData[$this->getColName()]);
-				}
+				$this->addFilesToToolboxLegacy($mixFiles, $objToolbox);
+			} else {
+				$this->addFilesToToolbox($mixFiles, $objToolbox);
 			}
 		}
 
@@ -226,4 +208,67 @@ class File extends BaseSimple
 		$objTemplate->files = $arrData['files'];
 		$objTemplate->src   = $arrData['source'];
 	}
+
+    /**
+     * Add files to $objToolbox for Contao < 3.2
+     * 
+     * @param string|array $arrFiles
+     * @param ToolboxFile  $objToolbox
+     * 
+     * @return void
+     */
+    protected function addFilesToToolboxLegacy($arrFiles, $objToolbox)
+    {
+        if (is_array($arrFiles))
+        {
+            foreach ($arrFiles as $strFile)
+            {
+                $this->addSingleFileToToolbox($strFile, $objToolbox);
+            }
+        }
+        else
+        {
+            $this->addSingleFileToToolbox($arrFiles, $objToolbox);
+        }
+    }
+
+    /**
+     * Add files to $objToolbox
+     * 
+     * @param string|array $arrFiles
+     * @param ToolboxFile  $objToolbox
+     * 
+     * @return void
+     */
+    protected function addFilesToToolbox($arrFiles, $objToolbox)
+    {
+        if (empty($arrFiles['value'])) {
+            return;
+        }
+
+        $fileUuids = $arrFiles['value'];
+        foreach ($fileUuids as $uuid) {
+            $this->addSingleFileToToolbox($uuid, $objToolbox);
+        }
+    }
+
+    /**
+     * Add a single file to $objToolbox
+     * 
+     * @param string      $strFile
+     * @param ToolboxFile $objToolbox
+     * 
+     * @return void
+     */
+    protected function addSingleFileToToolbox($strFile, $objToolbox)
+    {
+        if (version_compare(VERSION, '3.0', '<'))
+        {
+            $objToolbox->addPath($strFile);
+        }
+        else
+        {
+            $objToolbox->addPathById($strFile);
+        }
+    }
 }
