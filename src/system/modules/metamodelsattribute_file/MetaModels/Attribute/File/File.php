@@ -193,7 +193,21 @@ class File extends BaseSimple
 
 		if ($arrRowData[$this->getColName()])
 		{
-			if (is_array($arrRowData[$this->getColName()]))
+			if (isset($arrRowData[$this->getColName()]['value']))
+			{
+				foreach ($arrRowData[$this->getColName()]['value'] as $strFile)
+				{
+					if (version_compare(VERSION, '3.0', '<'))
+					{
+						$objToolbox->addPath($strFile);
+					}
+					else
+					{
+						$objToolbox->addPathById($strFile);
+					}
+				}
+			}
+			else if (is_array($arrRowData[$this->getColName()]))
 			{
 				foreach ($arrRowData[$this->getColName()] as $strFile)
 				{
