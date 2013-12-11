@@ -38,7 +38,9 @@ class AttributeFile extends \Backend
 	{
 		if(version_compare(VERSION,'3.1', '>=')){
 			$currentField = $dc->getEnvironment()->getCurrentModel()->getItem()->get($dc->field);
-			return ' <a href="' . \Environment::getInstance()->base . 'contao/file.php?do='.\Input::get('do').'&amp;table='.$dc->table.'&amp;field='.$dc->field . '_' . $dc->id . '&amp;value='.$currentField['path'][0].'" title="'.specialchars(str_replace("'", "\\'", $GLOBALS['TL_LANG']['MSC']['filepicker'])).'" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\''.specialchars($GLOBALS['TL_LANG']['MOD']['files'][0]).'\',\'url\':this.href,\'id\':\''.$dc->field.'\',\'tag\':\'ctrl_'.$dc->field . '_' . $dc->id . ((\Input::get('act') == 'editAll') ? '_' . $dc->id : '').'\',\'self\':this});return false">' . \Image::getHtml('pickfile.gif', $GLOBALS['TL_LANG']['MSC']['filepicker'], 'style="vertical-align:top;cursor:pointer"') . '</a>';
+			//use 'b' as an id when creating a new item
+			$strId = ($dc->id) ? $dc->id : 'b';
+			return ' <a href="' . \Environment::getInstance()->base . 'contao/file.php?do='.\Input::get('do').'&amp;table='.$dc->table.'&amp;field='.$dc->field . '_' . $strId . '&amp;value='.$currentField['path'][0].'" title="'.specialchars(str_replace("'", "\\'", $GLOBALS['TL_LANG']['MSC']['filepicker'])).'" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\''.specialchars($GLOBALS['TL_LANG']['MOD']['files'][0]).'\',\'url\':this.href,\'id\':\''.$dc->field.'\',\'tag\':\'ctrl_'.$dc->field . '_' . $strId . ((\Input::get('act') == 'editAll') ? '_' . $strId : '').'\',\'self\':this});return false">' . \Image::getHtml('pickfile.gif', $GLOBALS['TL_LANG']['MSC']['filepicker'], 'style="vertical-align:top;cursor:pointer"') . '</a>';
 		}
 
 		// FIXME: inputName is not available in DC_General, we need a substitute.
