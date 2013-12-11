@@ -156,7 +156,23 @@ class File extends BaseSimple
 	{
 		if (version_compare(VERSION, '3.0', '>='))
 		{
-			return serialize($varValue['value']);
+			return ($this->get('file_multiple')) ? serialize($varValue['value']) : $this->convertValueToPath($varValue['value'][0]);
+		}
+		else
+		{
+			return parent::valueToWidget($varValue);
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function widgetToValue($varValue, $intId)
+	{
+		if (version_compare(VERSION, '3.0', '>=') && (!$this->get('file_multiple')))
+		{   
+			$objFile = \Dbafs::addResource($varValue);
+			return $objFile->id;
 		}
 		else
 		{
@@ -239,5 +255,20 @@ class File extends BaseSimple
 
 		$objTemplate->files = $arrData['files'];
 		$objTemplate->src   = $arrData['source'];
+	}
+
+	/**
+	 * Translate the file ID to file path
+	 */
+	protected function convertValueToPath($varValue)
+	{
+
+		$objFiles = \FilesModel::findByPk($varValue);
+
+		if ($objFiles !== null)
+		{
+			return $objFiles->path;
+		}        
+        return '';
 	}
 }
