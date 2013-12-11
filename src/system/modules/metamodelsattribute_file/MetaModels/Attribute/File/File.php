@@ -156,7 +156,12 @@ class File extends BaseSimple
 	{
 		if (version_compare(VERSION, '3.0', '>='))
 		{
-			return ($this->get('file_multiple')) ? serialize($varValue['value']) : $this->convertValueToPath($varValue['value'][0]);
+			if ($this->get('file_multiple'))
+			{
+				return serialize($varValue['value']);
+			}
+			$strValue = is_array($varValue['value']) ? $varValue['value'][0] : $varValue['value'];
+			return $this->convertValueToPath($strValue);
 		}
 		else
 		{
