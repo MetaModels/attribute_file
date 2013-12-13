@@ -156,12 +156,15 @@ class File extends BaseSimple
 	{
 		if (version_compare(VERSION, '3.0', '>='))
 		{
-			if ($this->get('file_multiple'))
+			if (!$this->get('file_filePicker'))
 			{
 				return serialize($varValue['value']);
 			}
+
 			$strValue = is_array($varValue['value']) ? $varValue['value'][0] : $varValue['value'];
-			return $this->convertValueToPath($strValue);
+
+			$objToolbox = new ToolboxFile();
+			return $objToolbox->convertValueToPath($strValue);
 		}
 		else
 		{
@@ -174,7 +177,7 @@ class File extends BaseSimple
 	 */
 	public function widgetToValue($varValue, $intId)
 	{
-		if (version_compare(VERSION, '3.0', '>=') && (!$this->get('file_multiple')))
+		if (version_compare(VERSION, '3.0', '>=') && ($this->get('file_filePicker')))
 		{   
 			$objFile = \Dbafs::addResource($varValue);
 			return $objFile->id;
@@ -262,18 +265,4 @@ class File extends BaseSimple
 		$objTemplate->src   = $arrData['source'];
 	}
 
-	/**
-	 * Translate the file ID to file path
-	 */
-	protected function convertValueToPath($varValue)
-	{
-
-		$objFiles = \FilesModel::findByPk($varValue);
-
-		if ($objFiles !== null)
-		{
-			return $objFiles->path;
-		}        
-        return '';
-	}
 }
