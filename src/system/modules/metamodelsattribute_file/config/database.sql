@@ -14,7 +14,7 @@
 CREATE TABLE `tl_metamodel_attribute` (
   `file_multiple` char(1) NOT NULL default '',
   `file_customFiletree` char(1) NOT NULL default '',
-  `file_uploadFolder` varchar(255) NOT NULL default '',
+  `file_uploadFolder` blob NULL,
   `file_validFileTypes` varchar(255) NOT NULL default '',
   `file_filesOnly` char(1) NOT NULL default '',
   `file_filePicker` char(1) NOT NULL default '',
