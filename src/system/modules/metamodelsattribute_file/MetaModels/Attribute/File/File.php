@@ -102,29 +102,39 @@ class File extends BaseSimple
 
 		if ($this->get('file_customFiletree'))
 		{
-			
-			// set root path of file chooser depending on contao version
-			if (version_compare(VERSION, '3.0', '<')){
-				if (strlen($this->get('file_uploadFolder')))
-				{    
-					$arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
-				}
-			}else{
-				// contao 3 stores the pk of the folder so we had to convert them to work
-				if (strlen($this->get('file_uploadFolder')) && is_numeric($this->get('file_uploadFolder')))
-				{    
-					$objFile = \FilesModel::findByPk($this->get('file_uploadFolder'));
-					$arrFieldDef['eval']['path'] = $objFile->path;
-				}
-			
-				// fallback if path is not a numeric value - i dont know if needed but i think its better
-				if (strlen($this->get('file_uploadFolder')) && !is_numeric($this->get('file_uploadFolder')))
+			if (strlen($this->get('file_uploadFolder')))
+			{
+				// set root path of file chooser depending on contao version
+				if (version_compare(VERSION, '3.0', '<'))
 				{
 					$arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
 				}
-			
+				else
+				{
+					// Contao 3.1.x use the numeric values.
+					if (is_numeric($this->get('file_uploadFolder')))
+					{
+						$objFile = \FilesModel::findByPk($this->get('file_uploadFolder'));
+					}
+					// If not numeric we have a Contao 3.2.x with a binary uuid value.
+					elseif (strlen($this->get('file_uploadFolder')) == 16)
+					{
+						$objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
+					}
+
+					// Check if we have a file.
+					if ($objFile != null)
+					{
+						$arrFieldDef['eval']['path'] = $objFile->path;
+					}
+					// Fallback.
+					else
+					{
+						$arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
+					}
+				}
 			}
-			
+
 			if (strlen($this->get('file_validFileTypes')))
 			{
 				$arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
