@@ -28,5 +28,5 @@ CREATE TABLE `tl_metamodel_rendersetting` (
   `file_sortBy` varchar(32) NOT NULL default '',
   `file_showLink` char(1) NOT NULL default '',
   `file_showImage` char(1) NOT NULL default '',
-  `file_imageSize` varchar(255) NOT NULL default '',
+  `file_imageSize` varchar(255) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
