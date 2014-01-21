@@ -67,7 +67,7 @@ class File extends BaseSimple
 	/**
 	 * Take the raw data from the DB column and unserialize it.
 	 * 
-	 * @param type $value
+	 * @param mixed $value
 	 */
 	public function unserializeData($value)
 	{
@@ -86,6 +86,50 @@ class File extends BaseSimple
 
 		return $arrValues;
 	}
+
+	/**
+	 * Take the data from the system and serialize it for the database.
+	 *
+	 * @param mixed $mixValues
+	 *
+	 * @return string An serialized array with binary data or a binary data.
+	 */
+	public function serializeData($mixValues)
+	{
+		if (version_compare(VERSION, '3.0', '>=') && is_array($mixValues))
+		{
+			$arrData = array();
+			// Check if we have a array with value and path.
+			if(array_key_exists('value', $mixValues))
+			{
+				foreach ($mixValues['value'] as $mixValue)
+				{
+					$arrData[] = \String::uuidToBin($mixValue);
+				}
+			}
+			// Else run just as a normal array.
+			else
+			{
+				foreach ($mixValues as $mixValue)
+				{
+					$arrData[] = $mixValue;
+				}
+			}
+
+			// Check single file or multiple file.
+			if ($this->get('file_multiple'))
+			{
+				$mixValues = serialize($arrData);
+			}
+			else
+			{
+				$mixValues = $arrData[0];
+			}
+		}
+
+		return $mixValues;
+	}
+
 
 	/**
 	 * {@inheritdoc}
