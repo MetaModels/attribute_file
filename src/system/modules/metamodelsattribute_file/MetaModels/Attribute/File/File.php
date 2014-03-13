@@ -212,6 +212,11 @@ class File extends BaseSimple
 		{
 			if (!$this->get('file_filePicker'))
 			{
+                if(!is_array($varValue))
+                {
+                    return $varValue;
+                }
+                
 				return serialize($varValue['value']);
 			}
 
