@@ -18,7 +18,6 @@
 namespace MetaModels\Attribute\File;
 
 use MetaModels\Attribute\BaseSimple;
-use MetaModels\Helper\ContaoController;
 use MetaModels\Render\Template;
 use MetaModels\Helper\ToolboxFile;
 
@@ -36,14 +35,12 @@ class File extends BaseSimple
 	 */
 	public function getSQLDataType()
 	{
-		if(version_compare(VERSION, '3.2', '<'))
+		if (version_compare(VERSION, '3.2', '<'))
 		{
 			return 'text NULL';
 		}
-		else
-		{
-			return 'blob NULL';
-		}
+
+		return 'blob NULL';
 	}
 
 	/**
@@ -68,6 +65,8 @@ class File extends BaseSimple
 	 * Take the raw data from the DB column and unserialize it.
 	 * 
 	 * @param mixed $value
+	 *
+	 * @return array
 	 */
 	public function unserializeData($value)
 	{
@@ -78,8 +77,8 @@ class File extends BaseSimple
 			$arrReturn = array();
 			foreach ($arrValues as $mixValue)
 			{
-				$arrReturn['value'][]	 = (version_compare(VERSION, '3.2', '>=')) ? \String::binToUuid($mixValue) : $mixValue;
-				$arrReturn['path'][]	 = \FilesModel::findByPk($mixValue)->path;
+				$arrReturn['value'][] = (version_compare(VERSION, '3.2', '>=')) ? \String::binToUuid($mixValue) : $mixValue;
+				$arrReturn['path'][]  = \FilesModel::findByPk($mixValue)->path;
 			}
 			$arrValues = $arrReturn;
 		}
@@ -90,7 +89,7 @@ class File extends BaseSimple
 	/**
 	 * Take the data from the system and serialize it for the database.
 	 *
-	 * @param mixed $mixValues
+	 * @param mixed $mixValues The data to serialize.
 	 *
 	 * @return string An serialized array with binary data or a binary data.
 	 */
@@ -100,7 +99,7 @@ class File extends BaseSimple
 		{
 			$arrData = array();
 			// Check if we have a array with value and path.
-			if(array_key_exists('value', $mixValues))
+			if (array_key_exists('value', $mixValues))
 			{
 				foreach ($mixValues['value'] as $mixValue)
 				{
@@ -130,13 +129,12 @@ class File extends BaseSimple
 		return $mixValues;
 	}
 
-
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getFieldDefinition($arrOverrides = array())
 	{
-		$arrFieldDef=parent::getFieldDefinition($arrOverrides);
+		$arrFieldDef = parent::getFieldDefinition($arrOverrides);
 
 		$arrFieldDef['inputType']          = 'fileTree';
 		$arrFieldDef['eval']['files']      = true;
@@ -148,13 +146,15 @@ class File extends BaseSimple
 		{
 			if (strlen($this->get('file_uploadFolder')))
 			{
-				// set root path of file chooser depending on contao version
+				// Set root path of file chooser depending on contao version.
 				if (version_compare(VERSION, '3.0', '<'))
 				{
 					$arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
 				}
 				else
 				{
+					$objFile = null;
+
 					// Contao 3.1.x use the numeric values.
 					if (is_numeric($this->get('file_uploadFolder')))
 					{
@@ -190,11 +190,11 @@ class File extends BaseSimple
 		}
 
 		// Set all options for the file picker.
-		if($this->get('file_filePicker') && !$this->get('file_multiple'))
+		if ($this->get('file_filePicker') && !$this->get('file_multiple'))
 		{
-			$arrFieldDef['inputType'] = 'text';
+			$arrFieldDef['inputType']         = 'text';
 			$arrFieldDef['eval']['tl_class'] .= ' wizard';
-			$arrFieldDef['wizard'] = array
+			$arrFieldDef['wizard']            = array
 			(
 				array('MetaModels\Dca\AttributeFile', 'filePicker')
 			);
@@ -202,7 +202,7 @@ class File extends BaseSimple
 
 		return $arrFieldDef;
 	}
-	
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -220,10 +220,8 @@ class File extends BaseSimple
 			$objToolbox = new ToolboxFile();
 			return $objToolbox->convertValueToPath($strValue);
 		}
-		else
-		{
-			return parent::valueToWidget($varValue);
-		}
+
+		return parent::valueToWidget($varValue);
 	}
 
 	/**
@@ -232,14 +230,12 @@ class File extends BaseSimple
 	public function widgetToValue($varValue, $intId)
 	{
 		if (version_compare(VERSION, '3.0', '>=') && ($this->get('file_filePicker')))
-		{   
+		{
 			$objFile = \Dbafs::addResource($varValue);
 			return $objFile->id;
 		}
-		else
-		{
-			return parent::valueToWidget($varValue);
-		}
+
+		return parent::valueToWidget($varValue);
 	}
 
 	/**
@@ -285,7 +281,7 @@ class File extends BaseSimple
 					}
 				}
 			}
-			else if (is_array($arrRowData[$this->getColName()]))
+			elseif (is_array($arrRowData[$this->getColName()]))
 			{
 				foreach ($arrRowData[$this->getColName()] as $strFile)
 				{
