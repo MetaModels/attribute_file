@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The MetaModels extension allows the creation of multiple collections of custom items,
  * each with its own unique set of selectable attributes, with attribute extendability.
@@ -23,9 +22,6 @@ ClassLoader::addClasses(array
 (
 	'MetaModels\Attribute\File\File'      => 'system/modules/metamodelsattribute_file/MetaModels/Attribute/File/File.php',
 	'MetaModels\Dca\AttributeFile'        => 'system/modules/metamodelsattribute_file/MetaModels/Dca/AttributeFile.php',
-
-	'MetaModelAttributeFile'              => 'system/modules/metamodelsattribute_file/deprecated/MetaModelAttributeFile',
-	'TableMetaModelsAttributeFile'        => 'system/modules/metamodelsattribute_file/deprecated/TableMetaModelsAttributeFile',
 ));
 
 
