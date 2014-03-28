@@ -16,16 +16,6 @@
  */
 
 /**
- * Register the classes
- */
-ClassLoader::addClasses(array
-(
-	'MetaModels\Attribute\File\File'      => 'system/modules/metamodelsattribute_file/MetaModels/Attribute/File/File.php',
-	'MetaModels\Dca\AttributeFile'        => 'system/modules/metamodelsattribute_file/MetaModels/Dca/AttributeFile.php',
-));
-
-
-/**
  * Register the templates
  */
 TemplateLoader::addFiles(array
