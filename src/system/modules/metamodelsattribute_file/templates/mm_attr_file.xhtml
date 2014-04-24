@@ -7,7 +7,7 @@ $strAlt   = ($arrFile['caption']) ? $arrFile['caption'] : '';
 <li class="<?php echo $arrFile['class']; ?>">
 	<?php if ($this->settings->get('file_showLink')): ?>
 		<?php if ($this->settings->get('file_showImage')): ?>
-			<a data-lightbox="<?php echo $arrFile['lb']; ?>" title="<?php echo $strTitle; ?>" href="<?php echo $arrFile['file']; ?>">
+			<a class="cboxElement" data-lightbox="<?php echo $arrFile['lb']; ?>" title="<?php echo $strTitle; ?>" href="<?php echo $arrFile['file']; ?>">
 		<?php else: ?>
 			<a title="<?php echo $strTitle; ?>" href="<?php echo $arrFile['url']; ?>">
 		<?php endif; ?>
