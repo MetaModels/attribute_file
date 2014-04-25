@@ -64,7 +64,7 @@ class File extends BaseSimple
 	/**
 	 * Take the raw data from the DB column and unserialize it.
 	 * 
-	 * @param mixed $value
+	 * @param mixed $value The array of data from the database.
 	 *
 	 * @return array
 	 */
@@ -212,7 +212,7 @@ class File extends BaseSimple
 		{
 			if (!$this->get('file_filePicker'))
 			{
-				if(!is_array($varValue))
+				if (!is_array($varValue))
 				{
 					return $varValue;
 				}
