@@ -17,7 +17,3 @@
 
 $GLOBALS['METAMODELS']['attributes']['file']['class'] = 'MetaModels\Attribute\File\File';
 $GLOBALS['METAMODELS']['attributes']['file']['image'] = 'system/modules/metamodelsattribute_file/html/file.png';
-
-// non composerized Contao 2.X autoload support.
-$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__);
-$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'deprecated';
