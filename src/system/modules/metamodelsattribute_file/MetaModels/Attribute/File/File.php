@@ -244,6 +244,29 @@ class File extends BaseSimple
 	}
 
 	/**
+	 * Add a file to the given toolbox.
+	 *
+	 * This method adds the file as path in 2.11 and as pathById in 3.*+
+	 *
+	 * @param string      $file    The file to add.
+	 *
+	 * @param ToolboxFile $toolbox The toolbox to which the file shall get added to.
+	 *
+	 * @return void
+	 */
+	protected function addFileToToolbox($file, $toolbox)
+	{
+		if (version_compare(VERSION, '3.0', '<'))
+		{
+			$toolbox->addPath($file);
+		}
+		else
+		{
+			$toolbox->addPathById($file);
+		}
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
@@ -272,44 +295,25 @@ class File extends BaseSimple
 
 		if ($arrRowData[$this->getColName()])
 		{
-			if (isset($arrRowData[$this->getColName()]['value']))
+			$value = $arrRowData[$this->getColName()];
+
+			if (isset($value['value']))
 			{
-				foreach ($arrRowData[$this->getColName()]['value'] as $strFile)
+				foreach ($value['value'] as $strFile)
 				{
-					if (version_compare(VERSION, '3.0', '<'))
-					{
-						$objToolbox->addPath($strFile);
-					}
-					else
-					{
-						$objToolbox->addPathById($strFile);
-					}
+					$this->addFileToToolbox($strFile, $objToolbox);
 				}
 			}
-			elseif (is_array($arrRowData[$this->getColName()]))
+			elseif (is_array($value))
 			{
-				foreach ($arrRowData[$this->getColName()] as $strFile)
+				foreach ($value as $strFile)
 				{
-					if (version_compare(VERSION, '3.0', '<'))
-					{
-						$objToolbox->addPath($strFile);
-					}
-					else
-					{
-						$objToolbox->addPathById($strFile);
-					}
+					$this->addFileToToolbox($strFile, $objToolbox);
 				}
 			}
 			else
 			{
-				if (version_compare(VERSION, '3.0', '<'))
-				{
-					$objToolbox->addPath($arrRowData[$this->getColName()]);
-				}
-				else
-				{
-					$objToolbox->addPathById($arrRowData[$this->getColName()]);
-				}
+				$this->addFileToToolbox($value, $objToolbox);
 			}
 		}
 
