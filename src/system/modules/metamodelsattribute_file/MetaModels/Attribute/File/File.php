@@ -33,6 +33,37 @@ class File extends BaseSimple
 	/**
 	 * {@inheritdoc}
 	 */
+	public function searchFor($strPattern)
+	{
+		if (version_compare(VERSION, '3.0', '<'))
+		{
+			return parent::searchFor($strPattern);
+		}
+
+		// Base implementation, do a simple search on given column.
+		$objQuery = \Database::getInstance()
+			->prepare(sprintf(
+				'SELECT id
+					FROM %s
+					WHERE %s IN
+					(SELECT uuid FROM
+					%s
+					WHERE path
+					LIKE
+					?)',
+				$this->getMetaModel()->getTableName(),
+				$this->getColName(),
+				\FilesModel::getTable()
+			))
+			->executeUncached(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+
+		$arrIds = $objQuery->fetchEach('id');
+		return $arrIds;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getSQLDataType()
 	{
 		if (version_compare(VERSION, '3.2', '<'))
@@ -267,7 +298,7 @@ class File extends BaseSimple
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
 	{
