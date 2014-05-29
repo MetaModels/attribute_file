@@ -279,7 +279,7 @@ class File extends BaseSimple
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
 	{
