@@ -94,7 +94,7 @@ class File extends BaseSimple
 
 	/**
 	 * Take the raw data from the DB column and unserialize it.
-	 * 
+	 *
 	 * @param mixed $value The array of data from the database.
 	 *
 	 * @return array
@@ -221,7 +221,7 @@ class File extends BaseSimple
 		}
 
 		// Set all options for the file picker.
-		if ($this->get('file_filePicker') && !$this->get('file_multiple'))
+		if (version_compare(VERSION, '3.3', '<') && $this->get('file_filePicker') && !$this->get('file_multiple'))
 		{
 			$arrFieldDef['inputType']         = 'text';
 			$arrFieldDef['eval']['tl_class'] .= ' wizard';
@@ -241,7 +241,7 @@ class File extends BaseSimple
 	{
 		if (version_compare(VERSION, '3.0', '>='))
 		{
-			if (!$this->get('file_filePicker'))
+			if (version_compare(VERSION, '3.3', '>=') || !$this->get('file_filePicker'))
 			{
 				if (!is_array($varValue))
 				{
@@ -254,6 +254,7 @@ class File extends BaseSimple
 			$strValue = is_array($varValue['value']) ? $varValue['value'][0] : $varValue['value'];
 
 			$objToolbox = new ToolboxFile();
+
 			return $objToolbox->convertValueToPath($strValue);
 		}
 
@@ -265,7 +266,7 @@ class File extends BaseSimple
 	 */
 	public function widgetToValue($varValue, $intId)
 	{
-		if (version_compare(VERSION, '3.0', '>=') && ($this->get('file_filePicker')))
+		if (version_compare(VERSION, '3.0', '>=') && version_compare(VERSION, '3.3', '<') && ($this->get('file_filePicker')))
 		{
 			$objFile = \Dbafs::addResource($varValue);
 			return $objFile->id;
@@ -359,5 +360,4 @@ class File extends BaseSimple
 		$objTemplate->files = $arrData['files'];
 		$objTemplate->src   = $arrData['source'];
 	}
-
 }
