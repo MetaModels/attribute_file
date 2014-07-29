@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T12:10:27+02:00
+ * last-updated: 2014-05-09T16:14:07+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['0'] = 'Passen Sie den Dateibaum an.';
@@ -22,6 +22,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple']['1']       = 'Wen
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder']['0']   = 'Wurzelordner (Root) angeben';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder']['1']   = 'Wählen Sie den Punkt im Dateibaum, von dem aus Benutzer Daten hinzufügen können.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['0'] = 'Gültige Dateitypen';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['1'] = 'Bitte geben Sie eine Liste gültiger Dateitypen ein. Die Liste besteht aus kommagetrennten Werten.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['1'] = 'Geben Sie hier eine kommagetrennte Liste gültiger Dateiendungen ein, um die Standard-Dateitypen von Contao zu überschreiben.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['file']      = 'Datei';
 
