@@ -19,6 +19,7 @@ namespace MetaModels\Attribute\File;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use MetaModels\Attribute\BaseSimple;
+use MetaModels\DcGeneral\Events\WizardHandler;
 use MetaModels\Render\Template;
 use MetaModels\Helper\ToolboxFile;
 
@@ -228,10 +229,10 @@ class File extends BaseSimple
 			$arrFieldDef['eval']['tl_class'] .= ' wizard';
 
 			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-			$dispatcher    = $GLOBALS['container']['event-dispatcher'];
+			$dispatcher = $GLOBALS['container']['event-dispatcher'];
 			$dispatcher->addListener(
 				ManipulateWidgetEvent::NAME,
-				array(new \MetaModels\DcGeneral\Events\WizardHandler($this->getMetaModel(), $this->getColName()), 'getWizard')
+				array(new WizardHandler($this->getMetaModel(), $this->getColName()), 'getWizard')
 			);
 		}
 

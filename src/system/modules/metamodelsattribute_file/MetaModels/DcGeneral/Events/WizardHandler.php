@@ -20,13 +20,36 @@ namespace MetaModels\DcGeneral\Events;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
+use MetaModels\IMetaModel;
 
+/**
+ * This class adds the file picker wizard to the file picker widgets if necessary.
+ *
+ * @package MetaModels\DcGeneral\Events
+ */
 class WizardHandler
 {
+	/**
+	 * The MetaModel instance this handler should react on.
+	 *
+	 * @var IMetaModel
+	 */
 	protected $metaModel;
 
+	/**
+	 * The name of the attribute of the MetaModel this handler should react on.
+	 *
+	 * @var string
+	 */
 	protected $propertyName;
 
+	/**
+	 * Create a new instance.
+	 *
+	 * @param IMetaModel $metaModel    The MetaModel instance.
+	 *
+	 * @param string     $propertyName The name of the property.
+	 */
 	public function __construct($metaModel, $propertyName)
 	{
 		$this->metaModel    = $metaModel;
@@ -36,7 +59,7 @@ class WizardHandler
 	/**
 	 * Build the wizard string.
 	 *
-	 * @param ManipulateWidgetEvent    $event The event.
+	 * @param ManipulateWidgetEvent $event The event.
 	 *
 	 * @return void
 	 */
@@ -82,7 +105,8 @@ class WizardHandler
 				$value ? $value['path'][0] : null
 			);
 
-			$link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' .
+			$link = ' <a href="' . $url .
+				'" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' .
 				specialchars($translator->translate('files.0', 'MOD')) . '\',\'url\':this.href,\'id\':\'' . $propName .
 				'\',\'tag\':\'' . $inputId .
 				'\',\'self\':this});return false">%s</a>';
