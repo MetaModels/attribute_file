@@ -1,6 +1,6 @@
 <?php if (is_array($this->src)): ?>
 <?php foreach($this->src as $arrFile): ?>
-<p class="<?php echo $arrFile['class']; ?>">
+<p class="<?php echo $arrFile['class']; ?><?php echo $this->additional_class; ?>">
 <?php if ($this->settings->get('file_showLink')): ?>
     <?php if ($this->settings->get('file_showImage')): ?>
         <a class="cboxElement" data-lightbox="<?php echo $arrFile['lb']; ?>" title="<?php echo $arrFile['alt']; ?>" href="<?php echo $arrFile['file']; ?>">

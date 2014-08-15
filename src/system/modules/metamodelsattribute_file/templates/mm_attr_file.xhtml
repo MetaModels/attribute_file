@@ -1,5 +1,5 @@
 <?php if (is_array($this->src)): ?>
-<ul>
+<ul class="file<?php echo $this->additional_class; ?>">
 <?php foreach($this->src as $arrFile): 
 $strTitle = ($arrFile['title']) ? $arrFile['title'] : (($arrFile['alt']) ? $arrFile['alt'] : $arrFile['file']);
 $strAlt   = ($arrFile['caption']) ? $arrFile['caption'] : '';
