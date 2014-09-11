@@ -102,7 +102,7 @@ class WizardHandler
 				\Input::get('do'),
 				$event->getEnvironment()->getDataDefinition()->getName(),
 				$inputId,
-				$value ? $value['path'][0] : null
+				$value ? $value : null
 			);
 
 			$link = ' <a href="' . $url .

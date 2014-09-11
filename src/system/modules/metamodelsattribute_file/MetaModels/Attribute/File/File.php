@@ -244,6 +244,10 @@ class File extends BaseSimple
 	 */
 	public function valueToWidget($varValue)
 	{
+		if (empty($varValue)) {
+			return null;
+		}
+
 		if (version_compare(VERSION, '3.0', '>='))
 		{
 			if (version_compare(VERSION, '3.3', '>=') || !$this->get('file_filePicker'))
@@ -256,7 +260,12 @@ class File extends BaseSimple
 				return serialize($varValue['value']);
 			}
 
-			$strValue = is_array($varValue['value']) ? $varValue['value'][0] : $varValue['value'];
+			// If we get a numeric id, it is the correct value.
+			if (!is_array($varValue)) {
+				$strValue = $varValue;
+			} else {
+				$strValue = is_array($varValue['value']) ? $varValue['value'][0] : $varValue['value'];
+			}
 
 			$objToolbox = new ToolboxFile();
 
@@ -274,7 +283,8 @@ class File extends BaseSimple
 		if (version_compare(VERSION, '3.0', '>=') && version_compare(VERSION, '3.3', '<') && ($this->get('file_filePicker')))
 		{
 			$objFile = \Dbafs::addResource($varValue);
-			return $objFile->id;
+
+			return version_compare(VERSION, '3.1', '>') ? $objFile->uuid : $objFile->id;
 		}
 
 		return parent::valueToWidget($varValue);
