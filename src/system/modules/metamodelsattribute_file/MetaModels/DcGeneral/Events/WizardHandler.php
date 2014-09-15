@@ -68,16 +68,14 @@ class WizardHandler
     {
         if ($event->getModel()->getProviderName() !== $this->metaModel->getTableName()
             || $event->getProperty()->getName() !== $this->propertyName
-        )
-        {
+        ) {
             return;
         }
 
         $propName   = $event->getProperty()->getName();
         $inputId    = 'ctrl_' . $propName;
         $translator = $event->getEnvironment()->getTranslator();
-        if (\Input::getInstance()->get('act') == 'editAll')
-        {
+        if (\Input::getInstance()->get('act') == 'editAll') {
             $inputId .= $event->getModel()->getId();
         }
 
@@ -91,12 +89,9 @@ class WizardHandler
             )
         );
 
-        if (version_compare(VERSION, '3.1', '<'))
-        {
+        if (version_compare(VERSION, '3.1', '<')) {
             $link = ' <a href="javascript:Backend.pickFile(\'' . $inputId . '\');">%s</a>';
-        }
-        else
-        {
+        } else {
             $value = $event->getModel()->getProperty($propName);
             $url   = sprintf(
                 'contao/file.php?do=%s&amp;table=%s&amp;field=%s&amp;value=%s&mmfilepicker=1',

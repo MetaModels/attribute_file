@@ -25,8 +25,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFile
 );
 
 // This is not available anymore from Contao 3.3 on upwards.
-if (version_compare(VERSION, '3.3', '<'))
-{
+if (version_compare(VERSION, '3.3', '<')) {
     $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubselectpalettes']['file_multiple']['!1'] = array
     (
         'file_filePicker'

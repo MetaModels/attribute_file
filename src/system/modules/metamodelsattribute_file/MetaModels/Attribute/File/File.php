@@ -37,8 +37,7 @@ class File extends BaseSimple
      */
     public function searchFor($strPattern)
     {
-        if (version_compare(VERSION, '3.0', '<'))
-        {
+        if (version_compare(VERSION, '3.0', '<')) {
             return parent::searchFor($strPattern);
         }
 
@@ -68,8 +67,7 @@ class File extends BaseSimple
      */
     public function getSQLDataType()
     {
-        if (version_compare(VERSION, '3.2', '<'))
-        {
+        if (version_compare(VERSION, '3.2', '<')) {
             return 'text NULL';
         }
 
@@ -105,12 +103,12 @@ class File extends BaseSimple
     {
         $arrValues = deserialize($value, true);
 
-        if (version_compare(VERSION, '3.0', '>='))
-        {
+        if (version_compare(VERSION, '3.0', '>=')) {
             $arrReturn = array();
-            foreach ($arrValues as $mixValue)
-            {
-                $arrReturn['value'][] = (version_compare(VERSION, '3.2', '>=')) ? \String::binToUuid($mixValue) : $mixValue;
+            foreach ($arrValues as $mixValue) {
+                $arrReturn['value'][] = (version_compare(VERSION, '3.2', '>='))
+                    ? \String::binToUuid($mixValue)
+                    : $mixValue;
                 $arrReturn['path'][]  = \FilesModel::findByPk($mixValue)->path;
             }
             $arrValues = $arrReturn;
@@ -128,33 +126,24 @@ class File extends BaseSimple
      */
     public function serializeData($mixValues)
     {
-        if (version_compare(VERSION, '3.0', '>=') && is_array($mixValues))
-        {
+        if (version_compare(VERSION, '3.0', '>=') && is_array($mixValues)) {
             $arrData = array();
             // Check if we have a array with value and path.
-            if (array_key_exists('value', $mixValues))
-            {
-                foreach ($mixValues['value'] as $mixValue)
-                {
+            if (array_key_exists('value', $mixValues)) {
+                foreach ($mixValues['value'] as $mixValue) {
                     $arrData[] = \String::uuidToBin($mixValue);
                 }
-            }
-            // Else run just as a normal array.
-            else
-            {
-                foreach ($mixValues as $mixValue)
-                {
+            } else {
+                // Else run just as a normal array.
+                foreach ($mixValues as $mixValue) {
                     $arrData[] = $mixValue;
                 }
             }
 
             // Check single file or multiple file.
-            if ($this->get('file_multiple'))
-            {
+            if ($this->get('file_multiple')) {
                 $mixValues = serialize($arrData);
-            }
-            else
-            {
+            } else {
                 $mixValues = $arrData[0];
             }
         }
@@ -175,56 +164,43 @@ class File extends BaseSimple
         $arrFieldDef['eval']['multiple']   = $this->get('file_multiple') ? true : false;
         $arrFieldDef['eval']['extensions'] = $GLOBALS['TL_CONFIG']['allowedDownload'];
 
-        if ($this->get('file_customFiletree'))
-        {
-            if (strlen($this->get('file_uploadFolder')))
-            {
+        if ($this->get('file_customFiletree')) {
+            if (strlen($this->get('file_uploadFolder'))) {
                 // Set root path of file chooser depending on contao version.
-                if (version_compare(VERSION, '3.0', '<'))
-                {
+                if (version_compare(VERSION, '3.0', '<')) {
                     $arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
-                }
-                else
-                {
+                } else {
                     $objFile = null;
 
                     // Contao 3.1.x use the numeric values.
-                    if (is_numeric($this->get('file_uploadFolder')))
-                    {
+                    if (is_numeric($this->get('file_uploadFolder'))) {
                         $objFile = \FilesModel::findByPk($this->get('file_uploadFolder'));
-                    }
-                    // If not numeric we have a Contao 3.2.x with a binary uuid value.
-                    elseif (strlen($this->get('file_uploadFolder')) == 16)
-                    {
+                    } elseif (strlen($this->get('file_uploadFolder')) == 16) {
+                        // If not numeric we have a Contao 3.2.x with a binary uuid value.
                         $objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
                     }
 
                     // Check if we have a file.
-                    if ($objFile != null)
-                    {
+                    if ($objFile != null) {
                         $arrFieldDef['eval']['path'] = $objFile->path;
-                    }
-                    // Fallback.
-                    else
-                    {
+                    } else {
+                        // Fallback.
                         $arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
                     }
                 }
             }
 
-            if (strlen($this->get('file_validFileTypes')))
-            {
+            if (strlen($this->get('file_validFileTypes'))) {
                 $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
             }
-            if (strlen($this->get('file_filesOnly')))
-            {
+
+            if (strlen($this->get('file_filesOnly'))) {
                 $arrFieldDef['eval']['filesOnly'] = true;
             }
         }
 
         // Set all options for the file picker.
-        if (version_compare(VERSION, '3.3', '<') && $this->get('file_filePicker') && !$this->get('file_multiple'))
-        {
+        if (version_compare(VERSION, '3.3', '<') && $this->get('file_filePicker') && !$this->get('file_multiple')) {
             $arrFieldDef['inputType']         = 'text';
             $arrFieldDef['eval']['tl_class'] .= ' wizard';
 
@@ -248,12 +224,9 @@ class File extends BaseSimple
             return null;
         }
 
-        if (version_compare(VERSION, '3.0', '>='))
-        {
-            if (version_compare(VERSION, '3.3', '>=') || !$this->get('file_filePicker'))
-            {
-                if (!is_array($varValue))
-                {
+        if (version_compare(VERSION, '3.0', '>=')) {
+            if (version_compare(VERSION, '3.3', '>=') || !$this->get('file_filePicker')) {
+                if (!is_array($varValue)) {
                     return $varValue;
                 }
 
@@ -278,10 +251,12 @@ class File extends BaseSimple
     /**
      * {@inheritdoc}
      */
+    // @codingStandardsIgnoreStart - We do not need the parameter $intId.
     public function widgetToValue($varValue, $intId)
     {
-        if (version_compare(VERSION, '3.0', '>=') && version_compare(VERSION, '3.3', '<') && ($this->get('file_filePicker')))
-        {
+        if (version_compare(VERSION, '3.0', '>=')
+            && version_compare(VERSION, '3.3', '<') && ($this->get('file_filePicker'))
+        ) {
             $objFile = \Dbafs::addResource($varValue);
 
             return version_compare(VERSION, '3.1', '>') ? $objFile->uuid : $objFile->id;
@@ -289,6 +264,7 @@ class File extends BaseSimple
 
         return parent::valueToWidget($varValue);
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Add a file to the given toolbox.
@@ -303,12 +279,9 @@ class File extends BaseSimple
      */
     protected function addFileToToolbox($file, $toolbox)
     {
-        if (version_compare(VERSION, '3.0', '<'))
-        {
+        if (version_compare(VERSION, '3.0', '<')) {
             $toolbox->addPath($file);
-        }
-        else
-        {
+        } else {
             $toolbox->addPathById($file);
         }
     }
@@ -333,38 +306,28 @@ class File extends BaseSimple
             $arrRowData['id']
         ));
 
-        if (strlen($this->get('file_validFileTypes')))
-        {
+        if (strlen($this->get('file_validFileTypes'))) {
             $objToolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
         }
 
         $objToolbox->setShowImages($objSettings->get('file_showImage'));
 
-        if ($objSettings->get('file_imageSize'))
-        {
+        if ($objSettings->get('file_imageSize')) {
             $objToolbox->setResizeImages($objSettings->get('file_imageSize'));
         }
 
-        if ($arrRowData[$this->getColName()])
-        {
+        if ($arrRowData[$this->getColName()]) {
             $value = $arrRowData[$this->getColName()];
 
-            if (isset($value['value']))
-            {
-                foreach ($value['value'] as $strFile)
-                {
+            if (isset($value['value'])) {
+                foreach ($value['value'] as $strFile) {
                     $this->addFileToToolbox($strFile, $objToolbox);
                 }
-            }
-            elseif (is_array($value))
-            {
-                foreach ($value as $strFile)
-                {
+            } elseif (is_array($value)) {
+                foreach ($value as $strFile) {
                     $this->addFileToToolbox($strFile, $objToolbox);
                 }
-            }
-            else
-            {
+            } else {
                 $this->addFileToToolbox($value, $objToolbox);
             }
         }
