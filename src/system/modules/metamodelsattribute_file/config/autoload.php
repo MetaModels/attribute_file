@@ -21,6 +21,6 @@
  */
 TemplateLoader::addFiles(array
 (
-	'mm_attr_file'              => 'system/modules/metamodelsattribute_file/templates',
-	'mm_attr_file_alternative'  => 'system/modules/metamodelsattribute_file/templates',
+    'mm_attr_file'              => 'system/modules/metamodelsattribute_file/templates',
+    'mm_attr_file_alternative'  => 'system/modules/metamodelsattribute_file/templates',
 ));

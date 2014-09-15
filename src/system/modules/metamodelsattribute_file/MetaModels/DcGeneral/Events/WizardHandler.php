@@ -30,89 +30,89 @@ use MetaModels\IMetaModel;
  */
 class WizardHandler
 {
-	/**
-	 * The MetaModel instance this handler should react on.
-	 *
-	 * @var IMetaModel
-	 */
-	protected $metaModel;
+    /**
+     * The MetaModel instance this handler should react on.
+     *
+     * @var IMetaModel
+     */
+    protected $metaModel;
 
-	/**
-	 * The name of the attribute of the MetaModel this handler should react on.
-	 *
-	 * @var string
-	 */
-	protected $propertyName;
+    /**
+     * The name of the attribute of the MetaModel this handler should react on.
+     *
+     * @var string
+     */
+    protected $propertyName;
 
-	/**
-	 * Create a new instance.
-	 *
-	 * @param IMetaModel $metaModel    The MetaModel instance.
-	 *
-	 * @param string     $propertyName The name of the property.
-	 */
-	public function __construct($metaModel, $propertyName)
-	{
-		$this->metaModel    = $metaModel;
-		$this->propertyName = $propertyName;
-	}
+    /**
+     * Create a new instance.
+     *
+     * @param IMetaModel $metaModel    The MetaModel instance.
+     *
+     * @param string     $propertyName The name of the property.
+     */
+    public function __construct($metaModel, $propertyName)
+    {
+        $this->metaModel    = $metaModel;
+        $this->propertyName = $propertyName;
+    }
 
-	/**
-	 * Build the wizard string.
-	 *
-	 * @param ManipulateWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public function getWizard(ManipulateWidgetEvent $event)
-	{
-		if ($event->getModel()->getProviderName() !== $this->metaModel->getTableName()
-			|| $event->getProperty()->getName() !== $this->propertyName
-		)
-		{
-			return;
-		}
+    /**
+     * Build the wizard string.
+     *
+     * @param ManipulateWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function getWizard(ManipulateWidgetEvent $event)
+    {
+        if ($event->getModel()->getProviderName() !== $this->metaModel->getTableName()
+            || $event->getProperty()->getName() !== $this->propertyName
+        )
+        {
+            return;
+        }
 
-		$propName   = $event->getProperty()->getName();
-		$inputId    = 'ctrl_' . $propName;
-		$translator = $event->getEnvironment()->getTranslator();
-		if (\Input::getInstance()->get('act') == 'editAll')
-		{
-			$inputId .= $event->getModel()->getId();
-		}
+        $propName   = $event->getProperty()->getName();
+        $inputId    = 'ctrl_' . $propName;
+        $translator = $event->getEnvironment()->getTranslator();
+        if (\Input::getInstance()->get('act') == 'editAll')
+        {
+            $inputId .= $event->getModel()->getId();
+        }
 
-		/** @var GenerateHtmlEvent $imageEvent */
-		$imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
-			ContaoEvents::IMAGE_GET_HTML,
-			new GenerateHtmlEvent(
-				'pickfile.gif',
-				$translator->translate('filePicker.0', 'MSC'),
-				'style="vertical-align:top"'
-			)
-		);
+        /** @var GenerateHtmlEvent $imageEvent */
+        $imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
+            ContaoEvents::IMAGE_GET_HTML,
+            new GenerateHtmlEvent(
+                'pickfile.gif',
+                $translator->translate('filePicker.0', 'MSC'),
+                'style="vertical-align:top"'
+            )
+        );
 
-		if (version_compare(VERSION, '3.1', '<'))
-		{
-			$link = ' <a href="javascript:Backend.pickFile(\'' . $inputId . '\');">%s</a>';
-		}
-		else
-		{
-			$value = $event->getModel()->getProperty($propName);
-			$url   = sprintf(
-				'contao/file.php?do=%s&amp;table=%s&amp;field=%s&amp;value=%s&mmfilepicker=1',
-				\Input::get('do'),
-				$event->getEnvironment()->getDataDefinition()->getName(),
-				$inputId,
-				$value ? $value : null
-			);
+        if (version_compare(VERSION, '3.1', '<'))
+        {
+            $link = ' <a href="javascript:Backend.pickFile(\'' . $inputId . '\');">%s</a>';
+        }
+        else
+        {
+            $value = $event->getModel()->getProperty($propName);
+            $url   = sprintf(
+                'contao/file.php?do=%s&amp;table=%s&amp;field=%s&amp;value=%s&mmfilepicker=1',
+                \Input::get('do'),
+                $event->getEnvironment()->getDataDefinition()->getName(),
+                $inputId,
+                $value ? $value : null
+            );
 
-			$link = ' <a href="' . $url .
-				'" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' .
-				specialchars($translator->translate('files.0', 'MOD')) . '\',\'url\':this.href,\'id\':\'' . $propName .
-				'\',\'tag\':\'' . $inputId .
-				'\',\'self\':this});return false">%s</a>';
-		}
+            $link = ' <a href="' . $url .
+                '" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' .
+                specialchars($translator->translate('files.0', 'MOD')) . '\',\'url\':this.href,\'id\':\'' . $propName .
+                '\',\'tag\':\'' . $inputId .
+                '\',\'self\':this});return false">%s</a>';
+        }
 
-		$event->getWidget()->wizard = sprintf($link, $imageEvent->getHtml());
-	}
+        $event->getWidget()->wizard = sprintf($link, $imageEvent->getHtml());
+    }
 }
