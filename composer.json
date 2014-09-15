@@ -70,8 +70,8 @@
 	},
 	"extra":{
 		"contao": {
-			"symlinks":{
-				"src":"system/modules/metamodelsattribute_file"
+			"sources":{
+				"contao":"system/modules/metamodelsattribute_file"
 			},
 			"transifex": {
 				"project": "metamodels",
