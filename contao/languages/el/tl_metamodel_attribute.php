@@ -11,7 +11,6 @@
  * last-updated: 2013-05-13T22:12:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['0'] = 'Προσαρμόστε το δέντρο αρχείου ';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['1'] = 'Σας επιτρέπει να ορίσετε προσαρμοσμένες επιλογές για την Filetree.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly']['0']      = 'Επιτρέπονται μόνο αρχεία';

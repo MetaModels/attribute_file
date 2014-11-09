@@ -59,6 +59,7 @@ class File extends BaseSimple
             ->executeUncached(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
         $arrIds = $objQuery->fetchEach('id');
+
         return $arrIds;
     }
 
@@ -272,7 +273,6 @@ class File extends BaseSimple
      * This method adds the file as path in 2.11 and as pathById in 3.*+
      *
      * @param string      $file    The file to add.
-     *
      * @param ToolboxFile $toolbox The toolbox to which the file shall get added to.
      *
      * @return void

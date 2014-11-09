@@ -22,4 +22,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder']['1']   = 'Sé
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['0'] = 'Type de fichiers valides';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['1'] = 'Veuillez entrer une liste séparée par des virgules des types de fichiers valide pour ce champ.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['file']      = 'Fichier';
-

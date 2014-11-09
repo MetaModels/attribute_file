@@ -11,7 +11,6 @@
  * last-updated: 2013-05-13T22:12:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['0'] = 'Persunalisar l\'ierarchia da datotecas';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['1'] = 'Ta lubescha da definir opziuns persunalas per l\'ierarchia da datotecas.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly']['0']      = 'Be lubir datotecas';

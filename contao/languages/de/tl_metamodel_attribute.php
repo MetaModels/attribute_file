@@ -24,4 +24,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder']['1']   = 'Wä
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['0'] = 'Gültige Dateitypen';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes']['1'] = 'Geben Sie hier eine kommagetrennte Liste gültiger Dateiendungen ein, um die Standard-Dateitypen von Contao zu überschreiben.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['file']      = 'Datei';
-

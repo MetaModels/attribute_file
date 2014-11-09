@@ -15,4 +15,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['0'] = 'Н�
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly']['0']      = 'Разрешить только файлы';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder']['0']   = 'Установить корневой каталог';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['file']      = 'Файл';
-

@@ -15,7 +15,6 @@
  * @filesource
  */
 
-
 namespace MetaModels\DcGeneral\Events;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -48,7 +47,6 @@ class WizardHandler
      * Create a new instance.
      *
      * @param IMetaModel $metaModel    The MetaModel instance.
-     *
      * @param string     $propertyName The name of the property.
      */
     public function __construct($metaModel, $propertyName)
