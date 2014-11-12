@@ -25,4 +25,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']                = 'Fich
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']            = 'Nom de fichier (ascendant)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']           = 'Nom de fichier (décroissant)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['random']              = 'Ordre aléatoire';
-

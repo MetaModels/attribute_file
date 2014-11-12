@@ -11,7 +11,6 @@
  * last-updated: 2013-05-13T22:12:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']            = 'Data (ascendent)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_desc']           = 'Data (descendent)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize']['0'] = 'Ladezza ed autezza dal maletg';

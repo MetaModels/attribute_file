@@ -30,7 +30,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      * @param string $language         The language.
      * @param string $fallbackLanguage The fallback language.
      *
-     * @return IMetaModel
+     * @return \MetaModels\IMetaModel
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {

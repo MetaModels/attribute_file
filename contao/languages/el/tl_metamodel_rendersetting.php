@@ -11,7 +11,6 @@
  * last-updated: 2013-05-13T22:12:39+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']            = 'Ημερομηνία (αύξουσα)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_desc']           = 'Ημερομηνία (Φθίνουσα) ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize']['0'] = ' Πλάτος της εικόνας και ύψος ';
