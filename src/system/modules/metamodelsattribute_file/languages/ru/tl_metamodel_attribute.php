@@ -8,11 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-28T20:13:51+02:00
+ * last-updated: 2014-12-14T12:14:13+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['0'] = 'Настроить дерево файлов';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree']['1'] = 'Позволяет задать пользовательские параметры для дерева файлов.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filePicker']['0']     = 'Использовать выбор файлов';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filePicker']['1']     = 'Если выбрано, использовать выбор файлов вместо дерева файлов.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly']['0']      = 'Разрешить только файлы';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly']['1']      = 'Выберите опцию для ограничения файлового браузера выбором только файлов (каталоги не выбираются).';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple']['0']       = 'Множественный выбор';
