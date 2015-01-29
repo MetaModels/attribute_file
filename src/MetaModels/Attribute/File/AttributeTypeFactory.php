@@ -16,5 +16,24 @@
  * @filesource
  */
 
-$GLOBALS['METAMODELS']['attributes']['file']['class'] = 'MetaModels\Attribute\File\File';
-$GLOBALS['METAMODELS']['attributes']['file']['image'] = 'system/modules/metamodelsattribute_file/html/file.png';
+namespace MetaModels\Attribute\File;
+
+use MetaModels\Attribute\AbstractAttributeTypeFactory;
+
+/**
+ * Attribute type factory for file attributes.
+ */
+class AttributeTypeFactory extends AbstractAttributeTypeFactory
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->typeName  = 'file';
+        $this->typeIcon  = 'system/modules/metamodelsattribute_file/html/file.png';
+        $this->typeClass = 'MetaModels\Attribute\File\File';
+    }
+}
