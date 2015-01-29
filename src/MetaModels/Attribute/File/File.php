@@ -154,6 +154,42 @@ class File extends BaseSimple
     }
 
     /**
+     * Manipulate the field definition for custom file trees.
+     *
+     * @param array $arrFieldDef The field definition to manipulate.
+     *
+     * @return void
+     */
+    private function handleCustomFileTree(&$arrFieldDef)
+    {
+        if (strlen($this->get('file_uploadFolder'))) {
+            // Set root path of file chooser depending on contao version.
+            $objFile = null;
+
+            if (\Validator::isStringUuid($this->get('file_uploadFolder'))) {
+                // If not numeric we have a Contao 3.2.x with a binary uuid value.
+                $objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
+            }
+
+            // Check if we have a file.
+            if ($objFile != null) {
+                $arrFieldDef['eval']['path'] = $objFile->path;
+            } else {
+                // Fallback.
+                $arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
+            }
+        }
+
+        if (strlen($this->get('file_validFileTypes'))) {
+            $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
+        }
+
+        if (strlen($this->get('file_filesOnly'))) {
+            $arrFieldDef['eval']['filesOnly'] = true;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getFieldDefinition($arrOverrides = array())
@@ -162,36 +198,17 @@ class File extends BaseSimple
 
         $arrFieldDef['inputType']          = 'fileTree';
         $arrFieldDef['eval']['files']      = true;
-        $arrFieldDef['eval']['fieldType']  = $this->get('file_multiple') ? 'checkbox' : 'radio';
-        $arrFieldDef['eval']['multiple']   = $this->get('file_multiple') ? true : false;
-        $arrFieldDef['eval']['extensions'] = $GLOBALS['TL_CONFIG']['allowedDownload'];
+        $arrFieldDef['eval']['extensions'] = \Config::get('allowedDownload');
+        $arrFieldDef['eval']['multiple']   = (bool) $this->get('file_multiple');
+
+        if ($this->get('file_multiple')) {
+            $arrFieldDef['eval']['fieldType'] = 'checkbox';
+        } else {
+            $arrFieldDef['eval']['fieldType'] = 'radio';
+        }
 
         if ($this->get('file_customFiletree')) {
-            if (strlen($this->get('file_uploadFolder'))) {
-                // Set root path of file chooser depending on contao version.
-                $objFile = null;
-
-                if (\Validator::isStringUuid($this->get('file_uploadFolder'))) {
-                    // If not numeric we have a Contao 3.2.x with a binary uuid value.
-                    $objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
-                }
-
-                // Check if we have a file.
-                if ($objFile != null) {
-                    $arrFieldDef['eval']['path'] = $objFile->path;
-                } else {
-                    // Fallback.
-                    $arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
-                }
-            }
-
-            if (strlen($this->get('file_validFileTypes'))) {
-                $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
-            }
-
-            if (strlen($this->get('file_filesOnly'))) {
-                $arrFieldDef['eval']['filesOnly'] = true;
-            }
+            $this->handleCustomFileTree($arrFieldDef);
         }
 
         // Set all options for the file picker.
