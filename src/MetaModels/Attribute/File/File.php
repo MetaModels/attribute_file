@@ -253,7 +253,7 @@ class File extends BaseSimple
      * {@inheritdoc}
      */
     // @codingStandardsIgnoreStart - We do not need the parameter $intId.
-    public function widgetToValue($varValue, $intId)
+    public function widgetToValue($varValue, $itemId)
     {
         if (version_compare(VERSION, '3.0', '>=')
             && version_compare(VERSION, '3.3', '<') && ($this->get('file_filePicker'))
@@ -289,7 +289,7 @@ class File extends BaseSimple
     /**
      * {@inheritDoc}
      */
-    protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
+    protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
