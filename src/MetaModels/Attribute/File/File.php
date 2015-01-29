@@ -199,8 +199,7 @@ class File extends BaseSimple
             $arrFieldDef['inputType']         = 'text';
             $arrFieldDef['eval']['tl_class'] .= ' wizard';
 
-            /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-            $dispatcher = $GLOBALS['container']['event-dispatcher'];
+            $dispatcher = $this->getMetaModel()->getServiceContainer()->getEventDispatcher();
             $dispatcher->addListener(
                 ManipulateWidgetEvent::NAME,
                 array(new WizardHandler($this->getMetaModel(), $this->getColName()), 'getWizard')
