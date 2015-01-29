@@ -74,7 +74,7 @@ class WizardHandler
         $propName   = $event->getProperty()->getName();
         $inputId    = 'ctrl_' . $propName;
         $translator = $event->getEnvironment()->getTranslator();
-        if (\Input::getInstance()->get('act') == 'editAll') {
+        if (\Input::get('act') == 'editAll') {
             $inputId .= $event->getModel()->getId();
         }
 
@@ -88,24 +88,20 @@ class WizardHandler
             )
         );
 
-        if (version_compare(VERSION, '3.1', '<')) {
-            $link = ' <a href="javascript:Backend.pickFile(\'' . $inputId . '\');">%s</a>';
-        } else {
-            $value = $event->getModel()->getProperty($propName);
-            $url   = sprintf(
-                'contao/file.php?do=%s&amp;table=%s&amp;field=%s&amp;value=%s&mmfilepicker=1',
-                \Input::get('do'),
-                $event->getEnvironment()->getDataDefinition()->getName(),
-                $inputId,
-                $value ? $value : null
-            );
+        $value = $event->getModel()->getProperty($propName);
+        $url   = sprintf(
+            'contao/file.php?do=%s&amp;table=%s&amp;field=%s&amp;value=%s&mmfilepicker=1',
+            \Input::get('do'),
+            $event->getEnvironment()->getDataDefinition()->getName(),
+            $inputId,
+            $value ? $value : null
+        );
 
-            $link = ' <a href="' . $url .
-                '" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' .
-                specialchars($translator->translate('files.0', 'MOD')) . '\',\'url\':this.href,\'id\':\'' . $propName .
-                '\',\'tag\':\'' . $inputId .
-                '\',\'self\':this});return false">%s</a>';
-        }
+        $link = ' <a href="' . $url .
+            '" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' .
+            specialchars($translator->translate('files.0', 'MOD')) . '\',\'url\':this.href,\'id\':\'' . $propName .
+            '\',\'tag\':\'' . $inputId .
+            '\',\'self\':this});return false">%s</a>';
 
         $event->getWidget()->wizard = sprintf($link, $imageEvent->getHtml());
     }
