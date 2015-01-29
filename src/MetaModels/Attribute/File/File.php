@@ -171,7 +171,7 @@ class File extends BaseSimple
                 // Set root path of file chooser depending on contao version.
                 $objFile = null;
 
-                if (strlen($this->get('file_uploadFolder')) == 16) {
+                if (\Validator::isStringUuid($this->get('file_uploadFolder'))) {
                     // If not numeric we have a Contao 3.2.x with a binary uuid value.
                     $objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
                 }
