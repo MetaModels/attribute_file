@@ -1,0 +1,9 @@
+ignore:
+#  Mini Model <minimodel@metamodel.me>
+
+exclude:
+  languages
+
+mapping:
+  Andreas Isaak <info@andreas-isaak.de>: Andreas Isaak <andy.jared@googlemail.com>
+  Christopher Boelter <c.boelter@cogizz.de>: cogizz <c.boelter@cogizz.de>

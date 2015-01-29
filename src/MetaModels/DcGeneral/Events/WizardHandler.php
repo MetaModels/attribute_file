@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Greminger <david.greminger@1up.io>
  * @copyright  The MetaModels team.
  * @license    LGPL-3+.
  * @filesource
