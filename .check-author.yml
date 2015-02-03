@@ -6,4 +6,7 @@ exclude:
 
 mapping:
   Andreas Isaak <info@andreas-isaak.de>: Andreas Isaak <andy.jared@googlemail.com>
-  Christopher Boelter <c.boelter@cogizz.de>: cogizz <c.boelter@cogizz.de>
+  "Christopher Boelter <christopher@boelter.eu>":
+      - "cogizz <c.boelter@cogizz.de>"
+      - "cboelter <christopher@boelter.eu>"
+      - "Christopher Boelter <c.boelter@cogizz.de>"
