@@ -45,6 +45,7 @@ class File extends BaseSimple
      */
     public function searchFor($strPattern)
     {
+        // FIXME: does only work for single selection.
         // Base implementation, do a simple search on given column.
         $objQuery = \Database::getInstance()
             ->prepare(sprintf(
@@ -72,10 +73,6 @@ class File extends BaseSimple
      */
     public function getSQLDataType()
     {
-        if (version_compare(VERSION, '3.2', '<')) {
-            return 'text NULL';
-        }
-
         return 'blob NULL';
     }
 
@@ -106,17 +103,7 @@ class File extends BaseSimple
      */
     public function unserializeData($value)
     {
-        $arrValues = deserialize($value, true);
-
-        $arrReturn = array();
-        foreach ($arrValues as $mixValue) {
-            $arrReturn['value'][] = (version_compare(VERSION, '3.2', '>='))
-                ? \String::binToUuid($mixValue)
-                : $mixValue;
-            $arrReturn['path'][]  = \FilesModel::findByPk($mixValue)->path;
-        }
-
-        return $arrReturn;
+        return ToolboxFile::convertValuesToMetaModels(deserialize($value, true));
     }
 
     /**
@@ -128,26 +115,13 @@ class File extends BaseSimple
      */
     public function serializeData($mixValues)
     {
-        if (is_array($mixValues)) {
-            $arrData = array();
-            // Check if we have a array with value and path.
-            if (array_key_exists('value', $mixValues)) {
-                foreach ($mixValues['value'] as $mixValue) {
-                    $arrData[] = \String::uuidToBin($mixValue);
-                }
-            } else {
-                // Else run just as a normal array.
-                foreach ($mixValues as $mixValue) {
-                    $arrData[] = $mixValue;
-                }
-            }
+        $arrData = ToolboxFile::convertValuesToDatabase($mixValues);
 
-            // Check single file or multiple file.
-            if ($this->get('file_multiple')) {
-                $mixValues = serialize($arrData);
-            } else {
-                $mixValues = $arrData[0];
-            }
+        // Check single file or multiple file.
+        if ($this->get('file_multiple')) {
+            $mixValues = serialize($arrData);
+        } else {
+            $mixValues = $arrData[0];
         }
 
         return $mixValues;
@@ -167,7 +141,6 @@ class File extends BaseSimple
             $objFile = null;
 
             if (\Validator::isUuid($this->get('file_uploadFolder'))) {
-                // If not numeric we have a Contao 3.2.x with a binary uuid value.
                 $objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
             }
 
@@ -212,6 +185,7 @@ class File extends BaseSimple
         }
 
         // Set all options for the file picker.
+        // FIXME: drop support of the file picker widgets as they do not make sense since Contao 3.2.
         if (version_compare(VERSION, '3.3', '<') && $this->get('file_filePicker') && !$this->get('file_multiple')) {
             $arrFieldDef['inputType']         = 'text';
             $arrFieldDef['eval']['tl_class'] .= ' wizard';
@@ -235,24 +209,16 @@ class File extends BaseSimple
             return null;
         }
 
+        // From 3.3 on the file picker is mandatory.
         if (version_compare(VERSION, '3.3', '>=') || !$this->get('file_filePicker')) {
-            if (!is_array($varValue)) {
-                return $varValue;
-            }
-
-            return serialize($varValue['value']);
+            return $this->get('file_multiple') ? $varValue['bin'] : $varValue['bin'][0];
         }
 
-        // If we get a numeric id, it is the correct value.
-        if (!is_array($varValue)) {
-            $strValue = $varValue;
-        } else {
-            $strValue = is_array($varValue['value']) ? $varValue['value'][0] : $varValue['value'];
+        if ($this->get('file_filePicker')) {
+            return $varValue['path'][0];
         }
 
-        $objToolbox = new ToolboxFile();
-
-        return $objToolbox->convertValueToPath($strValue);
+        return $varValue['path'];
     }
 
     /**
@@ -260,11 +226,7 @@ class File extends BaseSimple
      */
     public function widgetToValue($varValue, $itemId)
     {
-        if (version_compare(VERSION, '3.3', '<') && ($this->get('file_filePicker'))) {
-            $objFile = \Dbafs::addResource($varValue);
-
-            return $objFile->uuid;
-        }
+        $varValue = ToolboxFile::convertUuidsOrPathsToMetaModels((array) $varValue);
 
         return parent::valueToWidget($varValue);
     }
