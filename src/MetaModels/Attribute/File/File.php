@@ -25,9 +25,7 @@
 
 namespace MetaModels\Attribute\File;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use MetaModels\Attribute\BaseSimple;
-use MetaModels\DcGeneral\Events\WizardHandler;
 use MetaModels\Render\Template;
 use MetaModels\Helper\ToolboxFile;
 
@@ -87,7 +85,6 @@ class File extends BaseSimple
             'file_uploadFolder',
             'file_validFileTypes',
             'file_filesOnly',
-            'file_filePicker',
             'filterable',
             'searchable',
             'mandatory',
@@ -184,19 +181,6 @@ class File extends BaseSimple
             $this->handleCustomFileTree($arrFieldDef);
         }
 
-        // Set all options for the file picker.
-        // FIXME: drop support of the file picker widgets as they do not make sense since Contao 3.2.
-        if (version_compare(VERSION, '3.3', '<') && $this->get('file_filePicker') && !$this->get('file_multiple')) {
-            $arrFieldDef['inputType']         = 'text';
-            $arrFieldDef['eval']['tl_class'] .= ' wizard';
-
-            $dispatcher = $this->getMetaModel()->getServiceContainer()->getEventDispatcher();
-            $dispatcher->addListener(
-                ManipulateWidgetEvent::NAME,
-                array(new WizardHandler($this->getMetaModel(), $this->getColName()), 'getWizard')
-            );
-        }
-
         return $arrFieldDef;
     }
 
@@ -209,16 +193,11 @@ class File extends BaseSimple
             return null;
         }
 
-        // From 3.3 on the file picker is mandatory.
-        if (version_compare(VERSION, '3.3', '>=') || !$this->get('file_filePicker')) {
-            return $this->get('file_multiple') ? $varValue['bin'] : $varValue['bin'][0];
+        if (!$this->get('file_multiple')) {
+            return isset($varValue['bin'][0]) ? $varValue['bin'][0] : null;
         }
 
-        if ($this->get('file_filePicker')) {
-            return $varValue['path'][0];
-        }
-
-        return $varValue['path'];
+        return $varValue['bin'];
     }
 
     /**
@@ -226,9 +205,7 @@ class File extends BaseSimple
      */
     public function widgetToValue($varValue, $itemId)
     {
-        $varValue = ToolboxFile::convertUuidsOrPathsToMetaModels((array) $varValue);
-
-        return parent::valueToWidget($varValue);
+        return ToolboxFile::convertUuidsOrPathsToMetaModels((array) $varValue);
     }
 
     /**

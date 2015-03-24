@@ -26,21 +26,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFile
     'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly'
 );
 
-// This is not available anymore from Contao 3.3 on upwards.
-if (version_compare(VERSION, '3.3', '<')) {
-    $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubselectpalettes']['file_multiple']['!1'] = array
-    (
-        'file_filePicker'
-    );
-
-    $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filePicker'] = array
-    (
-        'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filePicker'],
-        'inputType'               => 'checkbox',
-        'eval'                    => array('tl_class' => 'w50')
-    );
-}
-
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree'],

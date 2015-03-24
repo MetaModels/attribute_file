@@ -26,5 +26,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'][0]      = 'Allow
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'][1]      = 'Select this option to restrict the file browser to files only (folders not selectable).';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'][0]       = 'Multiple selection';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'][1]       = 'If selected, user will be able to select more than one item.';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filePicker'][0]     = 'Use file picker';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filePicker'][1]     = 'If selected, use the file picker instead of the filetree.';
