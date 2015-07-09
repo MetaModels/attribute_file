@@ -11,6 +11,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -21,9 +22,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simp
     '+advanced'               => array('file_customFiletree', 'file_multiple'),
 );
 
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['fileOrder extends _simpleattribute_'] = array();
+
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = array
 (
-    'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly'
+    'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly', 'file_orderField'
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = array
@@ -60,4 +63,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filesOnly'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'],
     'inputType'               => 'checkbox',
     'eval'                    => array('tl_class' => 'w50 m12')
+);
+
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_orderField'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_orderField'],
+    'inputType'               => 'select',
+    'eval'                    => array('tl_class' => 'w50')
 );

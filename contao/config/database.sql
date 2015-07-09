@@ -17,6 +17,7 @@ CREATE TABLE `tl_metamodel_attribute` (
   `file_uploadFolder` blob NULL,
   `file_validFileTypes` varchar(255) NOT NULL default '',
   `file_filesOnly` char(1) NOT NULL default '',
+  `file_orderField` int(10) unsigned NOT NULL default '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
