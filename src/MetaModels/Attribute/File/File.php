@@ -18,6 +18,7 @@
  * @author     MrTool <github@r2pi.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -112,6 +113,9 @@ class File extends BaseSimple
      */
     public function serializeData($mixValues)
     {
+        if ($mixValues === null) {
+            $mixValues = array('bin' => array(), 'value' => array(), 'path' => array());
+        }
         $arrData = ToolboxFile::convertValuesToDatabase($mixValues);
 
         // Check single file or multiple file.
