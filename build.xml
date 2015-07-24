@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-This project is using the PHP code quality project (PHPCQ).
+ This project is using the PHP code quality project (PHPCQ).
 
  For documentation visit:
-    https://github.com/phpcq/phpcq
+   https://github.com/phpcq/phpcq
 
 -->
-<project name="MetaModels attribute file" default="build">
-  <import file="vendor/phpcq/phpcq/phpcq.main.xml"/>
+<project name="metamodels/attribute_file" default="build">
+    <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
 </project>
