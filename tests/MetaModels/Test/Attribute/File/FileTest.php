@@ -72,4 +72,28 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $text = new File($this->mockMetaModel('en', 'en'));
         $this->assertInstanceOf('MetaModels\Attribute\File\File', $text);
     }
+
+    /**
+     * Test that empty values are handled correctly.
+     *
+     * @return void
+     */
+    public function testEmptyValues()
+    {
+        $file = new File(
+            $this->mockMetaModel('en', 'en'),
+            array(
+                'file_multiple' => false
+            )
+        );
+
+        $this->assertEquals(
+            array('bin' => array(), 'value' => array(), 'path' => array()),
+            $file->widgetToValue(null, 1)
+        );
+        $this->assertEquals(
+            array('bin' => array(), 'value' => array(), 'path' => array()),
+            $file->widgetToValue(array(), 1)
+        );
+    }
 }
