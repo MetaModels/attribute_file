@@ -14,6 +14,7 @@
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -21,6 +22,9 @@
 
 use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\Attribute\File\FileOrderAttributeTypeFactory;
+use MetaModels\Attribute\File\Subscriber;
+use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
 
 return array
@@ -29,6 +33,12 @@ return array
         function (CreateAttributeFactoryEvent $event) {
             $factory = $event->getFactory();
             $factory->addTypeFactory(new AttributeTypeFactory());
+            $factory->addTypeFactory(new FileOrderAttributeTypeFactory());
         }
-    )
+    ),
+    MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
+        function (MetaModelsBootEvent $event) {
+            new Subscriber($event->getServiceContainer());
+        }
+    ),
 );

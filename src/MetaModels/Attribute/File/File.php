@@ -22,6 +22,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -84,6 +85,7 @@ class File extends BaseSimple
             'file_uploadFolder',
             'file_validFileTypes',
             'file_filesOnly',
+            'file_orderField',
             'filterable',
             'searchable',
             'mandatory',
@@ -172,6 +174,11 @@ class File extends BaseSimple
         $arrFieldDef['eval']['files']      = true;
         $arrFieldDef['eval']['extensions'] = \Config::get('allowedDownload');
         $arrFieldDef['eval']['multiple']   = (bool) $this->get('file_multiple');
+
+        $orderFileAttribute = $this->getMetaModel()->getAttributeById($this->get('file_orderField'));
+        if ($orderFileAttribute) {
+            $arrFieldDef['eval']['orderField'] = $orderFileAttribute->getColName();
+        }
 
         if ($this->get('file_multiple')) {
             $arrFieldDef['eval']['fieldType'] = 'checkbox';
