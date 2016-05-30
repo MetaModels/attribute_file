@@ -1,23 +1,28 @@
 <?php
+
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * This file is part of MetaModels/attribute_file.
  *
- * PHP version 5
+ * (c) 2012-2015 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels
  * @subpackage AttributeFile
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
+ * @copyright  2012-2016 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Attribute\File;
 
 use MetaModels\Attribute\BaseSimple;
+use MetaModels\Helper\ToolboxFile;
 
 /**
  * FileOrder is a helper attribute for the file attribute.
@@ -75,26 +80,7 @@ class FileOrder extends BaseSimple
      */
     public function unserializeData($value)
     {
-        if (!is_array($value)) {
-            $deserialized = deserialize($value);
-
-            if (is_array($deserialized)) {
-                $value = $deserialized;
-            } else {
-                $value = explode(',', $value);
-            }
-        }
-
-        return array_map(
-            function ($value) {
-                if (!\Validator::isBinaryUuid($value)) {
-                    $value = \String::uuidToBin($value);
-                }
-
-                return $value;
-            },
-            $value
-        );
+        return ToolboxFile::convertValuesToMetaModels(deserialize($value, true));
     }
 
     /**
@@ -102,6 +88,11 @@ class FileOrder extends BaseSimple
      */
     public function serializeData($value)
     {
-        return serialize($value);
+        if ($value === null) {
+            $value = array('bin' => array(), 'value' => array(), 'path' => array());
+        }
+        $arrData = ToolboxFile::convertValuesToDatabase($value);
+
+        return serialize($arrData);
     }
 }
