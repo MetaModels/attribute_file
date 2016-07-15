@@ -1,26 +1,34 @@
 <?php
+
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * This file is part of MetaModels/attribute_file.
  *
- * PHP version 5
+ * (c) 2012-2015 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels
  * @subpackage AttributeFile
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
+ * @copyright  2012-2016 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Attribute\File;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\DefaultProperty;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyEditableCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\DcGeneral\AttributeFileDefinition;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
-use MetaModels\IMetaModel;
+use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 
 /**
  * Subscriber integrates file attribute related listeners.
@@ -30,99 +38,85 @@ use MetaModels\IMetaModel;
 class Subscriber extends BaseSubscriber
 {
     /**
-     * The meta models cache.
-     *
-     * @var array
-     */
-    private $metaModelCache = array();
-
-    /**
      * {@inheritdoc}
      */
     public function registerEventsInDispatcher()
     {
-        $this->addListener(
-            GetPropertyOptionsEvent::NAME,
-            array($this, 'getFileOrderAttributes')
-        );
-    }
-
-    /**
-     * Get file order attributes.
-     *
-     * @param GetPropertyOptionsEvent $event The event.
-     *
-     * @void
-     */
-    public function getFileOrderAttributes(GetPropertyOptionsEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')
-            || ($event->getPropertyName() !== 'file_orderField')) {
-            return;
-        }
-
-        $database  = $this->getDatabase();
-        $model     = $event->getModel();
-        $metaModel = $this->getMetaModel($model);
-
-        if (!$metaModel) {
-            return;
-        }
-
-        $options = array();
-
-        // Fetch all attributes that exist in other settings.
-        $alreadyTaken = $database
-            ->prepare('
-            SELECT
-                file_orderField
-            FROM
-                ' . $model->getProviderName() . '
-            WHERE
-                type=?
-                AND id<>?
-                AND pid=?')
-            ->execute(
-                $model->getProperty('type'),
-                $model->getProperty('attr_id'),
-                $model->getProperty('pid')
+        $this
+            ->addListener(
+                BuildAttributeEvent::NAME,
+                array($this, 'getBuildAttribute')
             )
-            ->fetchEach('attr_id');
-
-        foreach ($metaModel->getAttributes() as $attribute) {
-            if ($attribute->get('type') !== 'fileOrder' || in_array($attribute->get('id'), $alreadyTaken)) {
-                continue;
-            }
-            $options[$attribute->get('id')] = sprintf(
-                '%s [%s]',
-                $attribute->getName(),
-                $attribute->get('type')
+            ->addListener(
+                BuildDataDefinitionEvent::NAME,
+                array($this, 'getBuildDataDefinition')
             );
-        }
-
-        $event->setOptions($options);
     }
 
-
     /**
-     * Retrieve the MetaModel instance from a render settings model.
+     * This builds the dc-general property information for the virtual file order attribute.
      *
-     * @param ModelInterface $model The model to fetch the MetaModel instance for.
+     * @param BuildAttributeEvent $event The event being processed.
      *
-     * @return IMetaModel
+     * @return void
      */
-    protected function getMetaModel($model)
+    public function getBuildAttribute(BuildAttributeEvent $event)
     {
-        if (!isset($this->metaModelCache[$model->getProperty('pid')])) {
-            $dbResult = $this
-                ->getDatabase()
-                ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
-                ->execute($model->getProperty('pid'))
-                ->row();
+        $attribute = $event->getAttribute();
 
-            $this->metaModelCache[$model->getProperty('pid')] = $this->getMetaModelById($dbResult['pid']);
+        if (!($attribute instanceof File)) {
+            return;
         }
 
-        return $this->metaModelCache[$model->getProperty('pid')];
+        $container  = $event->getContainer();
+        $properties = $container->getPropertiesDefinition();
+        $name       = $attribute->getColName();
+
+        if ($properties->hasProperty($name . '_sort')) {
+            return;
+        }
+
+        $properties->addProperty($property = new DefaultProperty($name . '_sort'));
+        $property->setWidgetType('fileTreeOrder');
+
+        if (!$container->hasDefinition('metamodels.file-attributes')) {
+            $container->setDefinition('metamodels.file-attributes', new AttributeFileDefinition());
+        }
+
+        $container->getDefinition('metamodels.file-attributes')->add($name);
+    }
+
+    /**
+     * This handles all file attributes and clones the visible conditions to reflect those of the file attribute.
+     *
+     * @param BuildDataDefinitionEvent $event The event being processed.
+     *
+     * @return void
+     */
+    public function getBuildDataDefinition(BuildDataDefinitionEvent $event)
+    {
+        $container = $event->getContainer();
+        if (!$container->hasDefinition('metamodels.file-attributes')) {
+            return;
+        }
+        // All properties...
+        foreach ($container->getDefinition('metamodels.file-attributes')->get() as $propertyName) {
+            // ... in all palettes ...
+            foreach ($container->getPalettesDefinition()->getPalettes() as $palette) {
+                // ... in any legend ...
+                foreach ($palette->getLegends() as $legend) {
+                    // ... of the searched name ...
+                    if ($legend->hasProperty($propertyName)) {
+                        // ... must have the order field as companion, visible only when the real property is.
+                        $file = $legend->getProperty($propertyName);
+
+                        $legend->addProperty($order = new Property($propertyName . '_sort'), $file);
+
+                        $order->setEditableCondition(new PropertyEditableCondition($file->getName()));
+                        $order->setVisibleCondition(new PropertyVisibleCondition($file->getName()));
+                    }
+                }
+            }
+        }
     }
 }

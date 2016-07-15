@@ -22,7 +22,6 @@
 
 use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
-use MetaModels\Attribute\File\FileOrderAttributeTypeFactory;
 use MetaModels\Attribute\File\Subscriber;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
@@ -33,7 +32,6 @@ return array
         function (CreateAttributeFactoryEvent $event) {
             $factory = $event->getFactory();
             $factory->addTypeFactory(new AttributeTypeFactory());
-            $factory->addTypeFactory(new FileOrderAttributeTypeFactory());
         }
     ),
     MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(

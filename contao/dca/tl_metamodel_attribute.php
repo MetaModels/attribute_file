@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['fileOrder extends 
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = array
 (
-    'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly', 'file_orderField'
+    'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly'
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = array
@@ -67,11 +67,4 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filesOnly'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'],
     'inputType'               => 'checkbox',
     'eval'                    => array('tl_class' => 'w50 m12')
-);
-
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_orderField'] = array
-(
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_orderField'],
-    'inputType'               => 'select',
-    'eval'                    => array('tl_class' => 'w50')
 );

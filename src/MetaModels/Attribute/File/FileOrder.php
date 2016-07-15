@@ -21,38 +21,154 @@
 
 namespace MetaModels\Attribute\File;
 
-use MetaModels\Attribute\BaseSimple;
-use MetaModels\Helper\ToolboxFile;
+use MetaModels\Attribute\ISimple;
+use MetaModels\IMetaModel;
 
 /**
  * FileOrder is a helper attribute for the file attribute.
  *
  * @package MetaModels\Attribute\File
  */
-class FileOrder extends BaseSimple
+class FileOrder implements ISimple
 {
     /**
-     * {@inheritdoc}
+     * The MetaModel in use.
+     *
+     * @var IMetaModel
+     */
+    private $metaModel = null;
+
+    /**
+     * The column name.
+     *
+     * @var string
+     */
+    private $colName;
+
+    /**
+     * Create a new instance.
+     *
+     * @param null  $metaModel
+     * @param array $colName
+     */
+    public function __construct($metaModel, $colName)
+    {
+        $this->metaModel = $metaModel;
+        $this->colName   = $colName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColName()
+    {
+        return $this->colName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetaModel()
+    {
+        return $this->metaModel;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($strKey)
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function set($strKey, $varValue)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function handleMetaChange($strMetaName, $varNewValue)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function destroyAUX()
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function initializeAUX()
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function getAttributeSettingNames()
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
      */
     public function getFieldDefinition($arrOverrides = array())
     {
-        $arrFieldDef = parent::getFieldDefinition($arrOverrides);
-
-        $arrFieldDef['inputType'] = 'fileTreeOrder';
-
-        return $arrFieldDef;
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
      */
-    public function getSQLDataType()
+    public function getItemDCA($arrOverrides = array())
     {
-        return 'blob NULL';
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     */
+    public function valueToWidget($varValue)
+    {
+        return $varValue;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function widgetToValue($varValue, $itemId)
     {
@@ -62,37 +178,180 @@ class FileOrder extends BaseSimple
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function setDataFor($arrValues)
+    {
+        foreach ($arrValues as $id => $varData) {
+            if ($varData === null) {
+                $varData = array();
+            }
+
+            $this->getMetaModel()->getServiceContainer()->getDatabase()
+                ->prepare(
+                    sprintf(
+                        'UPDATE %2$s SET %1$s=? WHERE id=%3$s',
+                        $this->getColName(),
+                        $this->getMetaModel()->getTableName(),
+                        $id
+                    )
+                )
+                ->execute($varData);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function getDefaultRenderSettings()
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
      */
     public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null)
     {
-        $arrResult = array(
-            'raw'  => $arrRowData[$this->getColName()],
-            'text' => implode(', ', array_map('String::binToUuid', array_filter($arrRowData[$this->getColName()])))
-        );
-
-        return $arrResult;
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function getFilterUrlValue($varValue)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function sortIds($idList, $strDirection)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function searchFor($strPattern)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function filterGreaterThan($varValue, $blnInclusive = false)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function filterLessThan($varValue, $blnInclusive = false)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function filterNotEqual($varValue)
+    {
+        throw new \LogicException(__METHOD__ . ' is a virtual helper attribute and not intended for use.');
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public function modelSaved($objItem)
+    {
+        // No op.
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function getSQLDataType()
+    {
+        throw new \LogicException('FileOrder is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function createColumn()
+    {
+        throw new \LogicException('FileOrder is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function deleteColumn()
+    {
+        throw new \LogicException('FileOrder is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \LogicException Always, as this is not intended for real use.
+     */
+    public function renameColumn($strNewColumnName)
+    {
+        throw new \LogicException('FileOrder is a virtual helper attribute and not intended for use.');
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function unserializeData($value)
     {
-        return ToolboxFile::convertValuesToMetaModels(deserialize($value, true));
+        return deserialize($value, true);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function serializeData($value)
     {
-        if ($value === null) {
-            $value = array('bin' => array(), 'value' => array(), 'path' => array());
-        }
-        $arrData = ToolboxFile::convertValuesToDatabase($value);
-
-        return serialize($arrData);
+        return serialize($value);
     }
 }

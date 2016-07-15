@@ -27,5 +27,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'
     ),
     'functions'  => array(
         'mandatory',
+        'file_widgetMode'
+    )
+);
+
+$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode'] = array
+(
+    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetMode'],
+    'exclude'                 => true,
+    'inputType'               => 'radio',
+    'options'                 => array('normal', 'downloads', 'gallery'),
+    'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes'],
+    'eval'                    => array(
+        'default'             => 'normal',
+        'chosen'              => true,
     )
 );

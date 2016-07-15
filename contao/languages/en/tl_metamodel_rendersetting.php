@@ -36,5 +36,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']  = 'File name (asc
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc'] = 'File name (descending)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']  = 'Date (ascending)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_desc'] = 'Date (descending)';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']      = 'Meta file (meta.txt)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['random']    = 'Random order';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['manual']    = 'Manual sorting';

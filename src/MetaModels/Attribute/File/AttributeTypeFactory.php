@@ -21,22 +21,63 @@
 
 namespace MetaModels\Attribute\File;
 
-use MetaModels\Attribute\AbstractAttributeTypeFactory;
+use MetaModels\Attribute\IAttributeTypeFactory;
 
 /**
  * Attribute type factory for file attributes.
  */
-class AttributeTypeFactory extends AbstractAttributeTypeFactory
+class AttributeTypeFactory implements IAttributeTypeFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function __construct()
+    public function getTypeName()
     {
-        parent::__construct();
+        return 'file';
+    }
 
-        $this->typeName  = 'file';
-        $this->typeIcon  = 'system/modules/metamodelsattribute_file/html/file.png';
-        $this->typeClass = 'MetaModels\Attribute\File\File';
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeIcon()
+    {
+        return 'system/modules/metamodelsattribute_file/html/file.png';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createInstance($information, $metaModel)
+    {
+        // Inject ad-hoc order attribute.
+        $order = new FileOrder($metaModel, $information['colname'] . '_sort');
+        $metaModel->addAttribute($order);
+
+        $file = new File($metaModel, $information);
+        return $file;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isTranslatedType()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isSimpleType()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isComplexType()
+    {
+        return false;
     }
 }
