@@ -45,11 +45,11 @@ class Subscriber extends BaseSubscriber
         $this
             ->addListener(
                 BuildAttributeEvent::NAME,
-                array($this, 'getBuildAttribute')
+                array($this, 'buildAttribute')
             )
             ->addListener(
                 BuildDataDefinitionEvent::NAME,
-                array($this, 'getBuildDataDefinition'),
+                array($this, 'buildDataDefinition'),
                 // Ensure to be after MetaModels\DcGeneral\Dca\Builder\Builder::PRIORITY (currently 50).
                 0
             );
@@ -62,7 +62,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function getBuildAttribute(BuildAttributeEvent $event)
+    public function buildAttribute(BuildAttributeEvent $event)
     {
         $attribute = $event->getAttribute();
 
@@ -95,7 +95,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function getBuildDataDefinition(BuildDataDefinitionEvent $event)
+    public function buildDataDefinition(BuildDataDefinitionEvent $event)
     {
         $container = $event->getContainer();
         if (!$container->hasDefinition('metamodels.file-attributes')) {
