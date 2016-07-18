@@ -87,6 +87,7 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     {
         $factory   = new AttributeTypeFactory();
         $values    = array(
+            'colname' => 'test'
         );
         $attribute = $factory->createInstance(
             $values,
