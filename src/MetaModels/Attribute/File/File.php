@@ -43,6 +43,35 @@ class File extends BaseComplex
     /**
      * {@inheritdoc}
      */
+    public function destroyAUX()
+    {
+        parent::destroyAUX();
+        $metaModel = $this->getMetaModel()->getTableName();
+        // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
+        if (($colName = $this->getColName())
+            && $this->getDatabase()->fieldExists($colName, $metaModel, true)
+        ) {
+            TableManipulation::dropColumn($metaModel, $colName);
+            TableManipulation::dropColumn($metaModel, $colName . '_sort');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initializeAUX()
+    {
+        parent::initializeAUX();
+        if ($colName = $this->getColName()) {
+            $tableName = $this->getMetaModel()->getTableName();
+            TableManipulation::createColumn($tableName, $colName, 'blob NULL');
+            TableManipulation::createColumn($tableName, $colName . '_sort', 'blob NULL');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
@@ -153,33 +182,6 @@ class File extends BaseComplex
     {
         // FIXME: unimplemented so far.
         return array();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function createColumn()
-    {
-        if ($colName = $this->getColName()) {
-            $tableName = $this->getMetaModel()->getTableName();
-            TableManipulation::createColumn($tableName, $colName, 'blob NULL');
-            TableManipulation::createColumn($tableName, $colName . '_sort', 'blob NULL');
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteColumn()
-    {
-        $metaModel = $this->getMetaModel()->getTableName();
-        // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
-        if (($colName = $this->getColName())
-            && $this->getDatabase()->fieldExists($colName, $metaModel, true)
-        ) {
-            TableManipulation::dropColumn($metaModel, $colName);
-            TableManipulation::dropColumn($metaModel, $colName . '_sort');
-        }
     }
 
     /**
