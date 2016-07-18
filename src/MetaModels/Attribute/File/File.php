@@ -180,7 +180,6 @@ class File extends BaseComplex
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
-        // FIXME: unimplemented so far.
         return array();
     }
 
