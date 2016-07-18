@@ -49,7 +49,9 @@ class Subscriber extends BaseSubscriber
             )
             ->addListener(
                 BuildDataDefinitionEvent::NAME,
-                array($this, 'getBuildDataDefinition')
+                array($this, 'getBuildDataDefinition'),
+                // Ensure to be after MetaModels\DcGeneral\Dca\Builder\Builder::PRIORITY (currently 50).
+                0
             );
     }
 
