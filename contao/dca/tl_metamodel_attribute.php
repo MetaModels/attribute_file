@@ -26,8 +26,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simp
     '+advanced'               => array('file_customFiletree', 'file_multiple'),
 );
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['fileOrder extends _simpleattribute_'] = array();
-
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = array
 (
     'file_uploadFolder', 'file_validFileTypes', 'file_filesOnly'
