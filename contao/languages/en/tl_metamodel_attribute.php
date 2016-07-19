@@ -37,6 +37,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'][1]      =
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'][0]       = 'Multiple selection';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'][1]       =
     'If selected, user will be able to select more than one item.';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_orderField'][0]     = 'Order field';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_orderField'][1]     =
-    'Select an orderField attribute to enable file ordering.';
