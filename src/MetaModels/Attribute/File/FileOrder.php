@@ -181,8 +181,6 @@ class FileOrder implements ISimple
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \LogicException Always, as this is not intended for real use.
      */
     public function setDataFor($arrValues)
     {
