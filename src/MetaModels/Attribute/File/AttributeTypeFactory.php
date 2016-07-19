@@ -70,7 +70,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isSimpleType()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -78,6 +78,6 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isComplexType()
     {
-        return false;
+        return true;
     }
 }
