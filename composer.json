@@ -57,6 +57,9 @@
       "sources": {
         "contao": "system/modules/metamodelsattribute_file"
       },
+      "runonce": [
+        "runonce/runonce.php"
+      ],
       "transifex": {
         "project": "metamodels",
         "prefix": "attribute_file-",
