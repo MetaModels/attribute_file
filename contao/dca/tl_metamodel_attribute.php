@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmil.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -42,7 +43,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'],
     'inputType'               => 'checkbox',
-    'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50')
+    'eval'                    => array('tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = array

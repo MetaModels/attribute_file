@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,7 +23,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -32,8 +33,8 @@ namespace MetaModels\Attribute\File;
 
 use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\TableManipulation;
-use MetaModels\Render\Template;
 use MetaModels\Helper\ToolboxFile;
+use MetaModels\Render\Template;
 
 /**
  * This is the MetaModel attribute class for handling file fields.
@@ -52,7 +53,7 @@ class File extends BaseComplex
             && $this->getDatabase()->fieldExists($colName, $metaModel, true)
         ) {
             TableManipulation::dropColumn($metaModel, $colName);
-            TableManipulation::dropColumn($metaModel, $colName . '_sort');
+            TableManipulation::dropColumn($metaModel, $colName . '__sort');
         }
     }
 
@@ -65,7 +66,6 @@ class File extends BaseComplex
         if ($colName = $this->getColName()) {
             $tableName = $this->getMetaModel()->getTableName();
             TableManipulation::createColumn($tableName, $colName, 'blob NULL');
-            TableManipulation::createColumn($tableName, $colName . '_sort', 'blob NULL');
         }
     }
 
@@ -101,10 +101,17 @@ class File extends BaseComplex
      */
     public function unsetDataFor($arrIds)
     {
+        $sortProperty = $this->getMetaModel()->getAttribute($this->getColName() . '__sort');
+
+        $fileSortQuery = '';
+        if ($sortProperty) {
+            $fileSortQuery = ', %2$s__sort=null';
+        }
+
         $this->getDatabase()
             ->prepare(
                 sprintf(
-                    'UPDATE %1$s SET %2$s=null, %2$s_sort=null WHERE %1$s.id IN (%3$s)',
+                    'UPDATE %1$s SET %2$s=null' . $fileSortQuery . ' WHERE %1$s.id IN (%3$s)',
                     $this->getMetaModel()->getTableName(),
                     $this->getColName(),
                     $this->parameterMask($arrIds)
@@ -118,10 +125,17 @@ class File extends BaseComplex
      */
     public function getDataFor($arrIds)
     {
+        $sortProperty = $this->getMetaModel()->getAttribute($this->getColName() . '__sort');
+
+        $fileSortQuery = '';
+        if ($sortProperty) {
+            $fileSortQuery = ', %1$s__sort AS file_sort';
+        }
+
         $result = $this->getDatabase()
             ->prepare(
                 sprintf(
-                    'SELECT id, %1$s AS file, %1$s_sort AS file_sort FROM %2$s WHERE id IN (%3$s)',
+                    'SELECT id, %1$s AS file' . $fileSortQuery . ' FROM %2$s WHERE id IN (%3$s)',
                     $this->getColName(),
                     $this->getMetaModel()->getTableName(),
                     $this->parameterMask($arrIds)
@@ -131,8 +145,12 @@ class File extends BaseComplex
 
         $data = array();
         while ($result->next()) {
-            $row               = ToolboxFile::convertValuesToMetaModels(deserialize($result->file, true));
-            $row['sort']       = deserialize($result->file_sort, true);
+            $row = ToolboxFile::convertValuesToMetaModels(deserialize($result->file, true));
+
+            if ($sortProperty) {
+                $row['sort'] = deserialize($result->file_sort, true);
+            }
+
             $data[$result->id] = $row;
         }
 
@@ -271,9 +289,14 @@ class File extends BaseComplex
         $arrFieldDef['eval']['files']      = true;
         $arrFieldDef['eval']['extensions'] = \Config::get('allowedDownload');
         $arrFieldDef['eval']['multiple']   = (bool) $this->get('file_multiple');
-        $arrFieldDef['eval']['orderField'] = $this->getColName() . '_sort';
 
         $widgetMode = $this->getOverrideValue('file_widgetMode', $arrOverrides);
+
+        if (('normal' !== $widgetMode)
+            && ((bool) $this->get('file_multiple'))
+        ) {
+            $arrFieldDef['eval']['orderField'] = $this->getColName() . '__sort';
+        }
 
         $arrFieldDef['eval']['isDownloads'] = ('downloads' === $widgetMode);
         $arrFieldDef['eval']['isGallery']   = ('gallery' === $widgetMode);

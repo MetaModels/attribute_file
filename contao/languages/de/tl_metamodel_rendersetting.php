@@ -25,3 +25,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']                = 'Meta
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']            = 'Dateiname (aufsteigend)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']           = 'Dateiname (absteigend)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['random']              = 'Zufällige Reihenfolge';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['manual']              = 'Manuelle Reihenfolge';
