@@ -10,6 +10,9 @@ env:
 
 sudo: false
 
+before_install:
+  - phpenv config-add travis.php.ini
+
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer require contao/core $CONTAO_VERSION --no-update
