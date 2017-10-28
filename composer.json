@@ -32,10 +32,13 @@
     "source": "https://github.com/MetaModels/attribute_file"
   },
   "require": {
-    "php": ">=5.4",
-    "contao/core": "^3.5.5",
-    "contao-community-alliance/composer-plugin": "~2.0",
-    "metamodels/core": "~2.0"
+    "php": ">=5.6",
+    "contao/core-bundle": "^4.4",
+    "contao-community-alliance/dc-general": "~2.1@dev",
+    "contao-community-alliance/composer-plugin": "~3.0",
+    "metamodels/core": "~2.1@dev",
+    "symfony/dependency-injection": "^3.3",
+    "symfony/http-kernel": "^3.3"
   },
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
