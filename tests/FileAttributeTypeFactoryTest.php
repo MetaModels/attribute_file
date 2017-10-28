@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,29 +14,36 @@
  * @subpackage Tests
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Test\Attribute\File;
 
-use MetaModels\Attribute\File\File;
+use MetaModels\Attribute\IAttributeTypeFactory;
+use MetaModels\Attribute\File\AttributeTypeFactory;
+use MetaModels\IMetaModel;
+use MetaModels\Test\Attribute\AttributeTypeFactoryTest;
 
 /**
- * Unit tests to test class Alias.
+ * Test the attribute factory.
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
 {
     /**
      * Mock a MetaModel.
      *
+     * @param string $tableName        The table name.
+     *
      * @param string $language         The language.
+     *
      * @param string $fallbackLanguage The fallback language.
      *
-     * @return \MetaModels\IMetaModel
+     * @return IMetaModel
      */
-    protected function mockMetaModel($language, $fallbackLanguage)
+    protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
         $metaModel = $this->getMock(
             'MetaModels\MetaModel',
@@ -47,7 +54,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $metaModel
             ->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnValue('mm_unittest'));
+            ->will($this->returnValue($tableName));
 
         $metaModel
             ->expects($this->any())
@@ -63,37 +70,34 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that the attribute can be instantiated.
+     * Override the method to run the tests on the attribute factories to be tested.
      *
-     * @return void
+     * @return IAttributeTypeFactory[]
      */
-    public function testInstantiation()
+    protected function getAttributeFactories()
     {
-        $text = new File($this->mockMetaModel('en', 'en'));
-        $this->assertInstanceOf('MetaModels\Attribute\File\File', $text);
+        return array(new AttributeTypeFactory());
     }
 
     /**
-     * Test that empty values are handled correctly.
+     * Test creation of a file attribute.
      *
      * @return void
      */
-    public function testEmptyValues()
+    public function testCreateSelect()
     {
-        $file = new File(
-            $this->mockMetaModel('en', 'en'),
-            array(
-                'file_multiple' => false
-            )
+        $factory   = new AttributeTypeFactory();
+        $values    = array(
+        );
+        $attribute = $factory->createInstance(
+            $values,
+            $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array()),
-            $file->widgetToValue(null, 1)
-        );
-        $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array()),
-            $file->widgetToValue(array(), 1)
-        );
+        $this->assertInstanceOf('MetaModels\Attribute\File\File', $attribute);
+
+        foreach ($values as $key => $value) {
+            $this->assertEquals($value, $attribute->get($key), $key);
+        }
     }
 }
