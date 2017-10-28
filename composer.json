@@ -8,7 +8,7 @@
     "file",
     "nontranslatable"
   ],
-  "type": "contao-module",
+  "type": "contao-bundle",
   "homepage": "http://now.metamodel.me/",
   "license": "LGPL-3.0+",
   "authors": [
@@ -35,7 +35,6 @@
     "php": ">=5.6",
     "contao/core-bundle": "^4.4",
     "contao-community-alliance/dc-general": "~2.1@dev",
-    "contao-community-alliance/composer-plugin": "~3.0",
     "metamodels/core": "~2.1@dev",
     "symfony/dependency-injection": "^3.3",
     "symfony/http-kernel": "^3.3"
@@ -57,10 +56,6 @@
   },
   "extra": {
     "contao": {
-      "sources": {
-        "src/Resources/contao": "system/modules/metamodelsattribute_file",
-        "src/Resources/public": "assets/metamodelsattribute_file"
-      },
       "transifex": {
         "project": "metamodels",
         "prefix": "attribute_file-",
