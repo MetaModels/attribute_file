@@ -35,14 +35,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = 
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree'],
     'inputType'               => 'checkbox',
-    'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50')
+    'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50'),
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'],
     'inputType'               => 'checkbox',
-    'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50')
+    'eval'                    => array('submitOnChange' => true, 'tl_class' => 'w50'),
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = array
@@ -50,19 +52,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = ar
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder'],
     'exclude'                 => true,
     'inputType'               => 'fileTree',
-    'eval'                    => array('fieldType' => 'radio', 'tl_class' => 'clr')
+    'eval'                    => array('fieldType' => 'radio', 'tl_class' => 'clr'),
+    'sql'                     => "blob NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_validFileTypes'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes'],
     'inputType'               => 'text',
-    'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50')
+    'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filesOnly'] = array
 (
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'],
     'inputType'               => 'checkbox',
-    'eval'                    => array('tl_class' => 'w50 m12')
+    'eval'                    => array('tl_class' => 'w50 m12'),
+    'sql'                     => "char(1) NOT NULL default ''"
 );
