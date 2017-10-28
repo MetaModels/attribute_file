@@ -22,22 +22,27 @@
 
 namespace MetaModels\Attribute\File;
 
-use MetaModels\Attribute\AbstractAttributeTypeFactory;
+use Doctrine\DBAL\Driver\Connection;
+use MetaModels\Attribute\AbstractSimpleAttributeTypeFactory;
+use MetaModels\Helper\TableManipulator;
 
 /**
  * Attribute type factory for file attributes.
  */
-class AttributeTypeFactory extends AbstractAttributeTypeFactory
+class AttributeTypeFactory extends AbstractSimpleAttributeTypeFactory
 {
     /**
      * {@inheritDoc}
+     *
+     * @param Connection       $connection       The database connection.
+     * @param TableManipulator $tableManipulator The table manipulator.
      */
-    public function __construct()
+    public function __construct(Connection $connection, TableManipulator $tableManipulator)
     {
-        parent::__construct();
+        parent::__construct($connection, $tableManipulator);
 
         $this->typeName  = 'file';
-        $this->typeIcon  = 'system/modules/metamodelsattribute_file/html/file.png';
+        $this->typeIcon  = 'bundles/metamodelsattributefilebundle/file.png';
         $this->typeClass = 'MetaModels\Attribute\File\File';
     }
 }
