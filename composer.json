@@ -55,7 +55,8 @@
   "extra": {
     "contao": {
       "sources": {
-        "src/Resources/contao": "system/modules/metamodelsattribute_file"
+        "src/Resources/contao": "system/modules/metamodelsattribute_file",
+        "src/Resources/public": "assets/metamodelsattribute_file"
       },
       "transifex": {
         "project": "metamodels",
