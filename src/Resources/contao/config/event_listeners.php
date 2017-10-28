@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,19 +13,23 @@
  * @package    MetaModels
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Isaak <info@andreas-isaak.de>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file'] = array
+use MetaModels\Attribute\File\AttributeTypeFactory;
+use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\MetaModelsEvents;
+
+return array
 (
-    'presentation' => array(
-        'tl_class',
-    ),
-    'functions'  => array(
-        'mandatory',
+    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(
+        function (CreateAttributeFactoryEvent $event) {
+            $factory = $event->getFactory();
+            $factory->addTypeFactory(new AttributeTypeFactory());
+        }
     )
 );
