@@ -42,7 +42,7 @@ class AttributeTypeFactory extends AbstractSimpleAttributeTypeFactory
         parent::__construct($connection, $tableManipulator);
 
         $this->typeName  = 'file';
-        $this->typeIcon  = 'bundles/metamodelsattributefilebundle/file.png';
+        $this->typeIcon  = 'bundles/metamodelsattributefile/file.png';
         $this->typeClass = 'MetaModels\Attribute\File\File';
     }
 }
