@@ -29,3 +29,30 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'
         'mandatory',
     )
 );
+
+if (in_array('metamodels-contao-frontend-editing', \Contao\ModuleLoader::getActive())) {
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file']['functions'][] =
+        'fee_widget';
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fee_widget'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fee_widget'],
+        'exclude'   => true,
+        'inputType' => 'select',
+        'eval'      => [
+            'tl_class'           => 'w50',
+            'mandatory'          => true,
+            'submitOnChange'     => true,
+            'includeBlankOption' => true,
+        ],
+        'sql'       => "varchar(64) NOT NULL default ''",
+    ];
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['doNotOverwrite'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['doNotOverwrite'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'           => 'w50',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
+    ];
+}

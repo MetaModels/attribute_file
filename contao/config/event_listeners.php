@@ -19,6 +19,7 @@
  * @filesource
  */
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\MetaModelsEvents;
@@ -29,6 +30,26 @@ return array
         function (CreateAttributeFactoryEvent $event) {
             $factory = $event->getFactory();
             $factory->addTypeFactory(new AttributeTypeFactory());
+        }
+    ),
+    GetPropertyOptionsEvent::NAME => array(
+        function (GetPropertyOptionsEvent $event) {
+            if (('tl_metamodel_dcasetting' !== $event->getEnvironment()->getDataDefinition()->getName())
+                || ('fee_widget' !== $event->getPropertyName())) {
+                return;
+            }
+
+            $options = [];
+            foreach ($GLOBALS['TL_FFL'] as $ffl => $fflClass) {
+                if (in_array(
+                    'MetaModels\Attribute\File\Contao\Widget\IFileWidget',
+                    class_implements($fflClass, true)
+                )) {
+                    $options[] = $ffl;
+                }
+            }
+
+            $event->setOptions($options);
         }
     )
 );
