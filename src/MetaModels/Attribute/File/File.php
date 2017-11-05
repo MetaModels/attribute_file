@@ -183,8 +183,8 @@ class File extends BaseSimple
             $this->handleCustomFileTree($arrFieldDef);
         }
 
-        if ('FE' === TL_MODE && '' !== $arrOverrides['fee_widget']) {
-            $arrFieldDef['inputType'] = $arrOverrides['fee_widget'];
+        if ('FE' === TL_MODE && '' !== $arrOverrides['fe_widget']) {
+            $arrFieldDef['inputType'] = $arrOverrides['fe_widget'];
             $widgetClass = $GLOBALS['TL_FFL'][$arrFieldDef['inputType']];
 
             $additionalEval = $widgetClass::getAllowedEval();

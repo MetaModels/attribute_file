@@ -31,11 +31,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'
 );
 
 if (in_array('metamodels-contao-frontend-editing', \Contao\ModuleLoader::getActive())) {
-    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file']['functions'][] =
-        'fee_widget';
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['palettes']['__selector__'][] = 'fe_widget';
 
-    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fee_widget'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fee_widget'],
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file']['functions'][] =
+        'fe_widget';
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget'],
         'exclude'   => true,
         'inputType' => 'select',
         'eval'      => [
@@ -51,8 +53,30 @@ if (in_array('metamodels-contao-frontend-editing', \Contao\ModuleLoader::getActi
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'           => 'w50',
+            'tl_class'           => 'w50 m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
+    ];
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['useHomeDir'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['useHomeDir'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'           => 'w50 m12',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
+    ];
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fallbackImage'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fallbackImage'],
+        'exclude'   => true,
+        'inputType' => 'fileTree',
+        'eval'      => [
+            'fieldType'  => 'radio',
+            'files'      => true,
+            'filesOnly'  => true,
+            'extensions' => $GLOBALS['TL_CONFIG']['validImageTypes'],
+            'tl_class'   => 'w50 w50h',
+        ],
+        'sql'       => "binary(16) NULL",
     ];
 }

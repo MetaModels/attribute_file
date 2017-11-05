@@ -35,7 +35,7 @@ return array
     GetPropertyOptionsEvent::NAME => array(
         function (GetPropertyOptionsEvent $event) {
             if (('tl_metamodel_dcasetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-                || ('fee_widget' !== $event->getPropertyName())) {
+                || ('fe_widget' !== $event->getPropertyName())) {
                 return;
             }
 
