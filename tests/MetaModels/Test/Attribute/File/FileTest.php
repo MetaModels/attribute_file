@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Tests
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -22,11 +23,12 @@
 namespace MetaModels\Test\Attribute\File;
 
 use MetaModels\Attribute\File\File;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Unit tests to test class Alias.
+ * Unit tests to test class File.
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -38,11 +40,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
 
         $metaModel
             ->expects($this->any())
@@ -88,11 +86,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array()),
+            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
             $file->widgetToValue(null, 1)
         );
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array()),
+            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
             $file->widgetToValue(array(), 1)
         );
     }
