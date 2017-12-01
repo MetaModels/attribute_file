@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -22,13 +23,14 @@
 namespace MetaModels\Attribute\File;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\DefaultProperty;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyEditableCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\AttributeFileDefinition;
+use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
+use MetaModels\Helper\TableManipulation;
 
 /**
  * Subscriber integrates file attribute related listeners.
@@ -52,6 +54,11 @@ class Subscriber extends BaseSubscriber
                 array($this, 'buildDataDefinition'),
                 // Ensure to be after MetaModels\DcGeneral\Dca\Builder\Builder::PRIORITY (currently 50).
                 0
+            )
+            ->addListener(
+                PostPersistModelEvent::NAME,
+                array($this, 'handleUpdateAttribute'),
+                -1
             );
     }
 
@@ -66,7 +73,9 @@ class Subscriber extends BaseSubscriber
     {
         $attribute = $event->getAttribute();
 
-        if (!($attribute instanceof File)) {
+        if (!($attribute instanceof File)
+            || !$attribute->get('file_multiple')
+        ) {
             return;
         }
 
@@ -74,18 +83,18 @@ class Subscriber extends BaseSubscriber
         $properties = $container->getPropertiesDefinition();
         $name       = $attribute->getColName();
 
-        if ($properties->hasProperty($name . '_sort')) {
+        if ($properties->hasProperty($name . '__sort')) {
+            $this->addAttributeToDefinition($container, $name);
+
+            $properties->getProperty($name . '__sort')->setWidgetType('fileTreeOrder');
+
             return;
         }
 
-        $properties->addProperty($property = new DefaultProperty($name . '_sort'));
+        $properties->addProperty($property = new DefaultProperty($name . '__sort'));
         $property->setWidgetType('fileTreeOrder');
 
-        if (!$container->hasDefinition('metamodels.file-attributes')) {
-            $container->setDefinition('metamodels.file-attributes', new AttributeFileDefinition());
-        }
-
-        $container->getDefinition('metamodels.file-attributes')->add($name);
+        $this->addAttributeToDefinition($container, $name);
     }
 
     /**
@@ -108,17 +117,68 @@ class Subscriber extends BaseSubscriber
                 // ... in any legend ...
                 foreach ($palette->getLegends() as $legend) {
                     // ... of the searched name ...
-                    if ($legend->hasProperty($propertyName)) {
+                    if (($legend->hasProperty($propertyName))
+                        && ($container->getPropertiesDefinition()->hasProperty($propertyName . '__sort'))
+                    ) {
                         // ... must have the order field as companion, visible only when the real property is.
                         $file = $legend->getProperty($propertyName);
 
-                        $legend->addProperty($order = new Property($propertyName . '_sort'), $file);
+                        $legend->addProperty($order = new Property($propertyName . '__sort'), $file);
 
-                        $order->setEditableCondition(new PropertyEditableCondition($file->getName()));
-                        $order->setVisibleCondition(new PropertyVisibleCondition($file->getName()));
+                        $order->setEditableCondition($file->getEditableCondition());
+                        $order->setVisibleCondition($file->getVisibleCondition());
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Handle the update of the file attribute, if switch on for file multiple.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return void
+     *
+     * @throws \Exception If column not exist in the table.
+     */
+    public function handleUpdateAttribute(PostPersistModelEvent $event)
+    {
+        $model = $event->getModel();
+
+        if (($model->getProperty('type') !== 'file')
+            || (!$model->getProperty('file_multiple'))
+            || ($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')
+        ) {
+            return;
+        }
+
+        $metaModel = $this->getMetaModelById($model->getProperty('pid'));
+
+        $attributeName = $model->getProperty('colname') . '__sort';
+
+        try {
+            TableManipulation::checkColumnExists($metaModel->getTableName(), $attributeName);
+        } catch (\Exception $e) {
+            TableManipulation::createColumn($metaModel->getTableName(), $attributeName, 'blob NULL');
+        }
+    }
+
+    /**
+     * Add attribute to metamodels file attributes definition.
+     *
+     * @param IMetaModelDataDefinition $container The metamodel data definition.
+     *
+     * @param string                   $name      The attribute name.
+     *
+     * @return void
+     */
+    protected function addAttributeToDefinition(IMetaModelDataDefinition $container, $name)
+    {
+        if (!$container->hasDefinition('metamodels.file-attributes')) {
+            $container->setDefinition('metamodels.file-attributes', new AttributeFileDefinition());
+        }
+
+        $container->getDefinition('metamodels.file-attributes')->add($name);
     }
 }
