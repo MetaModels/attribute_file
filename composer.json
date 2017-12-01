@@ -32,7 +32,7 @@
     "source": "https://github.com/MetaModels/attribute_file"
   },
   "require": {
-    "php": ">=5.4",
+    "php": "^5.4 | ^7.0",
     "contao/core": "^3.5.5",
     "contao-community-alliance/composer-plugin": "~2.0",
     "metamodels/core": "~2.0"
