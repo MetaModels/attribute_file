@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -23,11 +24,12 @@
 namespace MetaModels\Test\Attribute\File;
 
 use MetaModels\Attribute\File\File;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Unit tests to test class Alias.
+ * Unit tests to test class File.
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -89,11 +91,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array()),
+            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
             $file->widgetToValue(null, 1)
         );
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array()),
+            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
             $file->widgetToValue(array(), 1)
         );
     }
