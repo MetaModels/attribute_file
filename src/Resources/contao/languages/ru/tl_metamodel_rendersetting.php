@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-22T12:14:34+02:00
+ * last-updated: 2017-11-30T00:34:29+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']            = 'Дата (по возрастанию)';
@@ -22,6 +22,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['1']  = 'Об
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['0']    = 'Сортировать по';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['1']    = 'Выберите порядок сортировки.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']                = 'Мета файл (meta.txt)';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']            = 'Имя файла (по возрастанию)';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']           = 'Имя файла (по убыванию)';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']            = 'Название файла (по возрастанию)';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']           = 'Название файла (по убыванию)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['random']              = 'Случайный порядок';
+
