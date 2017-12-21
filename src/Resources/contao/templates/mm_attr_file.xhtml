@@ -1,24 +1,24 @@
 <?php if (is_array($this->src)): ?>
-<ul class="file<?php echo $this->additional_class; ?>">
+<ul class="file<?= $this->additional_class ?>">
 <?php foreach($this->src as $arrFile): 
 $strTitle = ($arrFile['title']) ? $arrFile['title'] : (($arrFile['alt']) ? $arrFile['alt'] : $arrFile['file']);
 $strAlt   = ($arrFile['caption']) ? $arrFile['caption'] : '';
 ?>	
-<li class="<?php echo $arrFile['class']; ?>">
+<li class="<?= $arrFile['class'] ?>">
 	<?php if ($this->settings->get('file_showLink')): ?>
 		<?php if ($this->settings->get('file_showImage')): ?>
-			<a class="cboxElement" rel="lightbox[<?php echo $arrFile['lb']; ?>]" title="<?php echo $strTitle; ?>" href="<?php echo $arrFile['file']; ?>">
+			<a class="cboxElement" rel="lightbox[<?= $arrFile['lb'] ?>]" title="<?= $strTitle ?>" href="<?= $arrFile['file'] ?>">
 		<?php else: ?>
-			<a title="<?php echo $strTitle; ?>" href="<?php echo $arrFile['url']; ?>">
+			<a title="<?= $strTitle ?>" href="<?= $arrFile['url'] ?>">
 		<?php endif; ?>
 	<?php endif; ?>
 				
 	<?php if ($this->settings->get('file_showImage')): ?>
-		<?php if ($arrFile['isGdImage']): ?>
-			<?php echo $this->generateImage($arrFile['src'], $strAlt); ?>
+		<?php if ($arrFile['isGdImage'] || $arrFile['isSvgImage']): ?>
+			<?= $this->generateImage($arrFile['src'], $strAlt) ?>
 		<?php endif; ?>
 	<?php else: ?>
-		<img src="<?php echo $arrFile['icon']; ?>" alt="<?php echo $strAlt; ?>" /> <?php echo $strTitle; ?> <span class="size"><?php echo $arrFile['sizetext']; ?></span>
+		<img src="<?= $arrFile['icon'] ?>" alt="<?= $strAlt ?>" /> <?= $strTitle ?> <span class="size"><?= $arrFile['sizetext'] ?></span>
 	<?php endif; ?>
 		
 	<?php if ($this->settings->get('file_showLink')): ?>
