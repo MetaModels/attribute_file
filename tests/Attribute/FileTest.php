@@ -25,6 +25,9 @@ namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Statement;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
@@ -64,12 +67,15 @@ class FileTest extends TestCase
     /**
      * Mock the database connection.
      *
+     * @param array $methods The method names to mock.
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|Connection
      */
-    private function mockConnection()
+    private function mockConnection($methods = [])
     {
         return $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
+            ->setMethods($methods)
             ->getMock();
     }
 
@@ -136,5 +142,71 @@ class FileTest extends TestCase
             ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(array(), 1)
         );
+    }
+
+    /**
+     * Test the search for method.
+     *
+     * @return void
+     */
+    public function testSearchFor()
+    {
+        $metaModel    = $this->mockMetaModel('mm_test', 'en');
+        $connection   = $this->mockConnection(['createQueryBuilder']);
+        $manipulator  = $this->mockTableManipulator($connection);
+        $imageFactory = $this->mockImageFactory();
+
+        $statement = $this
+            ->getMockBuilder(Statement::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['fetchAll'])
+            ->getMock();
+        $statement
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_COLUMN)
+            ->willReturn(['1', '2', '3', '4', '5']);
+
+        $builder1 = $this
+            ->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['expr'])
+            ->getMock();
+
+        $builder1->expects($this->once())->method('expr')->willReturn(new ExpressionBuilder($connection));
+
+        $builder2 = $this
+            ->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['execute', 'expr'])
+            ->getMock();
+        $builder2->expects($this->once())->method('expr')->willReturn(new ExpressionBuilder($connection));
+        $builder2->expects($this->once())->method('execute')->willReturn($statement);
+
+        $connection
+            ->expects($this->exactly(2))
+            ->method('createQueryBuilder')
+            ->willReturnOnConsecutiveCalls($builder1, $builder2);
+
+        $file = new File(
+            $metaModel,
+            [
+                'colname' => 'file_attribute',
+                'file_multiple' => false
+            ],
+            $connection,
+            $manipulator,
+            $imageFactory,
+            sys_get_temp_dir()
+        );
+
+        $this->assertSame(['1', '2', '3', '4', '5'], $file->searchFor('*test?value'));
+
+        /** @var QueryBuilder $builder2 */
+        $this->assertSame(
+            'SELECT id FROM mm_test WHERE file_attribute IN (SELECT uuid FROM tl_files WHERE path LIKE :value)',
+            $builder2->getSQL()
+        );
+        $this->assertSame(['value' => '%test_value'], $builder2->getParameters());
     }
 }

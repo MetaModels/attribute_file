@@ -109,26 +109,19 @@ class File extends BaseSimple
      */
     public function searchFor($strPattern)
     {
-        // Base implementation, do a simple search on given column.
-        $objQuery = \Database::getInstance()
-            ->prepare(sprintf(
-                'SELECT id
-                    FROM %s
-                    WHERE %s IN
-                    (SELECT uuid FROM
-                    %s
-                    WHERE path
-                    LIKE
-                    ?)',
-                $this->getMetaModel()->getTableName(),
-                $this->getColName(),
-                \FilesModel::getTable()
-            ))
-            ->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+        $subSelect = $this->connection->createQueryBuilder();
+        $subSelect
+            ->select('uuid')
+            ->from('tl_files')
+            ->where($subSelect->expr()->like('path', ':value'));
+        $builder = $this->connection->createQueryBuilder();
+        $builder
+            ->select('id')
+            ->from($this->getMetaModel()->getTableName())
+            ->where($builder->expr()->in($this->getColName(), $subSelect->getSQL()))
+            ->setParameter('value', str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
-        $arrIds = $objQuery->fetchEach('id');
-
-        return $arrIds;
+        return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
