@@ -30,7 +30,12 @@
 
 namespace MetaModels\AttributeFileBundle\Attribute;
 
+use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\System;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\BaseSimple;
+use MetaModels\Helper\TableManipulator;
+use MetaModels\IMetaModel;
 use MetaModels\Render\Template;
 use MetaModels\Helper\ToolboxFile;
 
@@ -39,6 +44,66 @@ use MetaModels\Helper\ToolboxFile;
  */
 class File extends BaseSimple
 {
+    /**
+     * The image factory.
+     *
+     * @var ImageFactoryInterface
+     */
+    private $imageFactory;
+
+    /**
+     * The installation root dir.
+     *
+     * @var string
+     */
+    private $rootPath;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IMetaModel            $objMetaModel     The MetaModel instance this attribute belongs to.
+     * @param array                 $arrData          The attribute information array.
+     * @param Connection            $connection       The database connection.
+     * @param TableManipulator      $tableManipulator Table manipulator instance.
+     * @param ImageFactoryInterface $imageFactory     The image factory to use.
+     * @param string                $rootPath         The root path.
+     */
+    public function __construct(
+        IMetaModel $objMetaModel,
+        $arrData = [],
+        Connection $connection = null,
+        TableManipulator $tableManipulator = null,
+        ImageFactoryInterface $imageFactory = null,
+        string $rootPath = null
+    ) {
+        parent::__construct($objMetaModel, $arrData, $connection, $tableManipulator);
+        if (null === $imageFactory) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'No "ImageFactoryInterface" passed. It has to be passed in the constructor.' .
+                'Fallback will get removed in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $imageFactory = System::getContainer()->get('contao.image.image_factory');
+        }
+
+        if (null === $rootPath) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                '"rootPath"" is missing. It has to be passed in the constructor.' .
+                'Fallback will get removed in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $rootPath = System::getContainer()->getParameter('kernel.project_dir');
+        }
+
+        $this->imageFactory = $imageFactory;
+        $this->rootPath     = $rootPath;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -218,7 +283,7 @@ class File extends BaseSimple
     {
         parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $objToolbox = new ToolboxFile();
+        $objToolbox = new ToolboxFile($this->imageFactory, $this->rootPath);
 
         $objToolbox->setBaseLanguage($this->getMetaModel()->getActiveLanguage());
 

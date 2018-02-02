@@ -22,8 +22,10 @@
 
 namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
+use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
+use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
@@ -93,15 +95,28 @@ class FileAttributeTypeFactoryTest extends TestCase
     }
 
     /**
+     * Mock the image factory.
+     *
+     * @return ImageFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockImageFactory()
+    {
+        return $this->getMockBuilder(ImageFactoryInterface::class)
+            ->getMockForAbstractClass();
+    }
+
+    /**
      * Test creation of a file attribute.
      *
      * @return void
      */
     public function testCreateFile()
     {
-        $connection  = $this->mockConnection();
-        $manipulator = $this->mockTableManipulator($connection);
-        $factory     = new AttributeTypeFactory($connection, $manipulator);
+        $connection   = $this->mockConnection();
+        $manipulator  = $this->mockTableManipulator($connection);
+        $imageFactory = $this->mockImageFactory();
+
+        $factory     = new AttributeTypeFactory($connection, $manipulator, $imageFactory, sys_get_temp_dir());
         $values      = array(
         );
         $attribute = $factory->createInstance(
@@ -109,7 +124,7 @@ class FileAttributeTypeFactoryTest extends TestCase
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertInstanceOf('MetaModels\Attribute\File\File', $attribute);
+        $this->assertInstanceOf(File::class, $attribute);
 
         foreach ($values as $key => $value) {
             $this->assertEquals($value, $attribute->get($key), $key);

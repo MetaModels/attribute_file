@@ -23,6 +23,7 @@
 
 namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
+use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
@@ -87,17 +88,30 @@ class FileTest extends TestCase
     }
 
     /**
+     * Mock the image factory.
+     *
+     * @return ImageFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockImageFactory()
+    {
+        return $this->getMockBuilder(ImageFactoryInterface::class)
+            ->getMockForAbstractClass();
+    }
+
+    /**
      * Test that the attribute can be instantiated.
      *
      * @return void
      */
     public function testInstantiation()
     {
-        $connection  = $this->mockConnection();
-        $manipulator = $this->mockTableManipulator($connection);
+        $metaModel    = $this->mockMetaModel('en', 'en');
+        $connection   = $this->mockConnection();
+        $manipulator  = $this->mockTableManipulator($connection);
+        $imageFactory = $this->mockImageFactory();
 
-        $text = new File($this->mockMetaModel('en', 'en'), [], $connection, $manipulator);
-        $this->assertInstanceOf('MetaModels\AttributeFileBundle\Attribute\File', $text);
+        $file = new File($metaModel, [], $connection, $manipulator, $imageFactory, sys_get_temp_dir());
+        $this->assertInstanceOf('MetaModels\AttributeFileBundle\Attribute\File', $file);
     }
 
     /**
@@ -107,12 +121,12 @@ class FileTest extends TestCase
      */
     public function testEmptyValues()
     {
-        $file = new File(
-            $this->mockMetaModel('en', 'en'),
-            ['file_multiple' => false],
-            $connection = $this->mockConnection(),
-            $this->mockTableManipulator($connection)
-        );
+        $metaModel    = $this->mockMetaModel('en', 'en');
+        $connection   = $this->mockConnection();
+        $manipulator  = $this->mockTableManipulator($connection);
+        $imageFactory = $this->mockImageFactory();
+
+        $file = new File($metaModel, ['file_multiple' => false], $connection, $manipulator, $imageFactory, sys_get_temp_dir());
 
         $this->assertEquals(
             ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],

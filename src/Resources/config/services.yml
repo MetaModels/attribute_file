@@ -4,5 +4,7 @@ services:
         arguments:
             - "@database_connection"
             - "@metamodels.table_manipulator"
+            - "@contao.image.image_factory"
+            - "%kernel.root_dir%"
         tags:
           - { name: metamodels.attribute_factory }
