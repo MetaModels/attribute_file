@@ -22,7 +22,7 @@
 
 namespace MetaModels\Attribute\File;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\AbstractSimpleAttributeTypeFactory;
 use MetaModels\Helper\TableManipulator;
 
