@@ -19,12 +19,12 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\File\ContaoManager;
+namespace MetaModels\AttributeFileBundle\ContaoManager;
 
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use MetaModels\Attribute\File\MetaModelsAttributeFileBundle;
+use MetaModels\AttributeFileBundle\MetaModelsAttributeFileBundle;
 use MetaModels\CoreBundle\MetaModelsCoreBundle;
 
 /**

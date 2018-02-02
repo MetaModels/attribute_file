@@ -28,7 +28,7 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\File;
+namespace MetaModels\AttributeFileBundle\Attribute;
 
 use MetaModels\Attribute\BaseSimple;
 use MetaModels\Render\Template;

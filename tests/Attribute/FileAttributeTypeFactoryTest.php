@@ -20,17 +20,18 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\File;
+namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
-use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Attribute\File\AttributeTypeFactory;
+use Doctrine\DBAL\Connection;
+use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
+use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
-use MetaModels\Test\Attribute\AttributeTypeFactoryTest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the attribute factory.
  */
-class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
+class FileAttributeTypeFactoryTest extends TestCase
 {
     /**
      * Mock a MetaModel.
@@ -45,11 +46,7 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      */
     protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
 
         $metaModel
             ->expects($this->any())
@@ -70,13 +67,29 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     }
 
     /**
-     * Override the method to run the tests on the attribute factories to be tested.
+     * Mock the database connection.
      *
-     * @return IAttributeTypeFactory[]
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
      */
-    protected function getAttributeFactories()
+    private function mockConnection()
     {
-        return array(new AttributeTypeFactory());
+        return $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * Mock the table manipulator.
+     *
+     * @param Connection $connection The database connection mock.
+     *
+     * @return TableManipulator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockTableManipulator(Connection $connection)
+    {
+        return $this->getMockBuilder(TableManipulator::class)
+            ->setConstructorArgs([$connection, []])
+            ->getMock();
     }
 
     /**
@@ -84,10 +97,12 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      *
      * @return void
      */
-    public function testCreateSelect()
+    public function testCreateFile()
     {
-        $factory   = new AttributeTypeFactory();
-        $values    = array(
+        $connection  = $this->mockConnection();
+        $manipulator = $this->mockTableManipulator($connection);
+        $factory     = new AttributeTypeFactory($connection, $manipulator);
+        $values      = array(
         );
         $attribute = $factory->createInstance(
             $values,

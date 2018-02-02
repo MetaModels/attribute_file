@@ -20,7 +20,7 @@
  * @filesource
  */
 
-namespace MetaModels\Attribute\File;
+namespace MetaModels\AttributeFileBundle\Attribute;
 
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\AbstractSimpleAttributeTypeFactory;

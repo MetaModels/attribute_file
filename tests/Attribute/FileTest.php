@@ -21,9 +21,12 @@
  * @filesource
  */
 
-namespace MetaModels\Test\Attribute\File;
+namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
-use MetaModels\Attribute\File\File;
+use Doctrine\DBAL\Connection;
+use MetaModels\AttributeFileBundle\Attribute\File;
+use MetaModels\Helper\TableManipulator;
+use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,35 +37,53 @@ class FileTest extends TestCase
     /**
      * Mock a MetaModel.
      *
-     * @param string $language         The language.
-     * @param string $fallbackLanguage The fallback language.
+     * @param string $tableName        The table name.
      *
-     * @return \MetaModels\IMetaModel
+     * @param string $language         The language.
+     *
+     * @return IMetaModel
      */
-    protected function mockMetaModel($language, $fallbackLanguage)
+    protected function mockMetaModel($tableName, $language)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
 
         $metaModel
             ->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnValue('mm_unittest'));
+            ->will($this->returnValue($tableName));
 
         $metaModel
             ->expects($this->any())
             ->method('getActiveLanguage')
             ->will($this->returnValue($language));
 
-        $metaModel
-            ->expects($this->any())
-            ->method('getFallbackLanguage')
-            ->will($this->returnValue($fallbackLanguage));
-
         return $metaModel;
+    }
+
+    /**
+     * Mock the database connection.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection()
+    {
+        return $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     * Mock the table manipulator.
+     *
+     * @param Connection $connection The database connection mock.
+     *
+     * @return TableManipulator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockTableManipulator(Connection $connection)
+    {
+        return $this->getMockBuilder(TableManipulator::class)
+            ->setConstructorArgs([$connection, []])
+            ->getMock();
     }
 
     /**
@@ -72,7 +93,10 @@ class FileTest extends TestCase
      */
     public function testInstantiation()
     {
-        $text = new File($this->mockMetaModel('en', 'en'));
+        $connection  = $this->mockConnection();
+        $manipulator = $this->mockTableManipulator($connection);
+
+        $text = new File($this->mockMetaModel('en', 'en'), [], $connection, $manipulator);
         $this->assertInstanceOf('MetaModels\Attribute\File\File', $text);
     }
 
@@ -85,17 +109,17 @@ class FileTest extends TestCase
     {
         $file = new File(
             $this->mockMetaModel('en', 'en'),
-            array(
-                'file_multiple' => false
-            )
+            ['file_multiple' => false],
+            $connection = $this->mockConnection(),
+            $this->mockTableManipulator($connection)
         );
 
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
+            ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(null, 1)
         );
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
+            ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(array(), 1)
         );
     }

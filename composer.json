@@ -42,21 +42,23 @@
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
     "phpcq/all-tasks": "~1.1",
-    "metamodels/base-unit-tests": "~1.0",
     "contao/manager-bundle": "~4.4"
   },
   "autoload": {
     "psr-4": {
-      "MetaModels\\Attribute\\File\\": "src"
-    }
+      "MetaModels\\AttributeFileBundle\\": "src"
+    },
+    "files": [
+      "src/deprecated-autoload.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "MetaModels\\Test\\Attribute\\File\\": "tests"
+      "MetaModels\\AttributeFileBundle\\Test\\": "tests"
     }
   },
   "extra": {
-    "contao-manager-plugin": "MetaModels\\Attribute\\File\\ContaoManager\\Plugin",
+    "contao-manager-plugin": "MetaModels\\AttributeFileBundle\\ContaoManager\\Plugin",
     "contao": {
       "transifex": {
         "project": "metamodels",
