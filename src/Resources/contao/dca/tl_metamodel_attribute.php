@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = ar
     'exclude'                 => true,
     'inputType'               => 'fileTree',
     'eval'                    => array('fieldType' => 'radio', 'tl_class' => 'clr'),
-    'sql'                     => "blob NULL"
+    'sql'                     => 'blob NULL'
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_validFileTypes'] = array
