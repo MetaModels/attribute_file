@@ -97,7 +97,7 @@ class FileTest extends TestCase
         $manipulator = $this->mockTableManipulator($connection);
 
         $text = new File($this->mockMetaModel('en', 'en'), [], $connection, $manipulator);
-        $this->assertInstanceOf('MetaModels\Attribute\File\File', $text);
+        $this->assertInstanceOf('MetaModels\AttributeFileBundle\Attribute\File', $text);
     }
 
     /**
