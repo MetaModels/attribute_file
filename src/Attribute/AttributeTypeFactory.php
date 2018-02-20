@@ -72,7 +72,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
         Connection $connection,
         TableManipulator $tableManipulator,
         ImageFactoryInterface $imageFactory,
-        string $rootPath
+        $rootPath
     ) {
         $this->connection       = $connection;
         $this->tableManipulator = $tableManipulator;

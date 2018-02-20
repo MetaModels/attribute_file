@@ -74,7 +74,7 @@ class File extends BaseSimple
         Connection $connection = null,
         TableManipulator $tableManipulator = null,
         ImageFactoryInterface $imageFactory = null,
-        string $rootPath = null
+        $rootPath = null
     ) {
         parent::__construct($objMetaModel, $arrData, $connection, $tableManipulator);
         if (null === $imageFactory) {
