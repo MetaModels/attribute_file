@@ -16,7 +16,7 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2018 The MetaModels team.
- * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
+ * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
@@ -73,6 +73,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = a
     'reference'               => &$GLOBALS['TL_LANG']['MSC'],
     'eval'                    => array(
         'rgxp'                => 'digit',
+        'includeBlankOption'  => true,
         'nospace'             => true,
         'helpwizard'          => true,
         'tl_class'            => 'w50'
