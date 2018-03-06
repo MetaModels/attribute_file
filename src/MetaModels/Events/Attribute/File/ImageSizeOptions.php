@@ -12,8 +12,8 @@
  *
  * @package    MetaModels
  * @subpackage AttributeFile
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Sven Baumann ≤baumann.sv@gmail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -33,6 +33,8 @@ class ImageSizeOptions
      * Get property options for file image size in the render settings.
      *
      * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
      */
     public function getPropertyOptions(GetPropertyOptionsEvent $event)
     {
