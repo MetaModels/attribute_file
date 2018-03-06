@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Isaak <info@andreas-isaak.de>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -72,6 +73,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = a
     'reference'               => &$GLOBALS['TL_LANG']['MSC'],
     'eval'                    => array(
         'rgxp'                => 'digit',
+        'includeBlankOption'  => true,
         'nospace'             => true,
         'helpwizard'          => true,
         'tl_class'            => 'w50'
