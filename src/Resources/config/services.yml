@@ -8,3 +8,11 @@ services:
             - "%kernel.project_dir%"
         tags:
           - { name: metamodels.attribute_factory }
+
+    metamodels.attribute_file.event_listener.image_size_options:
+      class: MetaModels\AttributeFileBundle\Events\ImageSizeOptions
+      public: true
+      tags:
+          -   name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: getPropertyOptions

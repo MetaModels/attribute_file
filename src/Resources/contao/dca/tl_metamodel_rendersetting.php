@@ -76,6 +76,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = a
     'reference'               => &$GLOBALS['TL_LANG']['MSC'],
     'eval'                    => array(
         'rgxp'                => 'digit',
+        'includeBlankOption'  => true,
         'nospace'             => true,
         'helpwizard'          => true,
         'tl_class'            => 'w50'
