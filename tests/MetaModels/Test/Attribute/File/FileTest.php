@@ -25,6 +25,7 @@ namespace MetaModels\Test\Attribute\File;
 
 use MetaModels\Attribute\File\File;
 use PHPUnit\Framework\TestCase;
+use MetaModels\IMetaModel;
 
 /**
  * Unit tests to test class File.
@@ -41,7 +42,7 @@ class FileTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())
@@ -69,7 +70,7 @@ class FileTest extends TestCase
     public function testInstantiation()
     {
         $text = new File($this->mockMetaModel('en', 'en'));
-        $this->assertInstanceOf('MetaModels\Attribute\File\File', $text);
+        $this->assertInstanceOf(File::class, $text);
     }
 
     /**
@@ -81,18 +82,18 @@ class FileTest extends TestCase
     {
         $file = new File(
             $this->mockMetaModel('en', 'en'),
-            array(
+            [
                 'file_multiple' => false
-            )
+            ]
         );
 
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
+            ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(null, 1)
         );
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
-            $file->widgetToValue(array(), 1)
+            ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
+            $file->widgetToValue([], 1)
         );
     }
 }
