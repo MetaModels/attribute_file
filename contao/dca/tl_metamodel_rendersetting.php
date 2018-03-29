@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -36,46 +37,50 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showIm
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = array
 (
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
-    'exclude'                 => true,
-    'inputType'               => 'select',
-    'options'                 => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'meta', 'random'),
-    'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
-    'eval'                    => array(
-        'tl_class'            => 'w50',
-        'chosen'              => true,
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
+    'exclude'   => true,
+    'inputType' => 'select',
+    'options'   => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'meta', 'random'),
+    'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
+    'sql'       => 'varchar(32) NOT NULL default \'\'',
+    'eval'      => array(
+        'tl_class' => 'w50',
+        'chosen'   => true,
     )
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = array
 (
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink'],
-    'inputType'               => 'checkbox',
-    'eval'                    => array('tl_class' => 'w50 m12')
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink'],
+    'inputType' => 'checkbox',
+    'sql'       => 'char(1) NOT NULL default \'\'',
+    'eval'      => array('tl_class' => 'w50 m12')
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = array
 (
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage'],
-    'inputType'               => 'checkbox',
-    'eval'                    => array(
-        'submitOnChange'      => true,
-        'tl_class'            => 'clr'
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage'],
+    'inputType' => 'checkbox',
+    'sql'       => 'char(1) NOT NULL default \'\'',
+    'eval'      => array(
+        'submitOnChange' => true,
+        'tl_class'       => 'clr'
     )
 );
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = array
 (
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize'],
-    'exclude'                 => true,
-    'inputType'               => 'imageSize',
-    'options'                 => $GLOBALS['TL_CROP'],
-    'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-    'eval'                    => array(
-        'rgxp'                => 'digit',
-        'includeBlankOption'  => true,
-        'nospace'             => true,
-        'helpwizard'          => true,
-        'tl_class'            => 'w50'
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize'],
+    'exclude'   => true,
+    'inputType' => 'imageSize',
+    'options'   => $GLOBALS['TL_CROP'],
+    'reference' => &$GLOBALS['TL_LANG']['MSC'],
+    'sql'       => 'varchar(255) NOT NULL default \'\'',
+    'eval'      => array(
+        'rgxp'               => 'digit',
+        'includeBlankOption' => true,
+        'nospace'            => true,
+        'helpwizard'         => true,
+        'tl_class'           => 'w50'
     )
 );
