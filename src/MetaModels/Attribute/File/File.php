@@ -50,7 +50,7 @@ class File extends BaseSimple
     {
         // Base implementation, do a simple search on given column.
         $objQuery = Database::getInstance()
-            ->prepare(sprintf(
+            ->prepare(\sprintf(
                 'SELECT id
                     FROM %s
                     WHERE %s IN
@@ -63,7 +63,7 @@ class File extends BaseSimple
                 $this->getColName(),
                 FilesModel::getTable()
             ))
-            ->execute(str_replace(['*', '?'], ['%', '_'], $strPattern));
+            ->execute(\str_replace(['*', '?'], ['%', '_'], $strPattern));
 
         $arrIds = $objQuery->fetchEach('id');
 
@@ -83,7 +83,7 @@ class File extends BaseSimple
      */
     public function getAttributeSettingNames()
     {
-        return array_merge(
+        return \array_merge(
             parent::getAttributeSettingNames(),
             [
                 'file_multiple',
@@ -107,7 +107,7 @@ class File extends BaseSimple
      */
     public function unserializeData($value)
     {
-        return ToolboxFile::convertValuesToMetaModels(deserialize($value, true));
+        return ToolboxFile::convertValuesToMetaModels(\deserialize($value, true));
     }
 
     /**
@@ -126,7 +126,7 @@ class File extends BaseSimple
 
         // Check single file or multiple file.
         if ($this->get('file_multiple')) {
-            $mixValues = serialize($arrData);
+            $mixValues = \serialize($arrData);
         } else {
             $mixValues = $arrData[0];
         }
@@ -143,7 +143,7 @@ class File extends BaseSimple
      */
     private function handleCustomFileTree(&$arrFieldDef)
     {
-        if (strlen($this->get('file_uploadFolder'))) {
+        if (\strlen($this->get('file_uploadFolder'))) {
             // Set root path of file chooser depending on contao version.
             $objFile = null;
 
@@ -160,11 +160,11 @@ class File extends BaseSimple
             }
         }
 
-        if (strlen($this->get('file_validFileTypes'))) {
+        if (\strlen($this->get('file_validFileTypes'))) {
             $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
         }
 
-        if (strlen($this->get('file_filesOnly'))) {
+        if (\strlen($this->get('file_filesOnly'))) {
             $arrFieldDef['eval']['filesOnly'] = true;
         }
     }
@@ -231,14 +231,14 @@ class File extends BaseSimple
 
         $objToolbox->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage());
 
-        $objToolbox->setLightboxId(sprintf(
+        $objToolbox->setLightboxId(\sprintf(
             '%s.%s.%s',
             $this->getMetaModel()->getTableName(),
             $objSettings->get('id'),
             $arrRowData['id']
         ));
 
-        if (strlen($this->get('file_validFileTypes'))) {
+        if (\strlen($this->get('file_validFileTypes'))) {
             $objToolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
         }
 
@@ -255,7 +255,7 @@ class File extends BaseSimple
                 foreach ($value['value'] as $strFile) {
                     $objToolbox->addPathById($strFile);
                 }
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 foreach ($value as $strFile) {
                     $objToolbox->addPathById($strFile);
                 }
