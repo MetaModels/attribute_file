@@ -25,62 +25,56 @@
  * Table tl_metamodel_attribute
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['file extends default'] = array
-(
-    '+advanced' => array('file_sortBy', 'file_showLink', 'file_showImage'),
-);
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['file extends default'] = [
+    '+advanced' => ['file_sortBy', 'file_showLink', 'file_showImage'],
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showImage'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showImage'] = [
     'file_imageSize',
-);
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
     'exclude'   => true,
     'inputType' => 'select',
-    'options'   => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'meta', 'random'),
+    'options'   => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'meta', 'random'],
     'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
     'sql'       => 'varchar(32) NOT NULL default \'\'',
-    'eval'      => array(
+    'eval'      => [
         'tl_class' => 'w50',
         'chosen'   => true,
-    )
-);
+    ]
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => array('tl_class' => 'w50 m12')
-);
+    'eval'      => ['tl_class' => 'w50 m12']
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => array(
+    'eval'      => [
         'submitOnChange' => true,
         'tl_class'       => 'clr'
-    )
-);
+    ]
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize'],
     'exclude'   => true,
     'inputType' => 'imageSize',
     'options'   => $GLOBALS['TL_CROP'],
     'reference' => &$GLOBALS['TL_LANG']['MSC'],
     'sql'       => 'varchar(255) NOT NULL default \'\'',
-    'eval'      => array(
+    'eval'      => [
         'rgxp'               => 'digit',
         'includeBlankOption' => true,
         'nospace'            => true,
         'helpwizard'         => true,
         'tl_class'           => 'w50'
-    )
-);
+    ]
+];

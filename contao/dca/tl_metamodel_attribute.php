@@ -22,55 +22,48 @@
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simpleattribute_'] = array
-(
-    '+advanced' => array('file_customFiletree', 'file_multiple'),
-);
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simpleattribute_'] = [
+    '+advanced' => ['file_customFiletree', 'file_multiple'],
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = [
     'file_uploadFolder',
     'file_validFileTypes',
     'file_filesOnly'
-);
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_customFiletree'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_customFiletree'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50')
-);
+    'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50']
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => array('submitOnChange' => true, 'tl_class' => 'w50')
-);
+    'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50']
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_uploadFolder'],
     'exclude'   => true,
     'inputType' => 'fileTree',
     'sql'       => 'blob NULL',
-    'eval'      => array('fieldType' => 'radio', 'tl_class' => 'clr')
-);
+    'eval'      => ['fieldType' => 'radio', 'tl_class' => 'clr']
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_validFileTypes'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_validFileTypes'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes'],
     'inputType' => 'text',
     'sql'       => 'varchar(255) NOT NULL default \'\'',
-    'eval'      => array('maxlength' => 255, 'tl_class' => 'w50')
-);
+    'eval'      => ['maxlength' => 255, 'tl_class' => 'w50']
+];
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filesOnly'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filesOnly'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => array('tl_class' => 'w50 m12')
-);
+    'eval'      => ['tl_class' => 'w50 m12']
+];

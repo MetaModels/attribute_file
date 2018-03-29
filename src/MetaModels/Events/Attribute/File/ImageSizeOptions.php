@@ -63,18 +63,18 @@ class ImageSizeOptions
     private function getThemeImageSizes()
     {
         $dataProvider = new DefaultDataProvider();
-        $dataProvider->setBaseConfig(array('source' => 'tl_image_size'));
+        $dataProvider->setBaseConfig(['source' => 'tl_image_size']);
 
         $config = $dataProvider->getEmptyConfig();
-        $config->setFields(array('id', 'name', 'width', 'height'));
-        $config->setSorting(array('pid', 'name'));
+        $config->setFields(['id', 'name', 'width', 'height']);
+        $config->setSorting(['pid', 'name']);
 
         $collection = $dataProvider->fetchAll($config);
         if (!$collection->count()) {
-            return array();
+            return [];
         }
 
-        $sizes = array();
+        $sizes = [];
         foreach ($collection as $model) {
             $sizes[$model->getProperty('id')] = sprintf(
                 '%s (%sx%s)',

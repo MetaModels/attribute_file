@@ -31,8 +31,8 @@
 namespace MetaModels\Attribute\File;
 
 use MetaModels\Attribute\BaseSimple;
-use MetaModels\Render\Template;
 use MetaModels\Helper\ToolboxFile;
+use MetaModels\Render\Template;
 
 /**
  * This is the MetaModel attribute class for handling file fields.
@@ -59,7 +59,7 @@ class File extends BaseSimple
                 $this->getColName(),
                 \FilesModel::getTable()
             ))
-            ->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+            ->execute(str_replace(['*', '?'], ['%', '_'], $strPattern));
 
         $arrIds = $objQuery->fetchEach('id');
 
@@ -79,16 +79,19 @@ class File extends BaseSimple
      */
     public function getAttributeSettingNames()
     {
-        return array_merge(parent::getAttributeSettingNames(), array(
-            'file_multiple',
-            'file_customFiletree',
-            'file_uploadFolder',
-            'file_validFileTypes',
-            'file_filesOnly',
-            'filterable',
-            'searchable',
-            'mandatory',
-        ));
+        return array_merge(
+            parent::getAttributeSettingNames(),
+            [
+                'file_multiple',
+                'file_customFiletree',
+                'file_uploadFolder',
+                'file_validFileTypes',
+                'file_filesOnly',
+                'filterable',
+                'searchable',
+                'mandatory',
+            ]
+        );
     }
 
     /**
@@ -113,7 +116,7 @@ class File extends BaseSimple
     public function serializeData($mixValues)
     {
         if ($mixValues === null) {
-            $mixValues = array('bin' => array(), 'value' => array(), 'path' => array());
+            $mixValues = ['bin' => [], 'value' => [], 'path' => []];
         }
         $arrData = ToolboxFile::convertValuesToDatabase($mixValues);
 
@@ -165,7 +168,7 @@ class File extends BaseSimple
     /**
      * {@inheritdoc}
      */
-    public function getFieldDefinition($arrOverrides = array())
+    public function getFieldDefinition($arrOverrides = [])
     {
         $arrFieldDef = parent::getFieldDefinition($arrOverrides);
 

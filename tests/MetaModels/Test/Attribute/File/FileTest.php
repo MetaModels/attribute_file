@@ -81,18 +81,18 @@ class FileTest extends TestCase
     {
         $file = new File(
             $this->mockMetaModel('en', 'en'),
-            array(
+            [
                 'file_multiple' => false
-            )
+            ]
         );
 
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
+            ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(null, 1)
         );
         $this->assertEquals(
-            array('bin' => array(), 'value' => array(), 'path' => array(), 'meta' => array()),
-            $file->widgetToValue(array(), 1)
+            ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
+            $file->widgetToValue([], 1)
         );
     }
 }
