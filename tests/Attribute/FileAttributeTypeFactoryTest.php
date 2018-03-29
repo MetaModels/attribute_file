@@ -48,7 +48,7 @@ class FileAttributeTypeFactoryTest extends TestCase
      */
     protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())
@@ -117,8 +117,7 @@ class FileAttributeTypeFactoryTest extends TestCase
         $imageFactory = $this->mockImageFactory();
 
         $factory     = new AttributeTypeFactory($connection, $manipulator, $imageFactory, sys_get_temp_dir());
-        $values      = array(
-        );
+        $values      = [];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')

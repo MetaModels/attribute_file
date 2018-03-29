@@ -33,6 +33,9 @@ namespace MetaModels\AttributeFileBundle\Attribute;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use Contao\Config;
+use Contao\FilesModel;
+use Contao\Validator;
 use MetaModels\Attribute\BaseSimple;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
@@ -79,7 +82,7 @@ class File extends BaseSimple
         parent::__construct($objMetaModel, $arrData, $connection, $tableManipulator);
         if (null === $imageFactory) {
             // @codingStandardsIgnoreStart
-            @trigger_error(
+            @\trigger_error(
                 'No "ImageFactoryInterface" passed. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
@@ -90,7 +93,7 @@ class File extends BaseSimple
 
         if (null === $rootPath) {
             // @codingStandardsIgnoreStart
-            @trigger_error(
+            @\trigger_error(
                 '"rootPath"" is missing. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
@@ -119,7 +122,7 @@ class File extends BaseSimple
             ->select('id')
             ->from($this->getMetaModel()->getTableName())
             ->where($builder->expr()->in($this->getColName(), $subSelect->getSQL()))
-            ->setParameter('value', str_replace(array('*', '?'), array('%', '_'), $strPattern));
+            ->setParameter('value', \str_replace(['*', '?'], ['%', '_'], $strPattern));
 
         return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -137,16 +140,19 @@ class File extends BaseSimple
      */
     public function getAttributeSettingNames()
     {
-        return array_merge(parent::getAttributeSettingNames(), array(
-            'file_multiple',
-            'file_customFiletree',
-            'file_uploadFolder',
-            'file_validFileTypes',
-            'file_filesOnly',
-            'filterable',
-            'searchable',
-            'mandatory',
-        ));
+        return \array_merge(
+            parent::getAttributeSettingNames(),
+            [
+                'file_multiple',
+                'file_customFiletree',
+                'file_uploadFolder',
+                'file_validFileTypes',
+                'file_filesOnly',
+                'filterable',
+                'searchable',
+                'mandatory',
+            ]
+        );
     }
 
     /**
@@ -158,7 +164,7 @@ class File extends BaseSimple
      */
     public function unserializeData($value)
     {
-        return ToolboxFile::convertValuesToMetaModels(deserialize($value, true));
+        return ToolboxFile::convertValuesToMetaModels(\deserialize($value, true));
     }
 
     /**
@@ -171,13 +177,13 @@ class File extends BaseSimple
     public function serializeData($mixValues)
     {
         if ($mixValues === null) {
-            $mixValues = array('bin' => array(), 'value' => array(), 'path' => array());
+            $mixValues = ['bin' => [], 'value' => [], 'path' => []];
         }
         $arrData = ToolboxFile::convertValuesToDatabase($mixValues);
 
         // Check single file or multiple file.
         if ($this->get('file_multiple')) {
-            $mixValues = serialize($arrData);
+            $mixValues = \serialize($arrData);
         } else {
             $mixValues = $arrData[0];
         }
@@ -194,12 +200,12 @@ class File extends BaseSimple
      */
     private function handleCustomFileTree(&$arrFieldDef)
     {
-        if (strlen($this->get('file_uploadFolder'))) {
+        if (\strlen($this->get('file_uploadFolder'))) {
             // Set root path of file chooser depending on contao version.
             $objFile = null;
 
-            if (\Validator::isUuid($this->get('file_uploadFolder'))) {
-                $objFile = \FilesModel::findByUuid($this->get('file_uploadFolder'));
+            if (Validator::isUuid($this->get('file_uploadFolder'))) {
+                $objFile = FilesModel::findByUuid($this->get('file_uploadFolder'));
             }
 
             // Check if we have a file.
@@ -211,11 +217,11 @@ class File extends BaseSimple
             }
         }
 
-        if (strlen($this->get('file_validFileTypes'))) {
+        if (\strlen($this->get('file_validFileTypes'))) {
             $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
         }
 
-        if (strlen($this->get('file_filesOnly'))) {
+        if (\strlen($this->get('file_filesOnly'))) {
             $arrFieldDef['eval']['filesOnly'] = true;
         }
     }
@@ -223,13 +229,13 @@ class File extends BaseSimple
     /**
      * {@inheritdoc}
      */
-    public function getFieldDefinition($arrOverrides = array())
+    public function getFieldDefinition($arrOverrides = [])
     {
         $arrFieldDef = parent::getFieldDefinition($arrOverrides);
 
         $arrFieldDef['inputType']          = 'fileTree';
         $arrFieldDef['eval']['files']      = true;
-        $arrFieldDef['eval']['extensions'] = \Config::get('allowedDownload');
+        $arrFieldDef['eval']['extensions'] = Config::get('allowedDownload');
         $arrFieldDef['eval']['multiple']   = (bool) $this->get('file_multiple');
 
         if ($this->get('file_multiple')) {
@@ -282,14 +288,14 @@ class File extends BaseSimple
 
         $objToolbox->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage());
 
-        $objToolbox->setLightboxId(sprintf(
+        $objToolbox->setLightboxId(\sprintf(
             '%s.%s.%s',
             $this->getMetaModel()->getTableName(),
             $objSettings->get('id'),
             $arrRowData['id']
         ));
 
-        if (strlen($this->get('file_validFileTypes'))) {
+        if (\strlen($this->get('file_validFileTypes'))) {
             $objToolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
         }
 
@@ -306,7 +312,7 @@ class File extends BaseSimple
                 foreach ($value['value'] as $strFile) {
                     $objToolbox->addPathById($strFile);
                 }
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 foreach ($value as $strFile) {
                     $objToolbox->addPathById($strFile);
                 }
