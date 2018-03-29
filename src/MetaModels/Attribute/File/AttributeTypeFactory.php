@@ -38,6 +38,6 @@ class AttributeTypeFactory extends AbstractAttributeTypeFactory
 
         $this->typeName  = 'file';
         $this->typeIcon  = 'system/modules/metamodelsattribute_file/html/file.png';
-        $this->typeClass = 'MetaModels\Attribute\File\File';
+        $this->typeClass = File::class;
     }
 }

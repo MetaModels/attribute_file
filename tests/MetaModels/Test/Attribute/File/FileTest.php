@@ -25,6 +25,7 @@ namespace MetaModels\Test\Attribute\File;
 
 use MetaModels\Attribute\File\File;
 use PHPUnit\Framework\TestCase;
+use MetaModels\IMetaModel;
 
 /**
  * Unit tests to test class File.
@@ -41,7 +42,7 @@ class FileTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())
@@ -69,7 +70,7 @@ class FileTest extends TestCase
     public function testInstantiation()
     {
         $text = new File($this->mockMetaModel('en', 'en'));
-        $this->assertInstanceOf('MetaModels\Attribute\File\File', $text);
+        $this->assertInstanceOf(File::class, $text);
     }
 
     /**
