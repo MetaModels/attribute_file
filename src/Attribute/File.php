@@ -22,6 +22,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
@@ -36,7 +37,7 @@ use Doctrine\DBAL\Connection;
 use Contao\Config;
 use Contao\FilesModel;
 use Contao\Validator;
-use MetaModels\Attribute\BaseSimple;
+use MetaModels\Attribute\BaseComplex;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Template;
@@ -45,7 +46,7 @@ use MetaModels\Helper\ToolboxFile;
 /**
  * This is the MetaModel attribute class for handling file fields.
  */
-class File extends BaseSimple
+class File extends BaseComplex
 {
     /**
      * The image factory.
@@ -60,6 +61,20 @@ class File extends BaseSimple
      * @var string
      */
     private $rootPath;
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * Table manipulator instance.
+     *
+     * @var TableManipulator
+     */
+    private $tableManipulator;
 
     /**
      * Create a new instance.
@@ -79,7 +94,7 @@ class File extends BaseSimple
         ImageFactoryInterface $imageFactory = null,
         $rootPath = null
     ) {
-        parent::__construct($objMetaModel, $arrData, $connection, $tableManipulator);
+        parent::__construct($objMetaModel, $arrData);
         if (null === $imageFactory) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
@@ -103,8 +118,38 @@ class File extends BaseSimple
             $rootPath = System::getContainer()->getParameter('kernel.project_dir');
         }
 
-        $this->imageFactory = $imageFactory;
-        $this->rootPath     = $rootPath;
+        $this->imageFactory     = $imageFactory;
+        $this->rootPath         = $rootPath;
+        $this->connection       = $connection;
+        $this->tableManipulator = $tableManipulator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function destroyAUX()
+    {
+        parent::destroyAUX();
+        $metaModel = $this->getMetaModel()->getTableName();
+        // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
+        if (($colName = $this->getColName())
+            && !empty($this->connection->getSchemaManager()->listTableColumns($metaModel)[$colName])
+        ) {
+            $this->tableManipulator->dropColumn($metaModel, $colName);
+            $this->tableManipulator->dropColumn($metaModel, $colName . '__sort');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initializeAUX()
+    {
+        parent::initializeAUX();
+        if ($colName = $this->getColName()) {
+            $tableName = $this->getMetaModel()->getTableName();
+            $this->tableManipulator->createColumn($tableName, $colName, 'blob NULL');
+        }
     }
 
     /**
@@ -130,9 +175,90 @@ class File extends BaseSimple
     /**
      * {@inheritdoc}
      */
-    public function getSQLDataType()
+    public function unsetDataFor($arrIds)
     {
-        return 'blob NULL';
+        $builder = $this->connection->createQueryBuilder();
+        $builder
+            ->update($this->getMetaModel()->getTableName())
+            ->set($this->getColName(), ':null')
+            ->where($builder->expr()->in('id', ':values'))
+            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('null', null);
+
+        if ($this->getMetaModel()->hasAttribute($this->getColName() . '__sort')) {
+            $builder->set($this->getColName() . '__sort', ':null');
+        }
+
+        $builder->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataFor($arrIds)
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $builder
+            ->select('id', $this->getColName() . ' AS file')
+            ->from($this->getMetaModel()->getTableName())
+            ->where($builder->expr()->in('id', ':values'))
+            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY);
+
+        if ($hasSort = $this->getMetaModel()->hasAttribute($this->getColName() . '__sort')) {
+            $builder->addSelect($this->getColName() . '__sort AS file_sort');
+        }
+
+        $query = $builder->execute();
+        $data  = [];
+        while ($result = $query->fetch(\PDO::FETCH_ASSOC)) {
+            $row = ToolboxFile::convertValuesToMetaModels(deserialize($result['file'], true));
+
+            if ($hasSort) {
+                $row['sort'] = deserialize($result['file_sort'], true);
+            }
+
+            $data[$result['id']] = $row;
+        }
+
+        return $data;
+    }
+
+    /**
+     * This method is called to store the data for certain items to the database.
+     *
+     * @param mixed $arrValues The values to be stored into database. Mapping is item id=>value.
+     *
+     * @return void
+     */
+    public function setDataFor($arrValues)
+    {
+        $tableName = $this->getMetaModel()->getTableName();
+        $colName   = $this->getColName();
+        foreach ($arrValues as $id => $varData) {
+            if ($varData === null) {
+                $varData = ['bin' => [], 'value' => [], 'path' => [], 'sort' => null];
+            }
+
+            $files = ToolboxFile::convertValuesToDatabase($varData);
+
+            // Check single file or multiple file.
+            if ($this->get('file_multiple')) {
+                $files = serialize($files);
+            } else {
+                $files = $files[0];
+            }
+
+            $this->connection->update($tableName, [$colName => $files], ['id' => $id]);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
+    {
+        return [];
     }
 
     /**
@@ -148,6 +274,7 @@ class File extends BaseSimple
                 'file_uploadFolder',
                 'file_validFileTypes',
                 'file_filesOnly',
+                'file_widgetMode',
                 'filterable',
                 'searchable',
                 'mandatory',
@@ -238,6 +365,17 @@ class File extends BaseSimple
         $arrFieldDef['eval']['extensions'] = Config::get('allowedDownload');
         $arrFieldDef['eval']['multiple']   = (bool) $this->get('file_multiple');
 
+        $widgetMode = $this->getOverrideValue('file_widgetMode', $arrOverrides);
+
+        if (('normal' !== $widgetMode)
+            && ((bool) $this->get('file_multiple'))
+        ) {
+            $arrFieldDef['eval']['orderField'] = $this->getColName() . '__sort';
+        }
+
+        $arrFieldDef['eval']['isDownloads'] = ('downloads' === $widgetMode);
+        $arrFieldDef['eval']['isGallery']   = ('gallery' === $widgetMode);
+
         if ($this->get('file_multiple')) {
             $arrFieldDef['eval']['fieldType'] = 'checkbox';
         } else {
@@ -284,6 +422,11 @@ class File extends BaseSimple
 
         $objToolbox = new ToolboxFile($this->imageFactory, $this->rootPath);
 
+        // No data, nothing to do.
+        if (!$arrRowData[$this->getColName()]) {
+            return;
+        }
+
         $objToolbox->setBaseLanguage($this->getMetaModel()->getActiveLanguage());
 
         $objToolbox->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage());
@@ -305,24 +448,22 @@ class File extends BaseSimple
             $objToolbox->setResizeImages($objSettings->get('file_imageSize'));
         }
 
-        if ($arrRowData[$this->getColName()]) {
-            $value = $arrRowData[$this->getColName()];
+        $value = $arrRowData[$this->getColName()];
 
-            if (isset($value['value'])) {
-                foreach ($value['value'] as $strFile) {
-                    $objToolbox->addPathById($strFile);
-                }
-            } elseif (\is_array($value)) {
-                foreach ($value as $strFile) {
-                    $objToolbox->addPathById($strFile);
-                }
-            } else {
-                $objToolbox->addPathById($value);
+        if (isset($value['value'])) {
+            foreach ($value['value'] as $strFile) {
+                $objToolbox->addPathById($strFile);
             }
+        } elseif (\is_array($value)) {
+            foreach ($value as $strFile) {
+                $objToolbox->addPathById($strFile);
+            }
+        } else {
+            $objToolbox->addPathById($value);
         }
 
         $objToolbox->resolveFiles();
-        $arrData = $objToolbox->sortFiles($objSettings->get('file_sortBy'));
+        $arrData = $objToolbox->sortFiles($objSettings->get('file_sortBy'), $value['sort']);
 
         $objTemplate->files = $arrData['files'];
         $objTemplate->src   = $arrData['source'];

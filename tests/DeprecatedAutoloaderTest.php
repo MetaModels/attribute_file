@@ -22,6 +22,11 @@ namespace MetaModels\AttributeFileBundle\Test;
 
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
+use MetaModels\AttributeFileBundle\Attribute\FileOrder;
+use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
+use MetaModels\AttributeFileBundle\Events\ImageSizeOptions;
+use MetaModels\AttributeFileBundle\Events\Subscriber;
+use MetaModels\AttributeFileBundle\Helper\UpgradeHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,8 +42,13 @@ class DeprecatedAutoloaderTest extends TestCase
      * @var array
      */
     private static $classes = [
-        'MetaModels\AttributeFileBundle\Attribute\File' => File::class,
-        'MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory' => AttributeTypeFactory::class,
+        'MetaModels\Attribute\File\File'                    => File::class,
+        'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
+        'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
+        'MetaModels\Attribute\File\Subscriber'              => Subscriber::class,
+        'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
+        'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
+        'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptions::class,
     ];
 
     /**
