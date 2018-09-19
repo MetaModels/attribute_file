@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,11 +12,9 @@
  *
  * @package    MetaModels
  * @subpackage AttributeFile
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     David Molineus <david.molineus@netzmacht.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -26,40 +24,33 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\Defau
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use MetaModels\DcGeneral\AttributeFileDefinition;
-use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\AttributeFileBundle\Attribute\File;
+use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
+use MetaModels\Factory;
 use MetaModels\Helper\TableManipulation;
+use \ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 
 /**
- * Subscriber integrates file attribute related listeners.
+ * Class Attribute
  *
- * @package MetaModels\Attribute\File
+ * @package MetaModels\AttributeFileBundle\Events
  */
-class Subscriber extends BaseSubscriber
+class Attribute
 {
     /**
-     * {@inheritdoc}
+     * @var Factory|null
      */
-    public function registerEventsInDispatcher()
+    private $factory = null;
+
+    /**
+     * Attribute constructor.
+     *
+     * @param Factory $factory
+     */
+    public function __construct(Factory $factory)
     {
-        $this
-            ->addListener(
-                BuildAttributeEvent::NAME,
-                array($this, 'buildAttribute')
-            )
-            ->addListener(
-                BuildDataDefinitionEvent::NAME,
-                array($this, 'buildDataDefinition'),
-                // Ensure to be after MetaModels\DcGeneral\Dca\Builder\Builder::PRIORITY (currently 50).
-                0
-            )
-            ->addListener(
-                PostPersistModelEvent::NAME,
-                array($this, 'handleUpdateAttribute'),
-                -1
-            );
+        $this->factory = $factory;
     }
 
     /**
@@ -73,17 +64,16 @@ class Subscriber extends BaseSubscriber
     {
         $attribute = $event->getAttribute();
 
-        if (!($attribute instanceof File)
-            || !$attribute->get('file_multiple')
-        ) {
+        if (!($attribute instanceof File) || !$attribute->get('file_multiple')) {
             return;
         }
 
         $container  = $event->getContainer();
         $properties = $container->getPropertiesDefinition();
         $name       = $attribute->getColName();
+        $nameSort   = sprintf('%s__sort', $name);
 
-        if ($properties->hasProperty($name . '__sort')) {
+        if ($properties->hasProperty($nameSort)) {
             $this->addAttributeToDefinition($container, $name);
 
             $properties->getProperty($name . '__sort')->setWidgetType('fileTreeOrder');
@@ -153,9 +143,9 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $metaModel = $this->getMetaModelById($model->getProperty('pid'));
-
-        $attributeName = $model->getProperty('colname') . '__sort';
+        $metaModelsName = $this->factory->translateIdToMetaModelName($model->getProperty('pid'));
+        $metaModel      = $this->factory->getMetaModel($metaModelsName);
+        $attributeName  = $model->getProperty('colname') . '__sort';
 
         try {
             TableManipulation::checkColumnExists($metaModel->getTableName(), $attributeName);
@@ -167,13 +157,13 @@ class Subscriber extends BaseSubscriber
     /**
      * Add attribute to metamodels file attributes definition.
      *
-     * @param IMetaModelDataDefinition $container The metamodel data definition.
+     * @param ContainerInterface $container The metamodel data definition.
      *
-     * @param string                   $name      The attribute name.
+     * @param string             $name      The attribute name.
      *
      * @return void
      */
-    protected function addAttributeToDefinition(IMetaModelDataDefinition $container, $name)
+    protected function addAttributeToDefinition(ContainerInterface $container, $name)
     {
         if (!$container->hasDefinition('metamodels.file-attributes')) {
             $container->setDefinition('metamodels.file-attributes', new AttributeFileDefinition());
