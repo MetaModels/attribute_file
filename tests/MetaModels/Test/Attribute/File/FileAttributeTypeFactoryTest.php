@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,9 @@
  * @subpackage Tests
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Greminger <david.greminger@1up.io>
- * @copyright  2012-2016 The MetaModels team.
- * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -25,6 +26,7 @@ use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\IMetaModel;
 use MetaModels\Test\Attribute\AttributeTypeFactoryTest;
+use MetaModels\Attribute\File\File;
 
 /**
  * Test the attribute factory.
@@ -44,7 +46,7 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      */
     protected function mockMetaModel($tableName, $language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())
@@ -71,7 +73,7 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      */
     protected function getAttributeFactories()
     {
-        return array(new AttributeTypeFactory());
+        return [new AttributeTypeFactory()];
     }
 
     /**
@@ -82,15 +84,15 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     public function testCreateSelect()
     {
         $factory   = new AttributeTypeFactory();
-        $values    = array(
+        $values    = [
             'colname' => 'test'
-        );
+        ];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertInstanceOf('MetaModels\Attribute\File\File', $attribute);
+        $this->assertInstanceOf(File::class, $attribute);
 
         foreach ($values as $key => $value) {
             $this->assertEquals($value, $attribute->get($key), $key);

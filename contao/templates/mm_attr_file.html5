@@ -1,10 +1,14 @@
 <?php if (is_array($this->src)): ?>
 <ul class="file<?= $this->additional_class ?>">
-<?php foreach($this->src as $arrFile): 
+<?php foreach($this->src as $arrFile):
 $strTitle = ($arrFile['title']) ? $arrFile['title'] : (($arrFile['alt']) ? $arrFile['alt'] : $arrFile['file']);
 $strAlt   = ($arrFile['caption']) ? $arrFile['caption'] : '';
-?>	
+?>
 <li class="<?= $arrFile['class'] ?>">
+	<?php if ($arrFile['isPicture'] && $this->settings->get('file_showImage')): ?>
+	<figure class="image_container<?= $arrFile['floatClass'] ?>"<?php if ($arrFile['margin']): ?> style="<?= $arrFile['margin'] ?>"<?php endif; ?>>
+	<?php endif; ?>
+
 	<?php if ($this->settings->get('file_showLink')): ?>
 		<?php if ($this->settings->get('file_showImage')): ?>
 			<a class="cboxElement" data-lightbox="<?= $arrFile['lb'] ?>" title="<?= $strTitle ?>" href="<?= $arrFile['file'] ?>">
@@ -12,17 +16,26 @@ $strAlt   = ($arrFile['caption']) ? $arrFile['caption'] : '';
 			<a title="<?= $strTitle ?>" href="<?= $arrFile['url'] ?>">
 		<?php endif; ?>
 	<?php endif; ?>
-				
+
 	<?php if ($this->settings->get('file_showImage')): ?>
 		<?php if ($arrFile['isGdImage'] || $arrFile['isSvgImage']): ?>
 			<?= $this->generateImage($arrFile['src'], $strAlt) ?>
 		<?php endif; ?>
+	<?php elseif ($arrFile['isPicture'] && $this->settings->get('file_showImage')): ?>
+		<?php $this->insert('picture_default',$arrFile['picture']); ?>
 	<?php else: ?>
 		<img src="<?= $arrFile['icon'] ?>" alt="<?= $strAlt ?>" /> <?= $strTitle ?> <span class="size"><?= $arrFile['sizetext'] ?></span>
 	<?php endif; ?>
-		
+
 	<?php if ($this->settings->get('file_showLink')): ?>
 		</a>
+	<?php endif; ?>
+
+	<?php if ($arrFile['isPicture'] && $this->settings->get('file_showImage')): ?>
+		<?php if ($arrFile['caption']): ?>
+			<figcaption class="caption"><?= $arrFile['caption'] ?></figcaption>
+		<?php endif; ?>
+	</figure>
 	<?php endif; ?>
 </li>
 <?php endforeach; ?>
