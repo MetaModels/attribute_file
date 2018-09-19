@@ -10,9 +10,41 @@ services:
           - { name: metamodels.attribute_factory }
 
     metamodels.attribute_file.event_listener.image_size_options:
-      class: MetaModels\AttributeFileBundle\Events\ImageSizeOptions
-      public: true
-      tags:
-          -   name: kernel.event_listener
-              event: dc-general.view.contao2backend.get-property-options
-              method: getPropertyOptions
+        class: MetaModels\AttributeFileBundle\Events\ImageSizeOptions
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: getPropertyOptions
+
+    metamodels.attribute_file.event_listener.build_attribute:
+        class: MetaModels\AttributeFileBundle\Events\Attribute
+        arguments:
+            - @metamodels.factory
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.dc-general.events.metamodel.build.attribute
+                method: buildAttribute
+
+    metamodels.attribute_file.event_listener.build-data-definition:
+        class: MetaModels\AttributeFileBundle\Events\Attribute
+        arguments:
+            - @metamodels.factory
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.factory.build-data-definition
+                method: buildDataDefinition
+                priority: 0
+
+    metamodels.attribute_file.event_listener.post-persist:
+        class: MetaModels\AttributeFileBundle\Events\Attribute
+        arguments:
+            - @metamodels.factory
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.post-persist
+                method: handleUpdateAttribute
+                priority: -1
