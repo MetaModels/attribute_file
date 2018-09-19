@@ -54,7 +54,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
         $sortAttribute = $information['colname'] . '__sort';
 
         $file = new File($metaModel, $information);
-        if (!$information['file_multiple']
+        if (!empty($information['file_multiple'])
             || $metaModel->hasAttribute($sortAttribute)
         ) {
             return $file;
