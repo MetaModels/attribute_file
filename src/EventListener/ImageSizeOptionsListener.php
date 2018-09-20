@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\AttributeFileBundle\Events;
+namespace MetaModels\AttributeFileBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultDataProvider;
@@ -27,7 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\DefaultDataProvider;
 /**
  * Get the options for the image size.
  */
-class ImageSizeOptions
+class ImageSizeOptionsListener
 {
     /**
      * Get property options for file image size in the render settings.
