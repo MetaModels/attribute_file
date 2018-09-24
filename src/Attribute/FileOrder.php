@@ -198,12 +198,12 @@ class FileOrder implements ISimple, IInternal
     {
         foreach ($arrValues as $id => $varData) {
             if ($varData === null) {
-                $varData = array();
+                $varData = $this->serializeData([]);
             }
 
             $this->connection->update(
                 $this->getMetaModel()->getTableName(),
-                [$this->getColName() => serialize($varData)],
+                [$this->getColName() => $varData],
                 ['id' => $id]
             );
         }

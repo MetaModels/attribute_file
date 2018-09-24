@@ -10,7 +10,7 @@ services:
           - { name: metamodels.attribute_factory }
 
     metamodels.attribute_file.event_listener.image_size_options:
-        class: MetaModels\AttributeFileBundle\EventListener\ImageSizeOptions
+        class: MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener
         public: true
         tags:
             -   name: kernel.event_listener
@@ -37,7 +37,7 @@ services:
     metamodels.attribute_file.event_listener.post-persist:
         class: MetaModels\AttributeFileBundle\EventListener\HandleUpdateAttributeListener
         arguments:
-            - @metamodels.factory
+            - "@metamodels.factory"
         public: true
         tags:
             -   name: kernel.event_listener

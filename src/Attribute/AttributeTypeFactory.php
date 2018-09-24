@@ -102,8 +102,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
     public function createInstance($information, $metaModel)
     {
         $sortAttribute = $information['colname'] . '__sort';
-
-        $file = new File(
+        $file          = new File(
             $metaModel,
             $information,
             $this->connection,
@@ -112,9 +111,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
             $this->rootPath
         );
 
-        if (!empty($information['file_multiple'])
-            || $metaModel->hasAttribute($sortAttribute)
-        ) {
+        if (empty($information['file_multiple']) || $metaModel->hasAttribute($sortAttribute)) {
             return $file;
         }
 
