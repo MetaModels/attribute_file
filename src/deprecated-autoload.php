@@ -22,9 +22,9 @@ use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
-use MetaModels\AttributeFileBundle\Events\ImageSizeOptions;
-use MetaModels\AttributeFileBundle\Events\Subscriber;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
 use MetaModels\AttributeFileBundle\Helper\UpgradeHandler;
+use MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\BaseListener;
 
 // This hack is to load the "old locations" of the classes.
 spl_autoload_register(
@@ -33,10 +33,10 @@ spl_autoload_register(
             'MetaModels\Attribute\File\File'                    => File::class,
             'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
             'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
-            'MetaModels\Attribute\File\Subscriber'              => Subscriber::class,
+            'MetaModels\Attribute\File\Subscriber'              => BaseListener::class,
             'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
             'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
-            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptions::class,
+            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class,
         ];
 
         if (isset($classes[$class])) {
