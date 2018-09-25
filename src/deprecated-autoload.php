@@ -34,7 +34,6 @@ spl_autoload_register(
             'MetaModels\Attribute\File\File'                    => File::class,
             'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
             'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
-            'MetaModels\Attribute\File\Subscriber'              => BaseListener::class,
             'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
             'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
             'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class,

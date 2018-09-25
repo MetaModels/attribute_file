@@ -46,7 +46,6 @@ class DeprecatedAutoloaderTest extends TestCase
         'MetaModels\Attribute\File\File'                    => File::class,
         'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
         'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
-        'MetaModels\Attribute\File\Subscriber'              => Subscriber::class,
         'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
         'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
         'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptions::class,
