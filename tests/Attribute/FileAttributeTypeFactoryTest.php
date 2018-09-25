@@ -115,8 +115,10 @@ class FileAttributeTypeFactoryTest extends TestCase
         $manipulator  = $this->mockTableManipulator($connection);
         $imageFactory = $this->mockImageFactory();
 
-        $factory     = new AttributeTypeFactory($connection, $manipulator, $imageFactory, sys_get_temp_dir());
-        $values      = [];
+        $factory = new AttributeTypeFactory($connection, $manipulator, $imageFactory, sys_get_temp_dir());
+        $values  = [
+            'colname' => 'test'
+        ];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')

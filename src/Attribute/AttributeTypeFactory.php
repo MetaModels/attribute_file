@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -101,7 +102,8 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new File(
+        $sortAttribute = $information['colname'] . '__sort';
+        $file          = new File(
             $metaModel,
             $information,
             $this->connection,
@@ -109,6 +111,24 @@ class AttributeTypeFactory implements IAttributeTypeFactory
             $this->imageFactory,
             $this->rootPath
         );
+
+        if (empty($information['file_multiple'])
+            || $metaModel->hasAttribute($sortAttribute)
+        ) {
+            return $file;
+        }
+
+        try {
+            $this->tableManipulator->checkColumnExists($metaModel->getTableName(), $sortAttribute);
+        } catch (\Exception $e) {
+            return $file;
+        }
+
+        // Inject ad-hoc order attribute.
+        $order = new FileOrder($metaModel, $sortAttribute, $this->connection);
+        $metaModel->addAttribute($order);
+
+        return $file;
     }
 
     /**
@@ -124,7 +144,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isSimpleType()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -132,6 +152,6 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isComplexType()
     {
-        return false;
+        return true;
     }
 }

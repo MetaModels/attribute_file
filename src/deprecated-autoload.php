@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -20,13 +21,22 @@
 
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\File;
+use MetaModels\AttributeFileBundle\Attribute\FileOrder;
+use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
+use MetaModels\AttributeFileBundle\Helper\UpgradeHandler;
+use MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\BaseListener;
 
 // This hack is to load the "old locations" of the classes.
 spl_autoload_register(
     function ($class) {
         static $classes = [
-            'MetaModels\Attribute\File\File'                 => File::class,
-            'MetaModels\Attribute\File\AttributeTypeFactory' => AttributeTypeFactory::class,
+            'MetaModels\Attribute\File\File'                    => File::class,
+            'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
+            'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
+            'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
+            'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
+            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class,
         ];
 
         if (isset($classes[$class])) {

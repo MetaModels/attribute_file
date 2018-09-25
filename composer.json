@@ -40,7 +40,7 @@
     "symfony/http-kernel": "^3.3 || ^4.0"
   },
   "require-dev": {
-    "cyberspectrum/contao-toolbox": "^0.6",
+    "cyberspectrum/contao-toolbox": "^0.7",
     "phpcq/all-tasks": "^1.2",
     "contao/manager-bundle": "^4.4"
   },
