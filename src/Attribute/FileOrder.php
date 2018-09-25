@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -198,12 +199,12 @@ class FileOrder implements ISimple, IInternal
     {
         foreach ($arrValues as $id => $varData) {
             if ($varData === null) {
-                $varData = array();
+                $varData = $this->serializeData([]);
             }
 
             $this->connection->update(
                 $this->getMetaModel()->getTableName(),
-                [$this->getColName() => serialize($varData)],
+                [$this->getColName() => $varData],
                 ['id' => $id]
             );
         }
