@@ -25,6 +25,7 @@ use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
 use MetaModels\AttributeFileBundle\Events\ImageSizeOptions;
 use MetaModels\AttributeFileBundle\Events\Subscriber;
 use MetaModels\AttributeFileBundle\Helper\UpgradeHandler;
@@ -48,7 +49,7 @@ class DeprecatedAutoloaderTest extends TestCase
         'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
         'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
         'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
-        'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptions::class,
+        'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class,
     ];
 
     /**
