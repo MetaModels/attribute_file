@@ -111,7 +111,9 @@ class AttributeTypeFactory implements IAttributeTypeFactory
             $this->rootPath
         );
 
-        if (empty($information['file_multiple']) || $metaModel->hasAttribute($sortAttribute)) {
+        if (empty($information['file_multiple'])
+            || $metaModel->hasAttribute($sortAttribute)
+        ) {
             return $file;
         }
 
