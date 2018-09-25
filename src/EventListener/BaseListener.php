@@ -30,6 +30,8 @@ use MetaModels\Factory;
 class BaseListener
 {
     /**
+     * MetaModels factory.
+     *
      * @var Factory|null
      */
     private $factory = null;
@@ -37,7 +39,7 @@ class BaseListener
     /**
      * Attribute constructor.
      *
-     * @param Factory $factory
+     * @param Factory $factory MetaModels factory.
      */
     public function __construct(Factory $factory)
     {
