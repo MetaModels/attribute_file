@@ -1,1 +1,1 @@
-<?php echo implode(',', (array) $this->files) ?>
+<?php if (isset($this->files)) { echo implode(',', (array)$this->files); } ?>
