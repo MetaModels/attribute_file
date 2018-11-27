@@ -245,7 +245,7 @@ class File extends BaseComplex
 
             // Check single file or multiple file.
             if ($this->get('file_multiple')) {
-                $files = serialize($files);
+                $files = \serialize($files);
             } else {
                 $files = $files[0];
             }

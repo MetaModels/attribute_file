@@ -115,7 +115,7 @@ class FileAttributeTypeFactoryTest extends TestCase
         $manipulator  = $this->mockTableManipulator($connection);
         $imageFactory = $this->mockImageFactory();
 
-        $factory = new AttributeTypeFactory($connection, $manipulator, $imageFactory, sys_get_temp_dir());
+        $factory = new AttributeTypeFactory($connection, $manipulator, $imageFactory, \sys_get_temp_dir());
         $values  = [
             'colname' => 'test'
         ];

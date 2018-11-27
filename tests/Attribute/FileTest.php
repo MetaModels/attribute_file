@@ -116,7 +116,7 @@ class FileTest extends TestCase
         $manipulator  = $this->mockTableManipulator($connection);
         $imageFactory = $this->mockImageFactory();
 
-        $file = new File($metaModel, [], $connection, $manipulator, $imageFactory, sys_get_temp_dir());
+        $file = new File($metaModel, [], $connection, $manipulator, $imageFactory, \sys_get_temp_dir());
         $this->assertInstanceOf('MetaModels\AttributeFileBundle\Attribute\File', $file);
     }
 
@@ -132,7 +132,7 @@ class FileTest extends TestCase
         $manipulator  = $this->mockTableManipulator($connection);
         $imageFactory = $this->mockImageFactory();
 
-        $file = new File($metaModel, ['file_multiple' => false], $connection, $manipulator, $imageFactory, sys_get_temp_dir());
+        $file = new File($metaModel, ['file_multiple' => false], $connection, $manipulator, $imageFactory, \sys_get_temp_dir());
 
         $this->assertEquals(
             ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
@@ -197,7 +197,7 @@ class FileTest extends TestCase
             $connection,
             $manipulator,
             $imageFactory,
-            sys_get_temp_dir()
+            \sys_get_temp_dir()
         );
 
         $this->assertSame(['1', '2', '3', '4', '5'], $file->searchFor('*test?value'));

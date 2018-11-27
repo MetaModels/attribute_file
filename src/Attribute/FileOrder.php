@@ -361,6 +361,6 @@ class FileOrder implements ISimple, IInternal
      */
     public function serializeData($value)
     {
-        return serialize($value);
+        return \serialize($value);
     }
 }
