@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,14 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2017 The MetaModels team.
+ * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\AttributeFileBundle\Attribute;
 
+use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\ISimple;
 use MetaModels\Attribute\IInternal;
@@ -352,7 +353,7 @@ class FileOrder implements ISimple, IInternal
      */
     public function unserializeData($value)
     {
-        return deserialize($value, true);
+        return StringUtil::deserialize($value, true);
     }
 
     /**

@@ -32,6 +32,7 @@
 namespace MetaModels\AttributeFileBundle\Attribute;
 
 use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\StringUtil;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use Contao\Config;
@@ -212,10 +213,10 @@ class File extends BaseComplex
         $query = $builder->execute();
         $data  = [];
         while ($result = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $row = ToolboxFile::convertValuesToMetaModels(deserialize($result['file'], true));
+            $row = ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($result['file'], true));
 
             if ($hasSort) {
-                $row['sort'] = deserialize($result['file_sort'], true);
+                $row['sort'] = StringUtil::deserialize($result['file_sort'], true);
             }
 
             $data[$result['id']] = $row;
@@ -291,7 +292,7 @@ class File extends BaseComplex
      */
     public function unserializeData($value)
     {
-        return ToolboxFile::convertValuesToMetaModels(\deserialize($value, true));
+        return ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($value, true));
     }
 
     /**
