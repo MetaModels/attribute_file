@@ -14,10 +14,9 @@
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Isaak <info@andreas-isaak.de>
- * @author     Christopher Boelter <c.boelter@cogizz.de>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     David Greminger <david.greminger@1up.io>
  * @author     David Maack <david.maack@arcor.de>
- * @author     David Maack <maack@men-at-work.de>
  * @author     MrTool <github@r2pi.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
