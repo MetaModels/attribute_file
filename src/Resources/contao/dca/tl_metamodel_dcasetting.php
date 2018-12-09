@@ -26,20 +26,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'
         'tl_class',
     ],
     'functions'    => [
-        'mandatory',
-        'file_widgetMode'
+        'mandatory'
     ]
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode'] = [
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetMode'],
-    'exclude'                 => true,
-    'inputType'               => 'radio',
-    'options'                 => ['normal', 'downloads', 'gallery'],
-    'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes'],
-    'sql'                     => 'char(32) NOT NULL default \'normal\'',
-    'eval'                    => [
-        'default'             => 'normal',
-        'chosen'              => true,
-    ]
+    'sql' => 'char(32) NOT NULL default \'normal\'',
 ];
