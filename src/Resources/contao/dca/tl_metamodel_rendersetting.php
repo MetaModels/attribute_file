@@ -35,14 +35,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showIm
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = array
 (
-    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
-    'exclude'                 => true,
-    'inputType'               => 'select',
-    'options'                 => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'manual', 'random'),
-    'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
-    'eval'                    => array(
-        'tl_class'            => 'w50',
-        'chosen'              => true,
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
+    'exclude'   => true,
+    'inputType' => 'select',
+    'options'   => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'manual', 'random'),
+    'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
+    'sql'       => 'varchar(32) NOT NULL default \'\'',
+    'eval'      => array(
+        'tl_class' => 'w50',
+        'chosen'   => true,
     )
 );
 
