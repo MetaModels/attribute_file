@@ -3,25 +3,24 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2019 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels
- * @subpackage AttributeFile
+ * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
- * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2019 The MetaModels team.
+ * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeFileBundle\Helper;
 
-use Contao\Database;
+use Doctrine\DBAL\Connection;
 
 /**
  * Upgrade handler class that changes structural changes in the database.
@@ -32,18 +31,18 @@ class UpgradeHandler
     /**
      * The database to use.
      *
-     * @var Database
+     * @var Connection
      */
-    private $database;
+    private $connection;
 
     /**
      * Create a new instance.
      *
-     * @param Database $database The database instance to use.
+     * @param Connection $connection The database connection to use.
      */
-    public function __construct(Database $database)
+    public function __construct(Connection $connection)
     {
-        $this->database = $database;
+        $this->connection = $connection;
     }
 
     /**
@@ -64,31 +63,49 @@ class UpgradeHandler
     private function ensureOrderColumnExists()
     {
         $attributes = $this
-            ->database
-            ->prepare(
-                'SELECT metamodel.tableName, attribute.colname
-                FROM tl_metamodel_attribute AS attribute
-                LEFT JOIN tl_metamodel AS metamodel
-                ON (metamodel.id=attribute.pid)
-                WHERE attribute.type=?
-                AND attribute.file_multiple=?'
-            )
-            ->execute('file', 1);
+            ->connection
+            ->createQueryBuilder()
+            ->select('metamodel.tableName', 'attribute.colname')
+            ->from('tl_metamodel_attribute', 'attribute')
+            ->leftJoin('attribute', 'tl_metamodel', 'metamodel', 'metamodel.id=attribute.pid')
+            ->where('attribute.type=:type')
+            ->setParameter('type', 'file')
+            ->andWhere('attribute.file_multiple=:multiple')
+            ->setParameter('multiple', '1')
+            ->execute();
 
-        while ($attributes->next()) {
-            if ($this->database->fieldExists($attributes->colname . '__sort', $attributes->tableName, true)) {
+        while ($row = $attributes->fetch(\PDO::FETCH_OBJ)) {
+            if ($this->fieldExists($row->colname . '__sort', $row->tableName)) {
                 continue;
             }
             $this
-                ->database
-                ->execute(
+                ->connection
+                ->exec(
                     \sprintf(
                         'ALTER TABLE %1$s ADD COLUMN %2$s_sort %3$s',
-                        $attributes->tableName,
-                        $attributes->colname,
+                        $row->tableName,
+                        $row->colname,
                         'blob NULL'
                     )
                 );
         }
+    }
+
+    /**
+     * Test if a column exists in a table.
+     *
+     * @param string $tableName  Table name.
+     * @param string $columnName Column name.
+     *
+     * @return bool
+     */
+    private function fieldExists($tableName, $columnName): bool
+    {
+        static $cache = [];
+        if (!array_key_exists($tableName, $cache)) {
+            $cache[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
+        }
+
+        return isset($cache[$tableName][$columnName]);
     }
 }
