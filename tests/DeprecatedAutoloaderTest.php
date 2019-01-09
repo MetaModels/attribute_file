@@ -26,8 +26,6 @@ use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
 use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
-use MetaModels\AttributeFileBundle\Events\ImageSizeOptions;
-use MetaModels\AttributeFileBundle\Events\Subscriber;
 use MetaModels\AttributeFileBundle\Helper\UpgradeHandler;
 use PHPUnit\Framework\TestCase;
 
