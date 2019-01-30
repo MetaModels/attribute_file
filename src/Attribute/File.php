@@ -37,6 +37,7 @@ use Contao\Config;
 use Contao\FilesModel;
 use Contao\Validator;
 use MetaModels\Attribute\BaseComplex;
+use MetaModels\Attribute\ISchemaManagedAttribute;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Template;
@@ -45,7 +46,7 @@ use MetaModels\Helper\ToolboxFile;
 /**
  * This is the MetaModel attribute class for handling file fields.
  */
-class File extends BaseComplex
+class File extends BaseComplex implements ISchemaManagedAttribute
 {
     /**
      * The image factory.

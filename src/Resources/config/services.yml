@@ -34,13 +34,6 @@ services:
                 method: buildDataDefinition
                 priority: 0
 
-    metamodels.attribute_file.event_listener.post-persist:
-        class: MetaModels\AttributeFileBundle\EventListener\HandleUpdateAttributeListener
-        arguments:
-            - "@metamodels.factory"
-        public: true
+    MetaModels\AttributeFileBundle\Schema\DoctrineSchemaGenerator:
         tags:
-            -   name: kernel.event_listener
-                event: dc-general.model.post-persist
-                method: handleUpdateAttribute
-                priority: -1
+            - { name: 'metamodels.schema-generator.doctrine' }
