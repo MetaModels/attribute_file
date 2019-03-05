@@ -24,8 +24,6 @@ use MetaModels\Helper\TableManipulation;
 
 /**
  * Class HandleUpdateAttributeListener
- *
- * @package MetaModels\AttributeFileBundle\EventListener
  */
 class HandleUpdateAttributeListener extends BaseListener
 {

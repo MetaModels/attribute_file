@@ -23,8 +23,6 @@ use MetaModels\Factory;
 
 /**
  * Class BaseListener
- *
- * @package MetaModels\AttributeFileBundle\Events
  */
 class BaseListener
 {

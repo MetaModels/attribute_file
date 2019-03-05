@@ -31,8 +31,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * This class tests if the deprecated autoloader works.
- *
- * @package MetaModels\AttributeFileBundle\Test
  */
 class DeprecatedAutoloaderTest extends TestCase
 {

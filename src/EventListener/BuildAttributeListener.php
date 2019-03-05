@@ -28,8 +28,6 @@ use \ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 
 /**
  * Class Attribute
- *
- * @package MetaModels\AttributeFileBundle\Events
  */
 class BuildAttributeListener
 {

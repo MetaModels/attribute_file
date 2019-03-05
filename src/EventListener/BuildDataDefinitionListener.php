@@ -24,8 +24,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 
 /**
  * Class BuildDataDefinitionListener
- *
- * @package MetaModels\AttributeFileBundle\Events
  */
 class BuildDataDefinitionListener
 {

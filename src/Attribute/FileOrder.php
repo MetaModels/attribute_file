@@ -30,8 +30,6 @@ use MetaModels\IMetaModel;
 /**
  * FileOrder is a helper attribute for the file attribute.
  *
- * @package MetaModels\Attribute\File
- *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class FileOrder implements ISimple, IInternal
