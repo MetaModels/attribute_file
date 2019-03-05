@@ -5,7 +5,6 @@
 build.default.properties export-ignore
 build.xml export-ignore
 phpunit.xml.dist export-ignore
-travis.php.ini export-ignore
 /.github export-ignore
 /tests export-ignore
 ctb.json export-ignore
