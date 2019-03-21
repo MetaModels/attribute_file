@@ -83,7 +83,7 @@ class UpgradeHandler
                 ->database
                 ->execute(
                     sprintf(
-                        'ALTER TABLE %1$s ADD COLUMN %2$s_sort %3$s',
+                        'ALTER TABLE %1$s ADD COLUMN %2$s__sort %3$s',
                         $attributes->tableName,
                         $attributes->colname,
                         'blob NULL'
