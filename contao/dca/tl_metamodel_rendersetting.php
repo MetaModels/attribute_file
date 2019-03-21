@@ -32,18 +32,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showIm
     'file_imageSize',
 ];
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = array
-(
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [
     'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
     'exclude'                 => true,
     'inputType'               => 'select',
-    'options'                 => array('name_asc', 'name_desc', 'date_asc', 'date_desc', 'manual', 'random'),
+    'options'                 => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'random'],
     'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
-    'eval'                    => array(
+    'eval'                    => [
         'tl_class'            => 'w50',
-        'chosen'              => true,
-    )
-);
+        'chosen'              => true
+    ]
+];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink'],
