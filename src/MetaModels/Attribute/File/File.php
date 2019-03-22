@@ -56,7 +56,12 @@ class File extends BaseComplex
             && $this->getDatabase()->fieldExists($colName, $metaModel, true)
         ) {
             TableManipulation::dropColumn($metaModel, $colName);
-            TableManipulation::dropColumn($metaModel, $colName . '__sort');
+            // Catch error message if column does not exist .
+            try {
+                TableManipulation::dropColumn($metaModel, $colName . '__sort');
+            } catch (\Exception $e) {
+                return;
+            }
         }
     }
 
