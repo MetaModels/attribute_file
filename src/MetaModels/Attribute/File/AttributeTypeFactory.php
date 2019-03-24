@@ -64,11 +64,10 @@ class AttributeTypeFactory implements IAttributeTypeFactory
             return $file;
         }
 
-        // Inject ad-hoc order attribute.
-        $order = new FileOrder($metaModel, $sortAttribute);
-        $metaModel->addAttribute($order);
+        // Inject ad-hoc the main attribute before inject the order attribute.
+        $metaModel->addAttribute($file);
 
-        return $file;
+        return new FileOrder($metaModel, $sortAttribute);
     }
 
     /**
