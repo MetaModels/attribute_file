@@ -40,7 +40,7 @@ class FileOrder implements ISimple, IInternal
      *
      * @var IMetaModel
      */
-    private $metaModel = null;
+    private $metaModel;
 
     /**
      * The column name.
@@ -52,13 +52,13 @@ class FileOrder implements ISimple, IInternal
     /**
      * Create a new instance.
      *
-     * @param null   $metaModel
-     * @param string $colName
+     * @param IMetaModel $metaModel   The MetaModel.
+     * @param array      $information The attribute information.
      */
-    public function __construct($metaModel, $colName)
+    public function __construct(IMetaModel $metaModel, array $information)
     {
         $this->metaModel = $metaModel;
-        $this->colName   = $colName;
+        $this->colName   = $information['colname'];
     }
 
     /**

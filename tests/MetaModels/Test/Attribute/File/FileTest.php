@@ -28,6 +28,8 @@ use MetaModels\IMetaModel;
 
 /**
  * Unit tests to test class File.
+ *
+ * @covers \MetaModels\Attribute\File\File
  */
 class FileTest extends TestCase
 {
