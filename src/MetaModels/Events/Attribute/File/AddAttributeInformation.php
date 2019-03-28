@@ -77,8 +77,7 @@ class AddAttributeInformation
     {
         foreach ($inputInformation as $name => $information) {
             $columnName = $information['colname'] . '__sort';
-
-            $position = \array_flip(\array_keys($updateInformation))[$name];
+            $position   = \array_flip(\array_keys($updateInformation))[$name];
 
             $updateInformation = \array_merge(
                 \array_slice($updateInformation, 0, ($position + 1)),
@@ -88,7 +87,7 @@ class AddAttributeInformation
                         'type'    => 'filesort'
                     ]
                 ],
-                \array_slice($updateInformation, ($position - 1))
+                \array_slice($updateInformation, ($position ? $position - 1 : $position + 1))
             );
         }
 

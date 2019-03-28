@@ -114,6 +114,30 @@ class AddAttributeInformationTest extends TestCase
                     'beforeNoFile' => ['type' => 'nofile'],
                     'file'         => ['colname' => 'file', 'type' => 'file', 'file_multiple' => '1'],
                     'file__sort'   => ['colname' => 'file__sort', 'type' => 'filesort'],
+                ],
+                [
+                    'beforeNoFile' => ['type' => 'nofile'],
+                    'file'         => ['colname' => 'file', 'type' => 'file', 'file_multiple' => '1'],
+                ]
+            ],
+
+            [
+                [
+                    'file'         => ['colname' => 'file', 'type' => 'file', 'file_multiple' => '1'],
+                    'file__sort'   => ['colname' => 'file__sort', 'type' => 'filesort'],
+                    'afterNoFile'  => ['type' => 'nofile']
+                ],
+                [
+                    'file'         => ['colname' => 'file', 'type' => 'file', 'file_multiple' => '1'],
+                    'afterNoFile'  => ['type' => 'nofile']
+                ]
+            ],
+
+            [
+                [
+                    'beforeNoFile' => ['type' => 'nofile'],
+                    'file'         => ['colname' => 'file', 'type' => 'file', 'file_multiple' => '1'],
+                    'file__sort'   => ['colname' => 'file__sort', 'type' => 'filesort'],
                     'file2'        => ['colname' => 'file2', 'type' => 'file', 'file_multiple' => '1'],
                     'file2__sort'  => ['colname' => 'file2__sort', 'type' => 'filesort'],
                     'afterNoFile'  => ['type' => 'nofile']
