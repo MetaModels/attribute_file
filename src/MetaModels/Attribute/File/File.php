@@ -29,13 +29,11 @@
 
 namespace MetaModels\Attribute\File;
 
-use MetaModels\Attribute\BaseComplex;
-use MetaModels\Helper\TableManipulation;
 use Contao\Config;
-use Contao\Database;
 use Contao\FilesModel;
 use Contao\Validator;
-use MetaModels\Attribute\BaseSimple;
+use MetaModels\Attribute\BaseComplex;
+use MetaModels\Helper\TableManipulation;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\Render\Template;
 
@@ -156,7 +154,11 @@ class File extends BaseComplex
             $row = ToolboxFile::convertValuesToMetaModels(deserialize($result->file, true));
 
             if ($sortProperty) {
-                $row['sort'] = deserialize($result->file_sort, true);
+                $row['sort'] = $sorted = \deserialize($result->file_sort, true);
+
+                foreach (ToolboxFile::convertValuesToMetaModels($sorted) as $sortedKey => $sortedValue) {
+                    $row[$sortedKey . '_sorted'] = $sortedValue;
+                }
             }
 
             $data[$result->id] = $row;
@@ -411,7 +413,10 @@ class File extends BaseComplex
         }
 
         $objToolbox->resolveFiles();
-        $arrData = $objToolbox->sortFiles($objSettings->get('file_sortBy'), $value['sort']);
+        $arrData = $objToolbox->sortFiles(
+            $objSettings->get('file_sortBy'),
+            isset($value['bin_sorted']) ? $value['bin_sorted'] : []
+        );
 
         $objTemplate->files = $arrData['files'];
         $objTemplate->src   = $arrData['source'];
