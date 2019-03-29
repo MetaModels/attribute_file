@@ -23,11 +23,13 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Attribute\File\AttributeOrderTypeFactory;
+use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\Attribute\File\Subscriber;
 use MetaModels\Events\Attribute\File\AddAttributeInformation;
-use MetaModels\Events\MetaModelsBootEvent;
-use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\Events\Attribute\File\ImageSizeOptions;
+use MetaModels\Events\DcGeneral\Table\Attribute\File\RemoveTypeOptions;
+use MetaModels\Events\DcGeneral\Table\FilterSetting\File\RemoveAttIdOptions;
+use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
 
 return [
@@ -47,6 +49,8 @@ return [
         }
     ],
     GetPropertyOptionsEvent::NAME => [
-        [new ImageSizeOptions(), 'getPropertyOptions']
+        [new ImageSizeOptions(), 'getPropertyOptions'],
+        [[new RemoveTypeOptions(), 'removeOption'], -1],
+        [[new RemoveAttIdOptions(), 'removeOption'], -1]
     ]
 ];
