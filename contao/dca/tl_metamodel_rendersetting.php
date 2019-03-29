@@ -38,6 +38,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [
     'inputType'               => 'select',
     'options'                 => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'random'],
     'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
+    'sql'                     => 'varchar(32) NOT NULL default \'\'',
     'eval'                    => [
         'tl_class'            => 'w50',
         'chosen'              => true
