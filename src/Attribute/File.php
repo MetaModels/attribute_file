@@ -214,10 +214,21 @@ class File extends BaseComplex
             $row = ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($result->file, true));
 
             if ($hasSort) {
+                // The sort key be can remove in later version. The new sort key is bin_sorted.
                 $row['sort'] = $sorted = StringUtil::deserialize($result->file_sort, true);
 
                 foreach (ToolboxFile::convertValuesToMetaModels($sorted) as $sortedKey => $sortedValue) {
                     $row[$sortedKey . '_sorted'] = $sortedValue;
+                }
+
+                if (isset($row['sort'])) {
+                    // @codingStandardsIgnoreStart
+                    @\trigger_error(
+                        'The sort key from the attribute file is deprecated since 2.1 and where removed in 3.0' .
+                        'Use the key bin_sorted',
+                        E_USER_DEPRECATED
+                    );
+                    // @codingStandardsIgnoreEnd
                 }
             }
 
@@ -238,9 +249,10 @@ class File extends BaseComplex
     {
         $tableName = $this->getMetaModel()->getTableName();
         $colName   = $this->getColName();
-        foreach ($arrValues as $id => $varData) {
-            if ($varData === null) {
-                $varData = ['bin' => [], 'value' => [], 'path' => [], 'sort' => null];
+        foreach ($values as $id => $value) {
+            if (null === $value) {
+                // The sort key be can remove in later version.
+                $value = ['bin' => [], 'value' => [], 'path' => [], 'sort' => null];
             }
 
             $files = ToolboxFile::convertValuesToDatabase($varData);
