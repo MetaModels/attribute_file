@@ -36,6 +36,13 @@ class UpgradeHandler
     private $connection;
 
     /**
+     * The cache of table schemas.
+     *
+     * @var array
+     */
+    private $schemaCache = [];
+
+    /**
      * Create a new instance.
      *
      * @param Connection $connection The database connection to use.
@@ -101,11 +108,10 @@ class UpgradeHandler
      */
     private function fieldExists($tableName, $columnName): bool
     {
-        static $cache = [];
-        if (!\array_key_exists($tableName, $cache)) {
-            $cache[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
+        if (!\array_key_exists($tableName, $this->schemaCache)) {
+            $this->schemaCache[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
         }
 
-        return isset($cache[$tableName][$columnName]);
+        return isset($this->schemaCache[$tableName][$columnName]);
     }
 }
