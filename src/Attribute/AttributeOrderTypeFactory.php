@@ -21,7 +21,6 @@ namespace MetaModels\AttributeFileBundle\Attribute;
 
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Helper\TableManipulation;
 use MetaModels\Helper\TableManipulator;
 
 /**
@@ -79,9 +78,9 @@ class AttributeOrderTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        try {
-            TableManipulation::checkColumnExists($metaModel->getTableName(), $information['colname']);
-        } catch (\Exception $exception) {
+        $columnName   = $information['colname'] ?? null;
+        $tableColumns = $this->connection->getSchemaManager()->listTableColumns($metaModel->getTableName());
+        if (!$columnName || !\array_key_exists($columnName, $tableColumns)) {
             return null;
         }
 

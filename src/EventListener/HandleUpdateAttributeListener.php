@@ -21,6 +21,8 @@
 namespace MetaModels\AttributeFileBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
+use Doctrine\DBAL\Connection;
+use MetaModels\Factory;
 use MetaModels\Helper\TableManipulation;
 
 /**
@@ -28,6 +30,26 @@ use MetaModels\Helper\TableManipulation;
  */
 class HandleUpdateAttributeListener extends BaseListener
 {
+    /**
+     * The doctrine dbal connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * HandleUpdateAttributeListener constructor.
+     *
+     * @param Factory    $factory    The attribute factory.
+     * @param Connection $connection The doctrine dbal connection.
+     */
+    public function __construct(Factory $factory, Connection $connection)
+    {
+        parent::__construct($factory);
+
+        $this->connection = $connection;
+    }
+
     /**
      * Handle the update of the file attribute, if switch on for file multiple.
      *
@@ -51,11 +73,12 @@ class HandleUpdateAttributeListener extends BaseListener
         $metaModelsName = $this->getFactory()->translateIdToMetaModelName($model->getProperty('pid'));
         $metaModel      = $this->getFactory()->getMetaModel($metaModelsName);
         $attributeName  = $model->getProperty('colname') . '__sort';
+        $tableColumns   = $this->connection->getSchemaManager()->listTableColumns($metaModel->getTableName());
 
-        try {
-            TableManipulation::checkColumnExists($metaModel->getTableName(), $attributeName);
-        } catch (\Exception $e) {
-            TableManipulation::createColumn($metaModel->getTableName(), $attributeName, 'blob NULL');
+        if (\array_key_exists($attributeName, $tableColumns)) {
+            return;
         }
+
+        TableManipulation::createColumn($metaModel->getTableName(), $attributeName, 'blob NULL');
     }
 }

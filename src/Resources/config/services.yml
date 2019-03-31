@@ -73,6 +73,7 @@ services:
         class: MetaModels\AttributeFileBundle\EventListener\HandleUpdateAttributeListener
         arguments:
             - "@metamodels.factory"
+            - "@database_connection"
         public: true
         tags:
             -   name: kernel.event_listener

@@ -22,10 +22,12 @@ namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\AttributeOrderTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\File;
+use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
@@ -76,11 +78,44 @@ class FileAttributeTypeFactoryTest extends TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|Connection
      */
-    private function mockConnection()
+    private function mockConnection(AbstractSchemaManager $schemaManager = null)
     {
-        return $this->getMockBuilder(Connection::class)
+        $connection = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $connection
+            ->expects($this->any())
+            ->method('getSchemaManager')
+            ->willReturn($schemaManager);
+
+        return $connection;
+    }
+
+    private function mockSchemaManager(array $tableSchema = [])
+    {
+        $manager = $this->getMockForAbstractClass(
+            AbstractSchemaManager::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['listTableColumns']
+        );
+
+        $manager
+            ->expects($this->any())
+            ->method('listTableColumns')
+            ->will(
+                $this->returnCallback(
+                    function ($table) use ($tableSchema) {
+                        return $tableSchema[$table] ?? null;
+                    }
+                )
+            );
+
+        return $manager;
     }
 
     /**
@@ -152,7 +187,13 @@ class FileAttributeTypeFactoryTest extends TestCase
      */
     public function testCreateOrderSelect()
     {
-        $connection   = $this->mockConnection();
+        $tableSchema = [
+            'mm_test' => [
+                'test__sort' => ''
+            ]
+        ];
+
+        $connection   = $this->mockConnection($this->mockSchemaManager($tableSchema));
         $manipulator  = $this->mockTableManipulator($connection);
 
         $factory   = new AttributeOrderTypeFactory($connection, $manipulator);
@@ -164,6 +205,6 @@ class FileAttributeTypeFactoryTest extends TestCase
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertNull($attribute);
+        $this->assertInstanceOf(FileOrder::class, $attribute);
     }
 }
