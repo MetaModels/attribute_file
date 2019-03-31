@@ -32,7 +32,7 @@ class AttributeFileDefinition implements DefinitionInterface
      *
      * @var string[]
      */
-    private $fileProperties = array();
+    private $fileProperties = [];
 
     /**
      * Add a file property.

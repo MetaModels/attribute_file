@@ -26,11 +26,11 @@
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['file extends default'] = [
-    '+advanced' => ['file_sortBy', 'file_showLink', 'file_showImage'],
+    '+advanced' => ['file_sortBy', 'file_showLink', 'file_showImage']
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showImage'] = [
-    'file_imageSize',
+    'file_imageSize'
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [

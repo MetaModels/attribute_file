@@ -78,22 +78,22 @@ class File extends BaseComplex
     /**
      * Create a new instance.
      *
-     * @param IMetaModel            $objMetaModel     The MetaModel instance this attribute belongs to.
-     * @param array                 $arrData          The attribute information array.
+     * @param IMetaModel            $metaModel        The MetaModel instance this attribute belongs to.
+     * @param array                 $information      The attribute information.
      * @param Connection            $connection       The database connection.
      * @param TableManipulator      $tableManipulator Table manipulator instance.
      * @param ImageFactoryInterface $imageFactory     The image factory to use.
      * @param string                $rootPath         The root path.
      */
     public function __construct(
-        IMetaModel $objMetaModel,
-        $arrData = [],
+        IMetaModel $metaModel,
+        $information = [],
         Connection $connection = null,
         TableManipulator $tableManipulator = null,
         ImageFactoryInterface $imageFactory = null,
         $rootPath = null
     ) {
-        parent::__construct($objMetaModel, $arrData);
+        parent::__construct($metaModel, $information);
         if (null === $imageFactory) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
@@ -249,13 +249,13 @@ class File extends BaseComplex
     {
         $tableName = $this->getMetaModel()->getTableName();
         $colName   = $this->getColName();
-        foreach ($values as $id => $value) {
+        foreach ($arrValues as $id => $value) {
             if (null === $value) {
                 // The sort key be can remove in later version.
                 $value = ['bin' => [], 'value' => [], 'path' => [], 'sort' => null];
             }
 
-            $files = ToolboxFile::convertValuesToDatabase($varData);
+            $files = ToolboxFile::convertValuesToDatabase($value);
 
             // Check single file or multiple file.
             if ($this->get('file_multiple')) {
@@ -292,7 +292,7 @@ class File extends BaseComplex
                 'file_widgetMode',
                 'filterable',
                 'searchable',
-                'mandatory',
+                'mandatory'
             ]
         );
     }
@@ -318,19 +318,14 @@ class File extends BaseComplex
      */
     public function serializeData($mixValues)
     {
-        if ($mixValues === null) {
-            $mixValues = ['bin' => [], 'value' => [], 'path' => []];
-        }
-        $arrData = ToolboxFile::convertValuesToDatabase($mixValues);
+        $data = ToolboxFile::convertValuesToDatabase($mixValues ?: ['bin' => [], 'value' => [], 'path' => []]);
 
         // Check single file or multiple file.
         if ($this->get('file_multiple')) {
-            $mixValues = \serialize($arrData);
-        } else {
-            $mixValues = $arrData[0];
+            return \serialize($data);
         }
 
-        return $mixValues;
+        return $data[0];
     }
 
     /**
@@ -342,28 +337,28 @@ class File extends BaseComplex
      */
     private function handleCustomFileTree(&$arrFieldDef)
     {
-        if (\strlen($this->get('file_uploadFolder'))) {
+        if ($this->get('file_uploadFolder')) {
             // Set root path of file chooser depending on contao version.
-            $objFile = null;
+            $file = null;
 
             if (Validator::isUuid($this->get('file_uploadFolder'))) {
-                $objFile = FilesModel::findByUuid($this->get('file_uploadFolder'));
+                $file = FilesModel::findByUuid($this->get('file_uploadFolder'));
             }
 
             // Check if we have a file.
-            if ($objFile != null) {
-                $arrFieldDef['eval']['path'] = $objFile->path;
+            if (null !== $file) {
+                $arrFieldDef['eval']['path'] = $file->path;
             } else {
                 // Fallback.
                 $arrFieldDef['eval']['path'] = $this->get('file_uploadFolder');
             }
         }
 
-        if (\strlen($this->get('file_validFileTypes'))) {
+        if ($this->get('file_validFileTypes')) {
             $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
         }
 
-        if (\strlen($this->get('file_filesOnly'))) {
+        if ($this->get('file_filesOnly')) {
             $arrFieldDef['eval']['filesOnly'] = true;
         }
     }
@@ -373,35 +368,35 @@ class File extends BaseComplex
      */
     public function getFieldDefinition($arrOverrides = [])
     {
-        $arrFieldDef = parent::getFieldDefinition($arrOverrides);
+        $fieldDefinition = parent::getFieldDefinition($arrOverrides);
 
-        $arrFieldDef['inputType']          = 'fileTree';
-        $arrFieldDef['eval']['files']      = true;
-        $arrFieldDef['eval']['extensions'] = Config::get('allowedDownload');
-        $arrFieldDef['eval']['multiple']   = (bool) $this->get('file_multiple');
+        $fieldDefinition['inputType']          = 'fileTree';
+        $fieldDefinition['eval']['files']      = true;
+        $fieldDefinition['eval']['extensions'] = Config::get('allowedDownload');
+        $fieldDefinition['eval']['multiple']   = (bool) $this->get('file_multiple');
 
         $widgetMode = $this->getOverrideValue('file_widgetMode', $arrOverrides);
 
         if (('normal' !== $widgetMode)
             && ((bool) $this->get('file_multiple'))
         ) {
-            $arrFieldDef['eval']['orderField'] = $this->getColName() . '__sort';
+            $fieldDefinition['eval']['orderField'] = $this->getColName() . '__sort';
         }
 
-        $arrFieldDef['eval']['isDownloads'] = ('downloads' === $widgetMode);
-        $arrFieldDef['eval']['isGallery']   = ('gallery' === $widgetMode);
+        $fieldDefinition['eval']['isDownloads'] = ('downloads' === $widgetMode);
+        $fieldDefinition['eval']['isGallery']   = ('gallery' === $widgetMode);
 
         if ($this->get('file_multiple')) {
-            $arrFieldDef['eval']['fieldType'] = 'checkbox';
+            $fieldDefinition['eval']['fieldType'] = 'checkbox';
         } else {
-            $arrFieldDef['eval']['fieldType'] = 'radio';
+            $fieldDefinition['eval']['fieldType'] = 'radio';
         }
 
         if ($this->get('file_customFiletree')) {
-            $this->handleCustomFileTree($arrFieldDef);
+            $this->handleCustomFileTree($fieldDefinition);
         }
 
-        return $arrFieldDef;
+        return $fieldDefinition;
     }
 
     /**
@@ -409,15 +404,7 @@ class File extends BaseComplex
      */
     public function valueToWidget($varValue)
     {
-        if (empty($varValue)) {
-            return null;
-        }
-
-        if (!$this->get('file_multiple')) {
-            return isset($varValue['bin'][0]) ? $varValue['bin'][0] : null;
-        }
-
-        return $varValue['bin'];
+        return $this->get('file_multiple') ? ($varValue['bin'] ?? null) : ($varValue['bin'][0] ?? null);
     }
 
     /**
@@ -431,59 +418,54 @@ class File extends BaseComplex
     /**
      * {@inheritDoc}
      */
-    protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
+    protected function prepareTemplate(Template $template, $rowData, $settings)
     {
-        parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
-
-        $objToolbox = new ToolboxFile($this->imageFactory, $this->rootPath);
+        parent::prepareTemplate($template, $rowData, $settings);
 
         // No data, nothing to do.
-        if (!$arrRowData[$this->getColName()]) {
+        if (!$rowData[$this->getColName()]) {
             return;
         }
 
-        $objToolbox->setBaseLanguage($this->getMetaModel()->getActiveLanguage());
+        $toolbox = new ToolboxFile($this->imageFactory, $this->rootPath);
 
-        $objToolbox->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage());
+        $toolbox
+            ->setBaseLanguage($this->getMetaModel()->getActiveLanguage())
+            ->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage())
+            ->setLightboxId(\sprintf(
+                '%s.%s.%s',
+                $this->getMetaModel()->getTableName(),
+                $settings->get('id'),
+                $rowData['id']
+            ))
+            ->setShowImages($settings->get('file_showImage'));
 
-        $objToolbox->setLightboxId(\sprintf(
-            '%s.%s.%s',
-            $this->getMetaModel()->getTableName(),
-            $objSettings->get('id'),
-            $arrRowData['id']
-        ));
-
-        if (\strlen($this->get('file_validFileTypes'))) {
-            $objToolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
+        if ($this->get('file_validFileTypes')) {
+            $toolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
         }
 
-        $objToolbox->setShowImages($objSettings->get('file_showImage'));
-
-        if ($objSettings->get('file_imageSize')) {
-            $objToolbox->setResizeImages($objSettings->get('file_imageSize'));
+        if ($settings->get('file_imageSize')) {
+            $toolbox->setResizeImages($settings->get('file_imageSize'));
         }
 
-        $value = $arrRowData[$this->getColName()];
+        $value = $rowData[$this->getColName()];
 
         if (isset($value['value'])) {
             foreach ($value['value'] as $strFile) {
-                $objToolbox->addPathById($strFile);
+                $toolbox->addPathById($strFile);
             }
         } elseif (\is_array($value)) {
             foreach ($value as $strFile) {
-                $objToolbox->addPathById($strFile);
+                $toolbox->addPathById($strFile);
             }
         } else {
-            $objToolbox->addPathById($value);
+            $toolbox->addPathById($value);
         }
 
-        $objToolbox->resolveFiles();
-        $arrData = $objToolbox->sortFiles(
-            $objSettings->get('file_sortBy'),
-            isset($value['bin_sorted']) ? $value['bin_sorted'] : []
-        );
+        $toolbox->resolveFiles();
+        $data = $toolbox->sortFiles($settings->get('file_sortBy'), ($value['bin_sorted'] ?? []));
 
-        $objTemplate->files = $arrData['files'];
-        $objTemplate->src   = $arrData['source'];
+        $template->files = $data['files'];
+        $template->src   = $data['source'];
     }
 }

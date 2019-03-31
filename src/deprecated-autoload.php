@@ -13,6 +13,7 @@
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -35,7 +36,7 @@ spl_autoload_register(
             'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
             'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
             'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
-            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class,
+            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class
         ];
 
         if (isset($classes[$class])) {

@@ -184,9 +184,7 @@ class FileOrder implements ISimple, IInternal
      */
     public function widgetToValue($varValue, $itemId)
     {
-        $varValue = $this->unserializeData($varValue);
-
-        return $varValue;
+        return $this->unserializeData($varValue);
     }
 
     /**
@@ -194,14 +192,10 @@ class FileOrder implements ISimple, IInternal
      */
     public function setDataFor($arrValues)
     {
-        foreach ($arrValues as $id => $varData) {
-            if ($varData === null) {
-                $varData = $this->serializeData([]);
-            }
-
+        foreach ($arrValues as $id => $value) {
             $this->connection->update(
                 $this->getMetaModel()->getTableName(),
-                [$this->getColName() => $varData],
+                [$this->getColName() => $value ?: $this->serializeData([])],
                 ['id' => $id]
             );
         }

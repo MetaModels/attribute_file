@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -40,9 +41,9 @@ class HandleUpdateAttributeListener extends BaseListener
     {
         $model = $event->getModel();
 
-        if (($model->getProperty('type') !== 'file')
+        if (('file' !== $model->getProperty('type'))
             || (!$model->getProperty('file_multiple'))
-            || ($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')
+            || ('tl_metamodel_attribute' !== $event->getEnvironment()->getDataDefinition()->getName())
         ) {
             return;
         }

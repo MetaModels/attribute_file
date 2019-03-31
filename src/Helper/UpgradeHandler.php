@@ -102,7 +102,7 @@ class UpgradeHandler
     private function fieldExists($tableName, $columnName): bool
     {
         static $cache = [];
-        if (!array_key_exists($tableName, $cache)) {
+        if (!\array_key_exists($tableName, $cache)) {
             $cache[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
         }
 

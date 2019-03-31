@@ -23,7 +23,7 @@
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metapalettes']['file extends _simpleattribute_'] = [
-    '+advanced' => ['file_customFiletree', 'file_multiple'],
+    '+advanced' => ['file_customFiletree', 'file_multiple']
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['metasubpalettes']['file_customFiletree'] = [
