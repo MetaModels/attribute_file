@@ -1,0 +1,27 @@
+services:
+    metamodels.attribute_file.factory:
+        class: MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory
+        arguments:
+            - "@database_connection"
+            - "@metamodels.table_manipulator"
+            - "@contao.image.image_factory"
+            - "%kernel.project_dir%"
+        tags:
+            - { name: metamodels.attribute_factory }
+
+    metamodels.attribute_file_order.factory:
+        class: MetaModels\AttributeFileBundle\Attribute\AttributeOrderTypeFactory
+        arguments:
+            - "@database_connection"
+            - "@metamodels.table_manipulator"
+        tags:
+            - { name: metamodels.attribute_factory }
+
+    metamodels.attribute_file.event_listener_factory.add_attribute_information:
+        class: MetaModels\AttributeFileBundle\EventListener\Factory\AddAttributeInformation
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.collect-metamodel-attribute-information
+                method: addInformation
+                priority: -1
