@@ -1,0 +1,56 @@
+services:
+    metamodels.attribute_file.event_listener.image_size_options:
+        class: MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: getPropertyOptions
+
+    metamodels.attribute_file.event_listener.remove_type_options:
+        class: MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\Attribute\RemoveTypeOptions
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: removeOption
+                priority: -1
+
+    metamodels.attribute_file.event_listener.remove_attid_options:
+        class: MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\FilterSetting\RemoveAttIdOptions
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: removeOption
+                priority: -1
+
+    metamodels.attribute_file.event_listener.build_attribute:
+        class: MetaModels\AttributeFileBundle\EventListener\BuildAttributeListener
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.dc-general.events.metamodel.build.attribute
+                method: buildAttribute
+
+    metamodels.attribute_file.event_listener.build-data-definition:
+        class: MetaModels\AttributeFileBundle\EventListener\BuildDataDefinitionListener
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.factory.build-data-definition
+                method: buildDataDefinition
+                priority: 0
+
+    metamodels.attribute_file.event_listener.post-persist:
+        class: MetaModels\AttributeFileBundle\EventListener\HandleUpdateAttributeListener
+        arguments:
+            - "@metamodels.factory"
+            - "@database_connection"
+            - "@metamodels.table_manipulator"
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.post-persist
+                method: handleUpdateAttribute
+                priority: -1
