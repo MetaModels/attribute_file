@@ -37,7 +37,8 @@
     "contao/core-bundle": "^4.4.8",
     "metamodels/core": "^2.1",
     "symfony/dependency-injection": "^3.3 || ^4.0",
-    "symfony/http-kernel": "^3.3 || ^4.0"
+    "symfony/http-kernel": "^3.3 || ^4.0",
+    "ext-pdo": "*"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.1",
