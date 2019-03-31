@@ -22,13 +22,9 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file'] = [
     'presentation' => [
-        'tl_class',
+        'tl_class'
     ],
     'functions'    => [
         'mandatory'
     ]
-];
-
-$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode'] = [
-    'sql' => 'char(32) NOT NULL default \'normal\'',
 ];

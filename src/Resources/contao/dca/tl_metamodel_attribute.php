@@ -43,7 +43,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_multiple'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50']
+    'eval'      => ['tl_class' => 'w50']
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_uploadFolder'] = [

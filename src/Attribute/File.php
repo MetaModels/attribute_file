@@ -210,14 +210,18 @@ class File extends BaseComplex
 
         $query = $builder->execute();
         $data  = [];
-        while ($result = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $row = ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($result['file'], true));
+        while ($result = $query->fetch(\PDO::FETCH_OBJ)) {
+            $row = ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($result->file, true));
 
             if ($hasSort) {
-                $row['sort'] = StringUtil::deserialize($result['file_sort'], true);
+                $row['sort'] = $sorted = StringUtil::deserialize($result->file_sort, true);
+
+                foreach (ToolboxFile::convertValuesToMetaModels($sorted) as $sortedKey => $sortedValue) {
+                    $row[$sortedKey . '_sorted'] = $sortedValue;
+                }
             }
 
-            $data[$result['id']] = $row;
+            $data[$result->id] = $row;
         }
 
         return $data;
@@ -462,7 +466,10 @@ class File extends BaseComplex
         }
 
         $objToolbox->resolveFiles();
-        $arrData = $objToolbox->sortFiles($objSettings->get('file_sortBy'), $value['sort']);
+        $arrData = $objToolbox->sortFiles(
+            $objSettings->get('file_sortBy'),
+            isset($value['bin_sorted']) ? $value['bin_sorted'] : []
+        );
 
         $objTemplate->files = $arrData['files'];
         $objTemplate->src   = $arrData['source'];

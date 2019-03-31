@@ -22,6 +22,8 @@ namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
+use MetaModels\Attribute\IAttributeTypeFactory;
+use MetaModels\AttributeFileBundle\Attribute\AttributeOrderTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
@@ -30,6 +32,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test the attribute factory.
+ *
+ * @covers \MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory
+ * @covers \MetaModels\AttributeFileBundle\Attribute\AttributeOrderTypeFactory
  */
 class FileAttributeTypeFactoryTest extends TestCase
 {
@@ -104,6 +109,16 @@ class FileAttributeTypeFactoryTest extends TestCase
     }
 
     /**
+     * Override the method to run the tests on the attribute factories to be tested.
+     *
+     * @return IAttributeTypeFactory[]
+     */
+    protected function getAttributeOrderFactories($connection, $tableManipulator)
+    {
+        return [new AttributeOrderTypeFactory($connection, $tableManipulator)];
+    }
+
+    /**
      * Test creation of a file attribute.
      *
      * @return void
@@ -128,5 +143,27 @@ class FileAttributeTypeFactoryTest extends TestCase
         foreach ($values as $key => $value) {
             $this->assertEquals($value, $attribute->get($key), $key);
         }
+    }
+
+    /**
+     * Test creation of a file attribute.
+     *
+     * @return void
+     */
+    public function testCreateOrderSelect()
+    {
+        $connection   = $this->mockConnection();
+        $manipulator  = $this->mockTableManipulator($connection);
+
+        $factory   = new AttributeOrderTypeFactory($connection, $manipulator);
+        $values    = [
+            'colname' => 'test__sort'
+        ];
+        $attribute = $factory->createInstance(
+            $values,
+            $this->mockMetaModel('mm_test', 'de', 'en')
+        );
+
+        $this->assertNull($attribute);
     }
 }

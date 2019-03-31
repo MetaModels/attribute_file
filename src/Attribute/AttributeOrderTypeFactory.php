@@ -11,9 +11,7 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/attribute_file
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,15 +19,15 @@
 
 namespace MetaModels\AttributeFileBundle\Attribute;
 
-use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
+use MetaModels\Helper\TableManipulation;
 use MetaModels\Helper\TableManipulator;
 
 /**
- * Attribute type factory for file attributes.
+ * Attribute type factory for file order attributes.
  */
-class AttributeTypeFactory implements IAttributeTypeFactory
+class AttributeOrderTypeFactory implements IAttributeTypeFactory
 {
     /**
      * Database connection.
@@ -46,37 +44,18 @@ class AttributeTypeFactory implements IAttributeTypeFactory
     protected $tableManipulator;
 
     /**
-     * The image factory.
-     *
-     * @var ImageFactoryInterface
-     */
-    private $imageFactory;
-
-    /**
-     * The installation root dir.
-     *
-     * @var string
-     */
-    private $rootPath;
-
-    /**
      * {@inheritDoc}
      *
-     * @param Connection       $connection        The database connection.
-     * @param TableManipulator $tableManipulator  The table manipulator.
-     * @param ImageFactoryInterface $imageFactory The image factory to use.
-     * @param string                $rootPath     The root path.
+     * @param Connection       $connection       The database connection.
+     * @param TableManipulator $tableManipulator The table manipulator.
+     * @param string           $rootPath         The root path.
      */
     public function __construct(
         Connection $connection,
-        TableManipulator $tableManipulator,
-        ImageFactoryInterface $imageFactory,
-        $rootPath
+        TableManipulator $tableManipulator
     ) {
         $this->connection       = $connection;
         $this->tableManipulator = $tableManipulator;
-        $this->imageFactory     = $imageFactory;
-        $this->rootPath         = $rootPath;
     }
 
     /**
@@ -84,7 +63,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function getTypeName()
     {
-        return 'file';
+        return 'filesort';
     }
 
     /**
@@ -92,7 +71,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function getTypeIcon()
     {
-        return 'bundles/metamodelsattributefile/file.png';
+        return '';
     }
 
     /**
@@ -100,14 +79,13 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new File(
-            $metaModel,
-            $information,
-            $this->connection,
-            $this->tableManipulator,
-            $this->imageFactory,
-            $this->rootPath
-        );
+        try {
+            TableManipulation::checkColumnExists($metaModel->getTableName(), $information['colname']);
+        } catch (\Exception $exception) {
+            return null;
+        }
+
+        return new FileOrder($metaModel, $information, $this->connection);
     }
 
     /**
@@ -123,7 +101,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isSimpleType()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -131,6 +109,6 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isComplexType()
     {
-        return true;
+        return false;
     }
 }

@@ -9,6 +9,23 @@ services:
         tags:
           - { name: metamodels.attribute_factory }
 
+    metamodels.attribute_file_order.factory:
+        class: MetaModels\AttributeFileBundle\Attribute\AttributeOrderTypeFactory
+        arguments:
+            - "@database_connection"
+            - "@metamodels.table_manipulator"
+        tags:
+          - { name: metamodels.attribute_factory }
+
+    metamodels.attribute_file.event_listener.add_attribute_information:
+        class: MetaModels\AttributeFileBundle\EventListener\AddAttributeInformation
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.collect-metamodel-attribute-information
+                method: addInformation
+                priority: -1
+
     metamodels.attribute_file.event_listener.image_size_options:
         class: MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener
         public: true
@@ -16,6 +33,24 @@ services:
             -   name: kernel.event_listener
                 event: dc-general.view.contao2backend.get-property-options
                 method: getPropertyOptions
+
+    metamodels.attribute_file.event_listener.remove_type_options:
+        class: MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\Attribute\RemoveTypeOptions
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: removeOption
+                priority: -1
+
+    metamodels.attribute_file.event_listener.remove_attid_options:
+        class: MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\FilterSetting\RemoveAttIdOptions
+        public: true
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: removeOption
+                priority: -1
 
     metamodels.attribute_file.event_listener.build_attribute:
         class: MetaModels\AttributeFileBundle\EventListener\BuildAttributeListener
