@@ -17,10 +17,10 @@
  * @filesource
  */
 
-namespace MetaModels\AttributeFileBundle\Test\EventListener;
+namespace MetaModels\AttributeFileBundle\Test\EventListener\Factory;
 
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
-use MetaModels\AttributeFileBundle\EventListener\AddAttributeInformation;
+use MetaModels\AttributeFileBundle\EventListener\Factory\AddAttributeInformation;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -28,7 +28,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 /**
  * This test the event listener add attribute information.
  *
- * @covers \MetaModels\AttributeFileBundle\EventListener\AddAttributeInformation
+ * @covers \MetaModels\AttributeFileBundle\EventListener\Factory\AddAttributeInformation
  */
 class AddAttributeInformationTest extends TestCase
 {
