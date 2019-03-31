@@ -17,7 +17,7 @@
  * @filesource
  */
 
-namespace MetaModels\AttributeFileBundle\Test\EventListener\DcGeneral\Table\Attribute\File;
+namespace MetaModels\AttributeFileBundle\Test\EventListener\DcGeneral\Table\Attribute;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
