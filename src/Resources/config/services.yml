@@ -74,6 +74,7 @@ services:
         arguments:
             - "@metamodels.factory"
             - "@database_connection"
+            - "@metamodels.table_manipulator"
         public: true
         tags:
             -   name: kernel.event_listener

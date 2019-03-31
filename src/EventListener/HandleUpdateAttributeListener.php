@@ -23,7 +23,7 @@ namespace MetaModels\AttributeFileBundle\EventListener;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use Doctrine\DBAL\Connection;
 use MetaModels\Factory;
-use MetaModels\Helper\TableManipulation;
+use MetaModels\Helper\TableManipulator;
 
 /**
  * Class HandleUpdateAttributeListener
@@ -38,16 +38,25 @@ class HandleUpdateAttributeListener extends BaseListener
     private $connection;
 
     /**
+     * The table manipulator.
+     *
+     * @var TableManipulator
+     */
+    private $tableManipulator;
+
+    /**
      * HandleUpdateAttributeListener constructor.
      *
-     * @param Factory    $factory    The attribute factory.
-     * @param Connection $connection The doctrine dbal connection.
+     * @param Factory          $factory          The attribute factory.
+     * @param Connection       $connection       The doctrine dbal connection.
+     * @param TableManipulator $tableManipulator The table manipulator.
      */
-    public function __construct(Factory $factory, Connection $connection)
+    public function __construct(Factory $factory, Connection $connection, TableManipulator $tableManipulator)
     {
         parent::__construct($factory);
 
-        $this->connection = $connection;
+        $this->connection       = $connection;
+        $this->tableManipulator = $tableManipulator;
     }
 
     /**
@@ -79,6 +88,6 @@ class HandleUpdateAttributeListener extends BaseListener
             return;
         }
 
-        TableManipulation::createColumn($metaModel->getTableName(), $attributeName, 'blob NULL');
+        $this->tableManipulator->createColumn($metaModel->getTableName(), $attributeName, 'blob NULL');
     }
 }
