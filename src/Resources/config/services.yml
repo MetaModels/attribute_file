@@ -1,2 +1,7 @@
 services:
-
+    metamodels.attribute_file.toolbox.file:
+        class: MetaModels\Helper\ToolboxFile
+        public: true
+        arguments:
+            - "@contao.image.image_factory"
+            - "%kernel.project_dir%"

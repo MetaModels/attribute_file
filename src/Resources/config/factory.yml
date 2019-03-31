@@ -4,8 +4,11 @@ services:
         arguments:
             - "@database_connection"
             - "@metamodels.table_manipulator"
-            - "@contao.image.image_factory"
-            - "%kernel.project_dir%"
+            - "@metamodels.attribute_file.toolbox.file"
+            - "@=service('contao.framework').getAdapter('Contao\\\\StringUtil')"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Validator')"
+            - "@=service('contao.framework').getAdapter('Contao\\\\FilesModel')"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Config')"
         tags:
             - { name: metamodels.attribute_factory }
 

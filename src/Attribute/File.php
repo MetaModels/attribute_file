@@ -29,6 +29,7 @@
 
 namespace MetaModels\AttributeFileBundle\Attribute;
 
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\StringUtil;
 use Contao\System;
@@ -48,79 +49,147 @@ use MetaModels\Helper\ToolboxFile;
 class File extends BaseComplex
 {
     /**
-     * The image factory.
-     *
-     * @var ImageFactoryInterface
-     */
-    private $imageFactory;
-
-    /**
-     * The installation root dir.
-     *
-     * @var string
-     */
-    private $rootPath;
-
-    /**
      * The database connection.
      *
-     * @var Connection
+     * @var Connection|null
      */
     private $connection;
 
     /**
      * Table manipulator instance.
      *
-     * @var TableManipulator
+     * @var TableManipulator|null
      */
     private $tableManipulator;
 
     /**
+     * The toolbox for file.
+     *
+     * @var ToolboxFile|null
+     */
+    private $toolboxFile;
+
+    /**
+     * The string util.
+     *
+     * @var Adapter|StringUtil|null
+     */
+    private $stringUtil;
+
+    /**
+     * The validator.
+     *
+     * @var Adapter|Validator|null
+     */
+    private $validator;
+
+    /**
+     * The repository for files.
+     *
+     * @var Adapter|FilesModel|null
+     */
+    private $fileRepository;
+
+    /**
+     * The contao configurations.
+     *
+     * @var Adapter|Config|null
+     */
+    private $config;
+
+    /**
      * Create a new instance.
      *
-     * @param IMetaModel            $metaModel        The MetaModel instance this attribute belongs to.
-     * @param array                 $information      The attribute information.
-     * @param Connection            $connection       The database connection.
-     * @param TableManipulator      $tableManipulator Table manipulator instance.
-     * @param ImageFactoryInterface $imageFactory     The image factory to use.
-     * @param string                $rootPath         The root path.
+     * @param IMetaModel              $metaModel        The MetaModel instance this attribute belongs to.
+     * @param array                   $information      The attribute information.
+     * @param Connection|null         $connection       The database connection.
+     * @param TableManipulator|null   $tableManipulator Table manipulator instance.
+     * @param ToolboxFile|null        $toolboxFile      The toolbox for file.
+     * @param Adapter|StringUtil|null $stringUtil       The string util.
+     * @param Adapter|Validator|null  $validator        The validator.
+     * @param Adapter|FilesModel|null $fileRepository   The repository for files.
+     * @param Adapter|Config|null     $config           The contao configurations.
      */
     public function __construct(
         IMetaModel $metaModel,
         $information = [],
         Connection $connection = null,
         TableManipulator $tableManipulator = null,
-        ImageFactoryInterface $imageFactory = null,
-        $rootPath = null
+        ToolboxFile $toolboxFile = null,
+        Adapter $stringUtil = null,
+        Adapter $validator = null,
+        Adapter $fileRepository = null,
+        Adapter $config = null
     ) {
         parent::__construct($metaModel, $information);
-        if (null === $imageFactory) {
-            // @codingStandardsIgnoreStart
-            @\trigger_error(
-                'No "ImageFactoryInterface" passed. It has to be passed in the constructor.' .
-                'Fallback will get removed in MetaModels 3.0',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
-            $imageFactory = System::getContainer()->get('contao.image.image_factory');
-        }
 
-        if (null === $rootPath) {
+        if (null === $toolboxFile) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                '"rootPath"" is missing. It has to be passed in the constructor.' .
+                '"toolboxFile"" is missing. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
 
-            $rootPath = System::getContainer()->getParameter('kernel.project_dir');
+            $toolboxFile = System::getContainer()->get('metamodels.attribute_file.toolbox.file');
         }
 
-        $this->imageFactory     = $imageFactory;
-        $this->rootPath         = $rootPath;
+        if (null === $stringUtil) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                '"stringUtil"" is missing. It has to be passed in the constructor.' .
+                'Fallback will get removed in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $stringUtil = System::getContainer()->get('contao.framework')->getAdapter(StringUtil::class);
+        }
+
+        if (null === $validator) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                '"validator"" is missing. It has to be passed in the constructor.' .
+                'Fallback will get removed in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $validator = System::getContainer()->get('contao.framework')->getAdapter(Validator::class);
+        }
+
+        if (null === $fileRepository) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                '"fileRepository"" is missing. It has to be passed in the constructor.' .
+                'Fallback will get removed in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $fileRepository = System::getContainer()->get('contao.framework')->getAdapter(FilesModel::class);
+        }
+
+        if (null === $config) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                '"config"" is missing. It has to be passed in the constructor.' .
+                'Fallback will get removed in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $config = System::getContainer()->get('contao.framework')->getAdapter(Config::class);
+        }
+
         $this->connection       = $connection;
         $this->tableManipulator = $tableManipulator;
+        $this->toolboxFile      = $toolboxFile;
+        $this->stringUtil       = $stringUtil;
+        $this->validator        = $validator;
+        $this->fileRepository   = $fileRepository;
+        $this->config           = $config;
     }
 
     /**
@@ -211,13 +280,13 @@ class File extends BaseComplex
         $query = $builder->execute();
         $data  = [];
         while ($result = $query->fetch(\PDO::FETCH_OBJ)) {
-            $row = ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($result->file, true));
+            $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result->file, true));
 
             if ($hasSort) {
                 // The sort key be can remove in later version. The new sort key is bin_sorted.
-                $row['sort'] = $sorted = StringUtil::deserialize($result->file_sort, true);
+                $row['sort'] = $sorted = $this->stringUtil->deserialize($result->file_sort, true);
 
-                foreach (ToolboxFile::convertValuesToMetaModels($sorted) as $sortedKey => $sortedValue) {
+                foreach ($this->toolboxFile->convertValuesToMetaModels($sorted) as $sortedKey => $sortedValue) {
                     $row[$sortedKey . '_sorted'] = $sortedValue;
                 }
 
@@ -306,7 +375,7 @@ class File extends BaseComplex
      */
     public function unserializeData($value)
     {
-        return ToolboxFile::convertValuesToMetaModels(StringUtil::deserialize($value, true));
+        return ToolboxFile::convertValuesToMetaModels($this->stringUtil->deserialize($value, true));
     }
 
     /**
@@ -341,8 +410,8 @@ class File extends BaseComplex
             // Set root path of file chooser depending on contao version.
             $file = null;
 
-            if (Validator::isUuid($this->get('file_uploadFolder'))) {
-                $file = FilesModel::findByUuid($this->get('file_uploadFolder'));
+            if ($this->validator->isUuid($this->get('file_uploadFolder'))) {
+                $file = $this->fileRepository->findByUuid($this->get('file_uploadFolder'));
             }
 
             // Check if we have a file.
@@ -372,7 +441,7 @@ class File extends BaseComplex
 
         $fieldDefinition['inputType']          = 'fileTree';
         $fieldDefinition['eval']['files']      = true;
-        $fieldDefinition['eval']['extensions'] = Config::get('allowedDownload');
+        $fieldDefinition['eval']['extensions'] = $this->config->get('allowedDownload');
         $fieldDefinition['eval']['multiple']   = (bool) $this->get('file_multiple');
 
         $widgetMode = $this->getOverrideValue('file_widgetMode', $arrOverrides);
@@ -427,7 +496,7 @@ class File extends BaseComplex
             return;
         }
 
-        $toolbox = new ToolboxFile($this->imageFactory, $this->rootPath);
+        $toolbox = clone $this->toolboxFile;
 
         $toolbox
             ->setBaseLanguage($this->getMetaModel()->getActiveLanguage())

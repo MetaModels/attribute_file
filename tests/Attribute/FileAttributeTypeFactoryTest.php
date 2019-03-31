@@ -20,6 +20,7 @@
 
 namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
@@ -29,6 +30,7 @@ use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\Helper\TableManipulator;
+use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
 
@@ -132,15 +134,44 @@ class FileAttributeTypeFactoryTest extends TestCase
             ->getMock();
     }
 
-    /**
-     * Mock the image factory.
-     *
-     * @return ImageFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function mockImageFactory()
+    private function mockToolboxFile()
     {
-        return $this->getMockBuilder(ImageFactoryInterface::class)
-            ->getMockForAbstractClass();
+        return $this
+            ->getMockBuilder(ToolboxFile::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockStringUtil()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockValidator()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockFileRepository()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockConfig()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -162,9 +193,17 @@ class FileAttributeTypeFactoryTest extends TestCase
     {
         $connection   = $this->mockConnection();
         $manipulator  = $this->mockTableManipulator($connection);
-        $imageFactory = $this->mockImageFactory();
 
-        $factory = new AttributeTypeFactory($connection, $manipulator, $imageFactory, \sys_get_temp_dir());
+        $factory = new AttributeTypeFactory(
+            $connection,
+            $manipulator,
+            $this->mockToolboxFile(),
+            $this->mockStringUtil(),
+            $this->mockValidator(),
+            $this->mockFileRepository(),
+            $this->mockConfig()
+        );
+
         $values  = [
             'colname' => 'test'
         ];

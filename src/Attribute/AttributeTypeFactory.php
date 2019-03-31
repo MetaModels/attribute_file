@@ -21,10 +21,16 @@
 
 namespace MetaModels\AttributeFileBundle\Attribute;
 
+use Contao\Config;
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\FilesModel;
+use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Helper\TableManipulator;
+use MetaModels\Helper\ToolboxFile;
+use Validator;
 
 /**
  * Attribute type factory for file attributes.
@@ -46,37 +52,67 @@ class AttributeTypeFactory implements IAttributeTypeFactory
     protected $tableManipulator;
 
     /**
-     * The image factory.
+     * The toolbox for file.
      *
-     * @var ImageFactoryInterface
+     * @var ToolboxFile
      */
-    private $imageFactory;
+    private $toolboxFile;
 
     /**
-     * The installation root dir.
+     * The string util.
      *
-     * @var string
+     * @var Adapter|StringUtil|null
      */
-    private $rootPath;
+    private $stringUtil;
+
+    /**
+     * The validator.
+     *
+     * @var Adapter|Validator
+     */
+    private $validator;
+
+    /**
+     * The repository for files.
+     *
+     * @var Adapter|FilesModel
+     */
+    private $fileRepository;
+
+    /**
+     * The contao configurations.
+     *
+     * @var Adapter|Config
+     */
+    private $config;
 
     /**
      * {@inheritDoc}
      *
-     * @param Connection       $connection        The database connection.
-     * @param TableManipulator $tableManipulator  The table manipulator.
-     * @param ImageFactoryInterface $imageFactory The image factory to use.
-     * @param string                $rootPath     The root path.
+     * @param Connection            $connection       The database connection.
+     * @param TableManipulator      $tableManipulator The table manipulator.
+     * @param ToolboxFile           $toolboxFile      The toolbox for file.
+     * @param Adapter|StringUtil    $stringUtil       The string util.
+     * @param Adapter|Validator     $validator        The validator.
+     * @param Adapter|FilesModel    $fileRepository   The repository for files.
+     * @param Adapter|Config        $config           The contao configurations.
      */
     public function __construct(
         Connection $connection,
         TableManipulator $tableManipulator,
-        ImageFactoryInterface $imageFactory,
-        $rootPath
+        ToolboxFile $toolboxFile,
+        Adapter $stringUtil,
+        Adapter $validator,
+        Adapter $fileRepository,
+        Adapter $config
     ) {
         $this->connection       = $connection;
         $this->tableManipulator = $tableManipulator;
-        $this->imageFactory     = $imageFactory;
-        $this->rootPath         = $rootPath;
+        $this->toolboxFile      = $toolboxFile;
+        $this->stringUtil       = $stringUtil;
+        $this->validator        = $validator;
+        $this->fileRepository   = $fileRepository;
+        $this->config           = $config;
     }
 
     /**
@@ -105,8 +141,11 @@ class AttributeTypeFactory implements IAttributeTypeFactory
             $information,
             $this->connection,
             $this->tableManipulator,
-            $this->imageFactory,
-            $this->rootPath
+            $this->toolboxFile,
+            $this->stringUtil,
+            $this->validator,
+            $this->fileRepository,
+            $this->config
         );
     }
 

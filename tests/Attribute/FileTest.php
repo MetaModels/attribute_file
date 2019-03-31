@@ -22,6 +22,7 @@
 
 namespace MetaModels\AttributeFileBundle\Test\Attribute;
 
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
@@ -29,6 +30,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
+use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
 
@@ -40,9 +42,9 @@ class FileTest extends TestCase
     /**
      * Mock a MetaModel.
      *
-     * @param string $tableName        The table name.
+     * @param string $tableName The table name.
      *
-     * @param string $language         The language.
+     * @param string $language  The language.
      *
      * @return IMetaModel
      */
@@ -103,6 +105,48 @@ class FileTest extends TestCase
             ->getMockForAbstractClass();
     }
 
+    private function mockToolboxFile()
+    {
+        $toolbox = $this
+            ->getMockBuilder(ToolboxFile::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $toolbox;
+    }
+
+    private function mockStringUtil()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockValidator()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockFileRepository()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private function mockConfig()
+    {
+        return $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * Test that the attribute can be instantiated.
      *
@@ -110,12 +154,22 @@ class FileTest extends TestCase
      */
     public function testInstantiation()
     {
-        $metaModel    = $this->mockMetaModel('en', 'en');
-        $connection   = $this->mockConnection();
-        $manipulator  = $this->mockTableManipulator($connection);
-        $imageFactory = $this->mockImageFactory();
+        $metaModel   = $this->mockMetaModel('en', 'en');
+        $connection  = $this->mockConnection();
+        $manipulator = $this->mockTableManipulator($connection);
 
-        $file = new File($metaModel, [], $connection, $manipulator, $imageFactory, \sys_get_temp_dir());
+        $file = new File(
+            $metaModel,
+            [],
+            $connection,
+            $manipulator,
+            $this->mockToolboxFile(),
+            $this->mockStringUtil(),
+            $this->mockValidator(),
+            $this->mockFileRepository(),
+            $this->mockConfig()
+        );
+
         $this->assertInstanceOf('MetaModels\AttributeFileBundle\Attribute\File', $file);
     }
 
@@ -126,12 +180,21 @@ class FileTest extends TestCase
      */
     public function testEmptyValues()
     {
-        $metaModel    = $this->mockMetaModel('en', 'en');
-        $connection   = $this->mockConnection();
-        $manipulator  = $this->mockTableManipulator($connection);
-        $imageFactory = $this->mockImageFactory();
+        $metaModel   = $this->mockMetaModel('en', 'en');
+        $connection  = $this->mockConnection();
+        $manipulator = $this->mockTableManipulator($connection);
 
-        $file = new File($metaModel, ['file_multiple' => false], $connection, $manipulator, $imageFactory, \sys_get_temp_dir());
+        $file = new File(
+            $metaModel,
+            ['file_multiple' => false],
+            $connection,
+            $manipulator,
+            $this->mockToolboxFile(),
+            $this->mockStringUtil(),
+            $this->mockValidator(),
+            $this->mockFileRepository(),
+            $this->mockConfig()
+        );
 
         $this->assertEquals(
             ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
@@ -153,7 +216,6 @@ class FileTest extends TestCase
         $metaModel    = $this->mockMetaModel('mm_test', 'en');
         $connection   = $this->mockConnection(['createQueryBuilder']);
         $manipulator  = $this->mockTableManipulator($connection);
-        $imageFactory = $this->mockImageFactory();
 
         $statement = $this
             ->getMockBuilder(Statement::class)
@@ -190,13 +252,16 @@ class FileTest extends TestCase
         $file = new File(
             $metaModel,
             [
-                'colname' => 'file_attribute',
+                'colname'       => 'file_attribute',
                 'file_multiple' => false
             ],
             $connection,
             $manipulator,
-            $imageFactory,
-            \sys_get_temp_dir()
+            $this->mockToolboxFile(),
+            $this->mockStringUtil(),
+            $this->mockValidator(),
+            $this->mockFileRepository(),
+            $this->mockConfig()
         );
 
         $this->assertSame(['1', '2', '3', '4', '5'], $file->searchFor('*test?value'));
