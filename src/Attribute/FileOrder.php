@@ -23,8 +23,11 @@ namespace MetaModels\AttributeFileBundle\Attribute;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Platforms\Keywords\KeywordList;
 use MetaModels\Attribute\ISimple;
 use MetaModels\Attribute\IInternal;
+use MetaModels\AttributeFileBundle\Doctrine\DBAL\Platforms\Keywords\NotSupportedKeywordList;
 use MetaModels\IMetaModel;
 
 /**
@@ -54,6 +57,13 @@ class FileOrder implements ISimple, IInternal
      * @var Connection
      */
     private $connection;
+
+    /**
+     * The platform reserved keyword list.
+     *
+     * @var KeywordList
+     */
+    private $platformReservedWord;
 
     /**
      * Create a new instance.
@@ -194,9 +204,9 @@ class FileOrder implements ISimple, IInternal
     {
         foreach ($arrValues as $id => $value) {
             $this->connection->update(
-                $this->getMetaModel()->getTableName(),
-                [$this->getColName() => $value ?: $this->serializeData([])],
-                ['id' => $id]
+                $this->quoteReservedWord($this->getMetaModel()->getTableName()),
+                [$this->quoteReservedWord($this->getColName()) => $value ?: $this->serializeData([])],
+                [$this->quoteReservedWord('id') => $id]
             );
         }
     }
@@ -352,5 +362,30 @@ class FileOrder implements ISimple, IInternal
     public function serializeData($value)
     {
         return \serialize($value);
+    }
+
+    /**
+     * Quote the reserved platform key word.
+     *
+     * @param string $word The key word.
+     *
+     * @return string
+     */
+    private function quoteReservedWord(string $word): string
+    {
+        if (null === $this->platformReservedWord) {
+            try {
+                $this->platformReservedWord = $this->connection->getDatabasePlatform()->getReservedKeywordsList();
+            } catch (DBALException $exception) {
+                // Add the not support key word list, if the platform has not a list of keywords.
+                $this->platformReservedWord = new NotSupportedKeywordList();
+            }
+        }
+
+        if (false === $this->platformReservedWord->isKeyword($word)) {
+            return $word;
+        }
+
+        return $this->connection->quoteIdentifier($word);
     }
 }

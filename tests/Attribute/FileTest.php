@@ -25,6 +25,7 @@ namespace MetaModels\AttributeFileBundle\Test\Attribute;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
@@ -36,6 +37,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests to test class File.
+ *
+ * @covers \MetaModels\AttributeFileBundle\Attribute\File
  */
 class FileTest extends TestCase
 {
@@ -214,8 +217,14 @@ class FileTest extends TestCase
     public function testSearchFor()
     {
         $metaModel    = $this->mockMetaModel('mm_test', 'en');
-        $connection   = $this->mockConnection(['createQueryBuilder']);
+        $connection   = $this->mockConnection(['createQueryBuilder', 'getDatabasePlatform']);
         $manipulator  = $this->mockTableManipulator($connection);
+
+        $platform = $this->getMockForAbstractClass(AbstractPlatform::class);
+        $connection
+            ->expects($this->once())
+            ->method('getDatabasePlatform')
+            ->willReturn($platform);
 
         $statement = $this
             ->getMockBuilder(Statement::class)
