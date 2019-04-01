@@ -208,11 +208,14 @@ class File extends BaseComplex
     {
         parent::destroyAUX();
         $metaModel = $this->getMetaModel()->getTableName();
+
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
-        if (($colName = $this->getColName())
-            && !empty($this->connection->getSchemaManager()->listTableColumns($metaModel)[$colName])
-        ) {
+        $tableColumns = $this->connection->getSchemaManager()->listTableColumns($metaModel);
+        if (($colName = $this->getColName()) && \array_key_exists($colName, $tableColumns)) {
             $this->tableManipulator->dropColumn($metaModel, $colName);
+        }
+
+        if (\array_key_exists($colName . '__sort', $tableColumns)) {
             $this->tableManipulator->dropColumn($metaModel, $colName . '__sort');
         }
     }
