@@ -61,7 +61,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
     /**
      * The string util.
      *
-     * @var Adapter|StringUtil|null
+     * @var Adapter|StringUtil
      */
     private $stringUtil;
 
