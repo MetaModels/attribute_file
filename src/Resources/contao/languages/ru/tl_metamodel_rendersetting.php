@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/attribute_file.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/ru/
+ * Last-updated: 2019-04-02T15:01:54+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-11-30T00:34:29+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']            = 'Дата (по возрастанию)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_desc']           = 'Дата (по убыванию)';
@@ -21,6 +31,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['0']  = 'Со
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['1']  = 'Обернуть элемент в ссылку, которая покажет полноэкранное изображение или загрузку файла.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['0']    = 'Сортировать по';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['1']    = 'Выберите порядок сортировки.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['manual']              = 'Ручная сортировка';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']                = 'Мета файл (meta.txt)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']            = 'Название файла (по возрастанию)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']           = 'Название файла (по убыванию)';
