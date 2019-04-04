@@ -3,6 +3,7 @@
 [![Latest Version tagged](http://img.shields.io/github/tag/MetaModels/attribute_file.svg)](https://github.com/MetaModels/attribute_file/tags)
 [![Latest Version on Packagist](http://img.shields.io/packagist/v/MetaModels/attribute_file.svg)](https://packagist.org/packages/MetaModels/attribute_file)
 [![Installations via composer per month](http://img.shields.io/packagist/dm/MetaModels/attribute_file.svg)](https://packagist.org/packages/MetaModels/attribute_file)
+[![Dependency Status](https://www.versioneye.com/php/metamodels:attribute_file/badge.svg)](https://www.versioneye.com/php/metamodels:attribute_file)
 
 File
 ====

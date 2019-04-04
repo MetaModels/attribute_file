@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
@@ -19,9 +20,16 @@
  */
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\Attribute\File\AttributeOrderTypeFactory;
 use MetaModels\Attribute\File\AttributeTypeFactory;
+use MetaModels\Attribute\File\Subscriber;
+use MetaModels\Events\Attribute\File\AddAttributeInformation;
 use MetaModels\Events\Attribute\File\ImageSizeOptions;
+use MetaModels\Events\DcGeneral\Table\Attribute\File\RemoveTypeOptions;
+use MetaModels\Events\DcGeneral\Table\FilterSetting\File\RemoveAttIdOptions;
+use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
 
 return [
@@ -29,10 +37,20 @@ return [
         function (CreateAttributeFactoryEvent $event) {
             $factory = $event->getFactory();
             $factory->addTypeFactory(new AttributeTypeFactory());
+            $factory->addTypeFactory(new AttributeOrderTypeFactory());
         }
     ],
-
+    CollectMetaModelAttributeInformationEvent::NAME => [
+        [[new AddAttributeInformation(), 'addInformation'], -1]
+    ],
+    MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => [
+        function (MetaModelsBootEvent $event) {
+            new Subscriber($event->getServiceContainer());
+        }
+    ],
     GetPropertyOptionsEvent::NAME => [
-        [new ImageSizeOptions(), 'getPropertyOptions']
+        [new ImageSizeOptions(), 'getPropertyOptions'],
+        [[new RemoveTypeOptions(), 'removeOption'], -1],
+        [[new RemoveAttIdOptions(), 'removeOption'], -1]
     ]
 ];

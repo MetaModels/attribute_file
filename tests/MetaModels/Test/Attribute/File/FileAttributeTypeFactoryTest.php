@@ -20,6 +20,8 @@
 
 namespace MetaModels\Test\Attribute\File;
 
+use MetaModels\Attribute\File\AttributeOrderTypeFactory;
+use MetaModels\Attribute\File\FileOrder;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\File\AttributeTypeFactory;
 use MetaModels\IMetaModel;
@@ -28,6 +30,9 @@ use MetaModels\Attribute\File\File;
 
 /**
  * Test the attribute factory.
+ *
+ * @covers \MetaModels\Attribute\File\AttributeTypeFactory
+ * @covers \MetaModels\Attribute\File\AttributeOrderTypeFactory
  */
 class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
 {
@@ -75,6 +80,16 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     }
 
     /**
+     * Override the method to run the tests on the attribute factories to be tested.
+     *
+     * @return IAttributeTypeFactory[]
+     */
+    protected function getAttributeOrderFactories()
+    {
+        return [new AttributeOrderTypeFactory()];
+    }
+
+    /**
      * Test creation of a file attribute.
      *
      * @return void
@@ -82,7 +97,9 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     public function testCreateSelect()
     {
         $factory   = new AttributeTypeFactory();
-        $values    = [];
+        $values    = [
+            'colname' => 'test'
+        ];
         $attribute = $factory->createInstance(
             $values,
             $this->mockMetaModel('mm_test', 'de', 'en')
@@ -93,5 +110,24 @@ class FileAttributeTypeFactoryTest extends AttributeTypeFactoryTest
         foreach ($values as $key => $value) {
             $this->assertEquals($value, $attribute->get($key), $key);
         }
+    }
+
+    /**
+     * Test creation of a file attribute.
+     *
+     * @return void
+     */
+    public function testCreateOrderSelect()
+    {
+        $factory   = new AttributeOrderTypeFactory();
+        $values    = [
+            'colname' => 'test__sort'
+        ];
+        $attribute = $factory->createInstance(
+            $values,
+            $this->mockMetaModel('mm_test', 'de', 'en')
+        );
+
+        $this->assertNull($attribute);
     }
 }

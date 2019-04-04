@@ -11,7 +11,6 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/attribute_file
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
@@ -21,18 +20,19 @@
 namespace MetaModels\Attribute\File;
 
 use MetaModels\Attribute\IAttributeTypeFactory;
+use MetaModels\Helper\TableManipulation;
 
 /**
- * Attribute type factory for file attributes.
+ * Attribute type factory for file order attributes.
  */
-class AttributeTypeFactory implements IAttributeTypeFactory
+class AttributeOrderTypeFactory implements IAttributeTypeFactory
 {
     /**
      * {@inheritDoc}
      */
     public function getTypeName()
     {
-        return 'file';
+        return 'filesort';
     }
 
     /**
@@ -40,7 +40,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function getTypeIcon()
     {
-        return 'system/modules/metamodelsattribute_file/html/file.png';
+        return '';
     }
 
     /**
@@ -48,7 +48,13 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new File($metaModel, $information);
+        try {
+            TableManipulation::checkColumnExists($metaModel->getTableName(), $information['colname']);
+        } catch (\Exception $exception) {
+            return null;
+        }
+
+        return new FileOrder($metaModel, $information);
     }
 
     /**
@@ -64,7 +70,7 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isSimpleType()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -72,6 +78,6 @@ class AttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isComplexType()
     {
-        return true;
+        return false;
     }
 }

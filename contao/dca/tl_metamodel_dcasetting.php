@@ -22,9 +22,9 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file'] = [
     'presentation' => [
-        'tl_class',
+        'tl_class'
     ],
     'functions'    => [
-        'mandatory',
+        'mandatory'
     ]
 ];
