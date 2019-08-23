@@ -44,7 +44,8 @@ class AttributeOrderTypeFactory implements IAttributeTypeFactory
     protected $tableManipulator;
 
     /**
-     * Cache table columns
+     * Cache table columns.
+     * 
      * @var array
      */
     private $tableColumns = [];
@@ -85,8 +86,8 @@ class AttributeOrderTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        $columnName   = ($information['colname'] ?? null);
-        $tableName    = $metaModel->getTableName();
+        $columnName = ($information['colname'] ?? null);
+        $tableName = $metaModel->getTableName();
 
         if (!$this->tableColumns[$tableName]) {
             $this->tableColumns[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
