@@ -12,7 +12,7 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-04-02T15:01:54+02:00
+ * Last-updated: 2019-08-27T15:45:49+02:00
  *
  * @copyright 2012-2019 The MetaModels team.
  * @license   https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
@@ -24,7 +24,7 @@
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']            = 'Datum (aufsteigend)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_desc']           = 'Datum (absteigend)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize']['0'] = 'Bildbreite und -höhe';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize']['1'] = 'Bitte geben Sie entweder die Bildbreite, die Bildhöhe oder beides ein, damit das Bild skaliert wird. Falls Sie beide Felder leer lassen wird das Bild in Originalgröße ausgegeben.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize']['1'] = 'Bitte geben Sie entweder die Bildbreite, die Bildhöhe oder beides ein, damit das Bild skaliert wird. Falls Sie beide Felder leer lassen, wird das Bild in Originalgröße ausgegeben.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage']['0'] = 'Als Bildfeld mit Vorschaubild benutzen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage']['1'] = 'Falls aktiviert, wird für das Bild ein verkleinertes Vorschaubild generiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['0']  = 'Link als Download oder Lightbox erstellen';
