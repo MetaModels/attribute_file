@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Benedict Zinke <bz@presentprogressive.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -41,6 +42,13 @@ class AttributeOrderTypeFactory implements IAttributeTypeFactory
      * @var TableManipulator
      */
     protected $tableManipulator;
+
+    /**
+     * Cache table columns.
+     *
+     * @var array
+     */
+    private $tableColumns = [];
 
     /**
      * {@inheritDoc}
@@ -78,9 +86,14 @@ class AttributeOrderTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        $columnName   = ($information['colname'] ?? null);
-        $tableColumns = $this->connection->getSchemaManager()->listTableColumns($metaModel->getTableName());
-        if (!$columnName || !\array_key_exists($columnName, $tableColumns)) {
+        $columnName = ($information['colname'] ?? null);
+        $tableName  = $metaModel->getTableName();
+
+        if (!isset($this->tableColumns[$tableName])) {
+            $this->tableColumns[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
+        }
+
+        if (!$columnName || !\array_key_exists($columnName, $this->tableColumns[$tableName])) {
             return null;
         }
 
