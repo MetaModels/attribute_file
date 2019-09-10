@@ -25,12 +25,12 @@ use Contao\BackendUser;
 use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
-use Doctrine\Common\Cache\Cache;
 use Doctrine\DBAL\Connection;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 use MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AbstractListener;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
+use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -58,7 +58,7 @@ final class AddArgumentOptionsListener extends AbstractListener
     /**
      * The cache.
      *
-     * @var Cache
+     * @var CacheInterface
      */
     private $cache;
 
@@ -83,7 +83,7 @@ final class AddArgumentOptionsListener extends AbstractListener
      * @param IFactory                 $factory           The MetaModel factory.
      * @param Connection               $connection        The database connection.
      * @param TranslatorInterface      $translator        The translator.
-     * @param Cache                    $cache             The cache.
+     * @param CacheInterface           $cache             The cache.
      * @param TokenStorageInterface    $tokenStorage      The token storage.
      * @param Adapter                  $controllerAdapter The controller adapter to load languages and data containers.
      */
@@ -92,7 +92,7 @@ final class AddArgumentOptionsListener extends AbstractListener
         IFactory $factory,
         Connection $connection,
         TranslatorInterface $translator,
-        Cache $cache,
+        CacheInterface $cache,
         TokenStorageInterface $tokenStorage,
         Adapter $controllerAdapter
     ) {
@@ -132,14 +132,14 @@ final class AddArgumentOptionsListener extends AbstractListener
         );
 
         $options = [];
-        if ($this->cache->contains($cacheKey)) {
-            $options = $this->cache->fetch($cacheKey);
+        if ($this->cache->has($cacheKey)) {
+            $options = $this->cache->get($cacheKey);
         }
 
         if (!\count($options)) {
             $options = $this->collectOptions($this->getMetaModelFromModel($event->getModel()));
 
-            $this->cache->save($cacheKey, $options);
+            $this->cache->set($cacheKey, $options);
         }
 
         $event->setOptions($options);

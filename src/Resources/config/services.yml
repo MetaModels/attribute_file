@@ -6,8 +6,14 @@ services:
             - "@contao.image.image_factory"
             - "%kernel.project_dir%"
 
-    metamodels.attribute_file.cache:
+    metamodels.attribute_file.cache_system:
         class: Doctrine\Common\Cache\FilesystemCache
         public: false
         arguments:
             - "%metamodels.attribute_file.cache_dir%"
+
+    metamodels.attribute_file.cache:
+        class: Cache\Adapter\Doctrine\DoctrineCachePool
+        public: false
+        arguments:
+            - "@metamodels.attribute_file.cache_system"

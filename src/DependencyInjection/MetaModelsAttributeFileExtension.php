@@ -74,7 +74,7 @@ class MetaModelsAttributeFileExtension extends Extension
     {
         // if cache disabled, swap it out with the dummy cache.
         if (!$config['enable_cache']) {
-            $cache = $container->getDefinition('metamodels.attribute_file.cache');
+            $cache = $container->getDefinition('metamodels.attribute_file.cache_system');
             $cache->setClass(ArrayCache::class);
             $cache->setArguments([]);
             $container->setParameter('metamodels.attribute_file.cache_dir', null);
