@@ -24,6 +24,7 @@ use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use MetaModels\AttributeFileBundle\MetaModelsAttributeFileBundle;
+use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use MetaModels\CoreBundle\MetaModelsCoreBundle;
 
 /**
@@ -40,7 +41,8 @@ class Plugin implements BundlePluginInterface
             BundleConfig::create(MetaModelsAttributeFileBundle::class)
                 ->setLoadAfter(
                     [
-                        MetaModelsCoreBundle::class
+                        MetaModelsCoreBundle::class,
+                        MetaModelsContaoFrontendEditingBundle::class
                     ]
                 )
                 ->setReplace(['metamodelsattribute_file'])

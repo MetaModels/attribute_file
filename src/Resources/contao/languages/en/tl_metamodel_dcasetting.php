@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage AttributeFile
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
@@ -29,3 +30,31 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['downloads'] 
     'Show files as sortable file list e.g. for downloads.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['gallery']   =
     'Show files as sortable images e.g. for gallery.';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload']      =
+    'Single file upload [only for frontend editing]';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'][0]          = 'Preserve existing files';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'][1]          =
+    'Add a numeric suffix to the new file if the file name already exists.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'][0]              = 'Use home directory';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'][1]              =
+    'Store the file in the home directory if there is an authenticated user.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'][0]            = 'Target folder';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'][1]            =
+    'Please select the target folder from the files directory.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments'][0] = 'Extend folder options';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments'][1] =
+    'Here you can select the arguments to extend the upload folder path with the values.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'][0]           = 'Extend folder';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'][1]           =
+    'Here you can extend the upload folder path. If you have configured extend folder options, ' .
+    'they will be inserted using the sprintf function. Additionally the Contao inserttags are supported to extend the path.';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments_argument'] = ['', ''];
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['upload_settings_legend'] = 'File upload settings';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['argument']['group']['metamodel']  = 'MetaModel';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['argument']['group']['attributes'] = 'Attributes';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['argument']['group']['member']     = 'Member';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['argument']['group']['page']       = 'Page setting';

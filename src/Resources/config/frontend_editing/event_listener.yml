@@ -1,0 +1,15 @@
+services:
+    MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\AddArgumentOptionsListener:
+        public: false
+        arguments:
+            - '@cca.dc-general.scope-matcher'
+            - '@metamodels.factory'
+            - '@database_connection'
+            - '@contao.translation.translator'
+            - '@metamodels.attribute_file.cache'
+            - "@security.token_storage"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
+        tags:
+            -   name: kernel.event_listener
+                event: men-at-work.multi-column-wizard-bundle.get-options
+                method: onGetOptions

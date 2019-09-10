@@ -21,6 +21,9 @@
  * @filesource
  */
 
+use Contao\System;
+use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
+
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id']['file'] = [
     'presentation' => [
         'tl_class'
@@ -30,3 +33,100 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'
         'file_widgetMode'
     ]
 ];
+
+$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode'] = [
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetMode'],
+    'exclude'   => true,
+    'inputType' => 'radio',
+    'options'   => ['normal'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes'],
+    'eval'      => [
+        'default'  => 'normal',
+        'chosen'   => true,
+        'tl_class' => 'w50 clr'
+    ],
+    'sql'       => 'char(32) NOT NULL default \'normal\''
+];
+
+// Load configuration for the frontend editing.
+if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer()->getParameter('kernel.bundles'), true)) {
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'] = [
+        'upload_settings' => [
+            'fe_widget_file_useHomeDir',
+            'fe_widget_file_uploadFolder',
+            'fe_widget_file_doNotOverwrite',
+            'fe_widget_file_extend_folder_arguments',
+            'fe_widget_file_extend_folder'
+        ]
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['eval']['submitOnChange'] = true;
+
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'] = \array_merge(
+        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'], ['fe_single_upload']
+    );
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_useHomeDir'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'  => 'w50',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_uploadFolder'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'],
+        'exclude'   => true,
+        'inputType' => 'fileTree',
+        'eval'      => [
+            'fieldType' =>'radio',
+            'tl_class'  =>'w50 clr'
+        ],
+        'sql'       => "binary(16) NULL"
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_doNotOverwrite'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'  => 'w50 m12',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_extend_folder_arguments'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments'],
+        'exclude'   => true,
+        'inputType' => 'multiColumnWizard',
+        'eval'      => [
+            'tl_class'      => 'w50',
+            'columnFields'  => [
+                'argument'     => [
+                    'label'         => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments_argument'],
+                    'exclude'       => true,
+                    'inputType'     => 'select',
+                    'eval'          => [
+                        'style'              => 'width: 100%;',
+                        'includeBlankOption' => true,
+                        'chosen'             => true
+                    ]
+                ]
+            ]
+        ],
+        'sql'       => "blob NULL"
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_extend_folder'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'],
+        'inputType' => 'text',
+        'eval'      => [
+            'maxlength'     => 255,
+            'tl_class'      => 'w50 clr'
+        ],
+        'sql'       => "varchar(255) NOT NULL default ''",
+    ];
+}
