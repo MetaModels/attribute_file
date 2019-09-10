@@ -55,6 +55,8 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'fe_widget_file_useHomeDir',
             'fe_widget_file_uploadFolder',
             'fe_widget_file_doNotOverwrite',
+            'fe_widget_file_deselect',
+            'fe_widget_file_delete',
             'fe_widget_file_extend_folder',
             'fe_widget_file_extend_folder_arguments'
         ]
@@ -98,6 +100,26 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'sql'       => "char(1) NOT NULL default ''",
     ];
 
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_deselect'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_deselect'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'  => 'w50 clr',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_delete'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_delete'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'  => 'w50',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
+    ];
+
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_extend_folder_arguments'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments'],
         'exclude'   => true,
@@ -106,7 +128,8 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'tl_class'      => 'w50 clr',
             'columnFields'  => [
                 'argument'     => [
-                    'label'         => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments_argument'],
+                    'label'         =>
+                        &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments_argument'],
                     'exclude'       => true,
                     'inputType'     => 'select',
                     'eval'          => [
