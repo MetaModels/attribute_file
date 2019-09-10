@@ -38,7 +38,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'][
     'Add a numeric suffix to the new file, if the file name already exists.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'][0]              = 'Use home directory';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'][1]              =
-    'Store the file in the home directory if there is an authenticated user. ' .
+    'If this option is active, store the file in the home directory if there is an authenticated user. ' .
     'If the target folder configured too and the user is authenticated, so this folder is the base upload folder.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'][0]            = 'Target folder';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'][1]            =
