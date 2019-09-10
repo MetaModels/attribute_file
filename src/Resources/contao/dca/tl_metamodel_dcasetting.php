@@ -74,7 +74,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50',
+            'tl_class'  => 'w50 m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
