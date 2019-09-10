@@ -55,8 +55,8 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'fe_widget_file_useHomeDir',
             'fe_widget_file_uploadFolder',
             'fe_widget_file_doNotOverwrite',
-            'fe_widget_file_extend_folder_arguments',
-            'fe_widget_file_extend_folder'
+            'fe_widget_file_extend_folder',
+            'fe_widget_file_extend_folder_arguments'
         ]
     ];
 
@@ -83,7 +83,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'inputType' => 'fileTree',
         'eval'      => [
             'fieldType' =>'radio',
-            'tl_class'  =>'w50 clr'
+            'tl_class'  =>'w50'
         ],
         'sql'       => "binary(16) NULL"
     ];
@@ -93,7 +93,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 m12',
+            'tl_class'  => 'w50 m12 clr',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -103,7 +103,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'multiColumnWizard',
         'eval'      => [
-            'tl_class'      => 'w50',
+            'tl_class'      => 'w50 clr',
             'columnFields'  => [
                 'argument'     => [
                     'label'         => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments_argument'],
