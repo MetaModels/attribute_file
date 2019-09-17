@@ -57,16 +57,30 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'fe_widget_file_doNotOverwrite',
             'fe_widget_file_deselect',
             'fe_widget_file_delete',
-            'fe_widget_file_extend_folder',
-            'fe_widget_file_extend_folder_arguments'
+            'fe_widget_file_extend_folder'
         ]
     ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload_preview'] =
+        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_multiple_upload'] =
+        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_multiple_upload_preview'] =
+        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['eval']['submitOnChange'] = true;
 
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'] = \array_merge(
-        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'], ['fe_single_upload']
+        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'],
+        [
+            'fe_single_upload',
+            'fe_single_upload_preview',
+            'fe_multiple_upload',
+            'fe_multiple_upload_preview'
+        ]
     );
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_useHomeDir'] = [
@@ -120,36 +134,12 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'sql'       => "char(1) NOT NULL default ''",
     ];
 
-    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_extend_folder_arguments'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments'],
-        'exclude'   => true,
-        'inputType' => 'multiColumnWizard',
-        'eval'      => [
-            'tl_class'      => 'w50 clr',
-            'columnFields'  => [
-                'argument'     => [
-                    'label'         =>
-                        &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder_arguments_argument'],
-                    'exclude'       => true,
-                    'inputType'     => 'select',
-                    'eval'          => [
-                        'style'              => 'width: 100%;',
-                        'includeBlankOption' => true,
-                        'chosen'             => true
-                    ]
-                ]
-            ]
-        ],
-        'sql'       => "blob NULL"
-    ];
-
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_extend_folder'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'],
         'inputType' => 'text',
         'eval'      => [
-            'maxlength'     => 255,
-            'tl_class'      => 'w50 clr'
+            'tl_class'      => 'long clr'
         ],
-        'sql'       => "varchar(255) NOT NULL default ''",
+        'sql'       => "longtext"
     ];
 }

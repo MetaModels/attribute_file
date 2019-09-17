@@ -1,26 +1,16 @@
 services:
-    MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\AddArgumentOptionsListener:
+    MetaModels\AttributeFileBundle\EventListener\BuildFrontendUploadListener:
         public: false
+        calls:
+            -   method: setScopeDeterminator
+                arguments:
+                    - '@cca.dc-general.scope-matcher'
         arguments:
-            - '@cca.dc-general.scope-matcher'
-            - '@metamodels.factory'
-            - '@database_connection'
-            - '@contao.translation.translator'
-            - '@metamodels.attribute_file.cache'
-            - "@security.token_storage"
-            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
+            - '@metamodels.view_combination'
+            - '@security.token_storage'
+            - '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName'
+            - '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam'
         tags:
             -   name: kernel.event_listener
-                event: men-at-work.multi-column-wizard-bundle.get-options
-                method: onGetOptions
-
-    MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\ValidateExtendedFolderListener:
-        public: false
-        arguments:
-            - '@cca.dc-general.scope-matcher'
-            - '@translator'
-        tags:
-            -   name: kernel.event_listener
-                event: dc-general.view.contao2backend.build-widget
-                method: onValidate
-                priority: -256
+                event: metamodels.dc-general.events.metamodel.build.attribute
+                priority: -128
