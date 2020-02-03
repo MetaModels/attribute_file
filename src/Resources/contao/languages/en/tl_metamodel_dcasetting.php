@@ -53,7 +53,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'][1]
     'If the home dir configured too and is not authenticated a user, so this folder is the base folder.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'][0]           = 'Extend folder';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'][1]           =
-    'Here you can extend the base upload folder path. The Contao inserttags are supported to extend the path.';
+    'Here you can extend the base upload folder path. The Contao insert tags are supported to extend the path. ' .
+    'The insert tags from the custom sql filter work here too.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_deselect'][0]                = 'Deselect file';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_deselect'][1]                =
     'If this option deselect file is active, then that file entry is remove from this model.';
