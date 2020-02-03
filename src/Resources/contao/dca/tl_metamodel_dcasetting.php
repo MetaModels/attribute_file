@@ -57,7 +57,8 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'fe_widget_file_doNotOverwrite',
             'fe_widget_file_deselect',
             'fe_widget_file_delete',
-            'fe_widget_file_extend_folder'
+            'fe_widget_file_extend_folder',
+            'fe_widget_file_normalize_extend_folder'
         ]
     ];
 
@@ -138,8 +139,18 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'],
         'inputType' => 'text',
         'eval'      => [
-            'tl_class'      => 'long clr'
+            'tl_class'      => 'w50 clr'
         ],
         'sql'       => "longtext"
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_normalize_extend_folder'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_extend_folder'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'eval'      => [
+            'tl_class'  => 'w50 m12',
+        ],
+        'sql'       => "char(1) NOT NULL default ''",
     ];
 }

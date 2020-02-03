@@ -124,12 +124,13 @@ final class BuildFrontendUploadListener
         $property->setWidgetType('uploadOnSteroids');
 
         $extra = [
-            'doNotOverwrite' => $this->information['fe_widget_file_doNotOverwrite'],
-            'deselect'       => (bool) $this->information['fe_widget_file_deselect'],
-            'delete'         => (bool) $this->information['fe_widget_file_delete'],
-            'uploadFolder'   => $this->getUserHomeDir() ?: $this->getTargetFolder(),
-            'extendFolder'   => $this->getExtendFolder($event),
-            'storeFile'      => true
+            'doNotOverwrite'        => $this->information['fe_widget_file_doNotOverwrite'],
+            'deselect'              => (bool) $this->information['fe_widget_file_deselect'],
+            'delete'                => (bool) $this->information['fe_widget_file_delete'],
+            'uploadFolder'          => $this->getUserHomeDir() ?: $this->getTargetFolder(),
+            'extendFolder'          => $this->getExtendFolder($event),
+            'normalizeExtendFolder' => $this->information['fe_widget_file_normalize_extend_folder'],
+            'storeFile'             => true,
         ];
 
         $previewModes = ['fe_single_upload_preview', 'fe_multiple_upload_preview'];

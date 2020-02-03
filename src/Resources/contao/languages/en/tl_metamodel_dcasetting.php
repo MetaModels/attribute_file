@@ -61,5 +61,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_deselect'][1]    
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_delete'][0]                  = 'Delete file';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_delete'][1]                  =
     'If this option delete file is active, then that file entry is remove from this model and from the file directory.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_extend_folder'][0] = 'Normalize extend folder';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_extend_folder'][1] =
+    'Normalize the extend folder with an alias generator from the string util.';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['upload_settings_legend'] = 'File upload settings';
