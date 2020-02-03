@@ -59,7 +59,9 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'fe_widget_file_delete',
             'fe_widget_file_extend_folder',
             'fe_widget_file_normalize_extend_folder',
-            'fe_widget_file_normalize_filename'
+            'fe_widget_file_normalize_filename',
+            'fe_widget_file_prefix_filename',
+            'fe_widget_file_postfix_filename'
         ]
     ];
 
@@ -163,5 +165,23 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
             'tl_class'  => 'w50 clr',
         ],
         'sql'       => "char(1) NOT NULL default ''",
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_prefix_filename'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_prefix_filename'],
+        'inputType' => 'text',
+        'eval'      => [
+            'tl_class'      => 'w50 clr'
+        ],
+        'sql'       => "longtext"
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_postfix_filename'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'],
+        'inputType' => 'text',
+        'eval'      => [
+            'tl_class'      => 'w50'
+        ],
+        'sql'       => "longtext"
     ];
 }

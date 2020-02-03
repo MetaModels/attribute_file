@@ -67,5 +67,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_extend_
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_filename'][0]      = 'Normalize filename';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_filename'][1]      =
     'Normalize the filename with an alias generator from the string util.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_prefix_filename'][0]         = 'Prefix filename';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_prefix_filename'][1]         =
+    'Here you can prefix the filename. The Contao insert tags are supported to prefix the filename. ' .
+    'The insert tags from the custom sql filter work here too.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'][0]        = 'Postfix filename';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'][1]        =
+    'Here you can postfix the filename. The Contao insert tags are supported to postfix the filename. ' .
+    'The insert tags from the custom sql filter work here too.';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['upload_settings_legend'] = 'File upload settings';
