@@ -130,6 +130,7 @@ final class BuildFrontendUploadListener
             'uploadFolder'          => $this->getUserHomeDir() ?: $this->getTargetFolder(),
             'extendFolder'          => $this->getExtendFolder($event),
             'normalizeExtendFolder' => $this->information['fe_widget_file_normalize_extend_folder'],
+            'normalizeFilename'     => $this->information['fe_widget_file_normalize_filename'],
             'storeFile'             => true,
         ];
 
