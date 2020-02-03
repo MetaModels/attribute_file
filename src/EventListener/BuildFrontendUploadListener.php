@@ -207,15 +207,28 @@ final class BuildFrontendUploadListener
             return $extendFolder ?: null;
         }
 
-        $extendFolder = $this->replaceTableName->replace($event->getContainer()->getName(), $extendFolder);
-        $extendFolder = $this->replaceParam->replace($extendFolder);
+        return $this->replaceInsertTag($event, $extendFolder);
+    }
 
-        if ((false === \strpos($extendFolder, '{{'))) {
-            return $extendFolder;
+    /**
+     * Replace the insert tag.
+     *
+     * @param BuildAttributeEvent $event   The event.
+     * @param string              $replace The replacement.
+     *
+     * @return string
+     */
+    private function replaceInsertTag(BuildAttributeEvent $event, string $replace): string
+    {
+        $replaced = $this->replaceParam
+            ->replace($this->replaceTableName->replace($event->getContainer()->getName(), $replace));
+
+        if ((false === \strpos($replaced, '{{'))) {
+            return $replaced;
         }
 
         $replacer = new InsertTags();
-        return $replacer->replace($extendFolder);
+        return $replacer->replace($replaced);
     }
 
     /**
