@@ -204,7 +204,7 @@ final class BuildFrontendUploadListener
         if (!($extendFolder = $this->information['fe_widget_file_extend_folder'])
             || (false === \strpos($extendFolder, '{{'))
         ) {
-            return null;
+            return $extendFolder ?: null;
         }
 
         $extendFolder = $this->replaceTableName->replace($event->getContainer()->getName(), $extendFolder);
