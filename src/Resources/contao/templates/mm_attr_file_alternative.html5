@@ -1,6 +1,6 @@
 <?php if (is_array($this->src)): ?>
 <?php foreach($this->src as $arrFile): ?>
-<p class="<?= $arrFile['class'] ?><?= $this->additional_class ?>">
+<div class="<?= $arrFile['class'] ?><?= $this->additional_class ?>">
 <?php if ($arrFile['isPicture'] && $this->settings->get('file_showImage')): ?>
 <figure class="image_container<?= $arrFile['floatClass'] ?>"<?php if ($arrFile['margin']): ?> style="<?= $arrFile['margin'] ?>"<?php endif; ?>>
 <?php endif; ?>
@@ -29,6 +29,6 @@
     <?php endif; ?>
 </figure>
 <?php endif; ?>
-</p>
+</div>
 <?php endforeach; ?>
 <?php endif; ?>
