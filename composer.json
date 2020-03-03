@@ -61,7 +61,7 @@
   "extra": {
     "contao-manager-plugin": "MetaModels\\AttributeFileBundle\\ContaoManager\\Plugin",
     "branch-alias": {
-      "dev-master": "2.2.0-dev"
+      "dev-feature/2.2.0": "2.2.x-dev"
     }
   },
   "config": {
