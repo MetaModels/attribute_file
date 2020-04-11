@@ -54,11 +54,12 @@ class BuildAttributeListener
             $this->addAttributeToDefinition($container, $name);
             $properties->getProperty($name . '__sort')->setWidgetType('fileTreeOrder');
 
+            $properties->addProperty($property = new DefaultProperty($name . '__sort'));
+            $property->setWidgetType('fileTreeOrder');
+            
             return;
         }
 
-        $properties->addProperty($property = new DefaultProperty($name . '__sort'));
-        $property->setWidgetType('fileTreeOrder');
 
         $this->addAttributeToDefinition($container, $name);
     }
