@@ -82,7 +82,7 @@ class UpgradeHandler
             ->execute();
 
         while ($row = $attributes->fetch(\PDO::FETCH_OBJ)) {
-            if ($this->fieldExists($row->colname . '__sort', $row->tableName)) {
+            if ($this->fieldExists($row->tableName, $row->colname . '__sort')) {
                 continue;
             }
             $this
