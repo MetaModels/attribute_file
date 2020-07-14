@@ -20,6 +20,8 @@
 
 namespace MetaModels\AttributeFileBundle\DependencyInjection;
 
+use Doctrine\Common\Cache\ArrayCache;
+use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -39,5 +41,46 @@ class MetaModelsAttributeFileExtension extends Extension
         $loader->load('factory.yml');
         $loader->load('event_listener.yml');
         $loader->load('services.yml');
+
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $this->buildCacheService($container, $config);
+
+        // Load configuration for the frontend editing.
+        if (\in_array(MetaModelsContaoFrontendEditingBundle::class, $container->getParameter('kernel.bundles'), true)) {
+            $loader->load('frontend_editing/event_listener.yml');
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration(
+            $container->getParameter('kernel.debug'),
+            $container->getParameter('metamodels.cache_dir')
+        );
+    }
+
+    /**
+     * Build the cache service.
+     *
+     * @param ContainerBuilder $container The container builder.
+     * @param array            $config    The configuration.
+     *
+     * @return void
+     */
+    private function buildCacheService(ContainerBuilder $container, array $config)
+    {
+        // if cache disabled, swap it out with the dummy cache.
+        if (!$config['enable_cache']) {
+            $cache = $container->getDefinition('metamodels.attribute_file.cache_system');
+            $cache->setClass(ArrayCache::class);
+            $cache->setArguments([]);
+            $container->setParameter('metamodels.attribute_file.cache_dir', null);
+            return;
+        }
+
+        $container->setParameter('metamodels.attribute_file.cache_dir', $config['cache_dir']);
     }
 }
