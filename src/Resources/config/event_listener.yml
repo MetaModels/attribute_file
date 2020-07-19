@@ -54,3 +54,15 @@ services:
                 event: dc-general.model.post-persist
                 method: handleUpdateAttribute
                 priority: -1
+
+    MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\FileWidgetModeOptions:
+        public: false
+        arguments:
+            $scopeDeterminator: '@cca.dc-general.scope-matcher'
+            $factory: '@MetaModels\IFactory'
+            $connection: '@database_connection'
+            # The $frontendEditing argument where set in the extension.
+            $frontendEditing: ~
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options

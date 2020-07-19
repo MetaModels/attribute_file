@@ -76,17 +76,6 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['eval']['submitOnChange'] = true;
 
-
-    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'] = \array_merge(
-        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['options'],
-        [
-            'fe_single_upload',
-            'fe_single_upload_preview',
-            'fe_multiple_upload',
-            'fe_multiple_upload_preview'
-        ]
-    );
-
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_useHomeDir'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'],
         'exclude'   => true,

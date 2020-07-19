@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +21,7 @@
 namespace MetaModels\AttributeFileBundle\DependencyInjection;
 
 use Doctrine\Common\Cache\ArrayCache;
+use MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\FileWidgetModeOptions;
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -45,10 +46,14 @@ class MetaModelsAttributeFileExtension extends Extension
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
         $this->buildCacheService($container, $config);
 
+        $frontendEditing = false;
         // Load configuration for the frontend editing.
         if (\in_array(MetaModelsContaoFrontendEditingBundle::class, $container->getParameter('kernel.bundles'), true)) {
+            $frontendEditing = true;
             $loader->load('frontend_editing/event_listener.yml');
         }
+
+        $this->addFrontendEditingArgument($container, $frontendEditing);
     }
 
     /**
@@ -82,5 +87,18 @@ class MetaModelsAttributeFileExtension extends Extension
         }
 
         $container->setParameter('metamodels.attribute_file.cache_dir', $config['cache_dir']);
+    }
+
+    /**
+     * Add the frontend editing argument to service, who it used.
+     *
+     * @param ContainerBuilder $container       The container builder.
+     * @param bool             $frontendEditing Is frontend editing extension installed.
+     *
+     * @return void
+     */
+    private function addFrontendEditingArgument(ContainerBuilder $container, bool $frontendEditing): void
+    {
+        $container->getDefinition(FileWidgetModeOptions::class)->setArgument('$frontendEditing', $frontendEditing);
     }
 }
