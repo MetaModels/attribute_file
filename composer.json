@@ -37,7 +37,7 @@
     "contao/core-bundle": "^4.9.0, <4.13.0",
     "metamodels/core": "^2.1.1",
     "symfony/dependency-injection": "^3.4.26 || ^4.2.7",
-    "symfony/http-kernel": "^3.4.26 || ^4.2.7"
+    "symfony/http-kernel": "^3.4.26 || ^4.2.7",
     "ext-pdo": "*",
     "psr/simple-cache": "^1.0",
     "cache/doctrine-adapter": "^1.0",
