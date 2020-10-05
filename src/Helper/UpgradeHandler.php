@@ -14,6 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -70,6 +71,16 @@ class UpgradeHandler
      */
     private function ensureOrderColumnExists()
     {
+        $schemaManager = $this->connection->getSchemaManager();
+
+        if (!$schemaManager->tablesExist(['tl_metamodel', 'tl_metamodel_attribute'])) {
+            return false;
+        }
+
+        if(!array_key_exists('file_multiple', $schemaManager->listTableColumns('tl_metamodel_attribute'))) {
+            return;
+        }
+
         $attributes = $this
             ->connection
             ->createQueryBuilder()
