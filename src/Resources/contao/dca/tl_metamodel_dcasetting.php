@@ -54,14 +54,14 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'upload_settings' => [
             'fe_widget_file_useHomeDir',
             'fe_widget_file_uploadFolder',
-            'fe_widget_file_doNotOverwrite',
-            'fe_widget_file_deselect',
-            'fe_widget_file_delete',
             'fe_widget_file_extend_folder',
             'fe_widget_file_normalize_extend_folder',
+            'fe_widget_file_doNotOverwrite',
             'fe_widget_file_normalize_filename',
             'fe_widget_file_prefix_filename',
-            'fe_widget_file_postfix_filename'
+            'fe_widget_file_postfix_filename',
+            'fe_widget_file_deselect',
+            'fe_widget_file_delete'
         ]
     ];
 
@@ -81,7 +81,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 m12',
+            'tl_class'  => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -102,7 +102,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 m12 clr',
+            'tl_class'  => 'w50 cbx m12 clr',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -112,7 +112,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 clr',
+            'tl_class'  => 'w50 clr cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -122,7 +122,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50',
+            'tl_class'  => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -141,7 +141,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 m12',
+            'tl_class'  => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -151,7 +151,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 clr',
+            'tl_class'  => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
