@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -59,7 +59,7 @@ class UpgradeHandler
      *
      * @return void
      */
-    public function perform()
+    public function perform(): void
     {
         $this->ensureOrderColumnExists();
     }
@@ -69,15 +69,15 @@ class UpgradeHandler
      *
      * @return void
      */
-    private function ensureOrderColumnExists()
+    private function ensureOrderColumnExists(): void
     {
         $schemaManager = $this->connection->getSchemaManager();
 
         if (!$schemaManager->tablesExist(['tl_metamodel', 'tl_metamodel_attribute'])) {
-            return false;
+            return;
         }
 
-        if(!array_key_exists('file_multiple', $schemaManager->listTableColumns('tl_metamodel_attribute'))) {
+        if (!array_key_exists('file_multiple', $schemaManager->listTableColumns('tl_metamodel_attribute'))) {
             return;
         }
 

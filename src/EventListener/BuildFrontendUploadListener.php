@@ -113,6 +113,7 @@ final class BuildFrontendUploadListener
      * @param TokenStorageInterface $tokenStorage     The token storage.
      * @param ReplaceTableName      $replaceTableName The insert tag replacer, for replace the table name.
      * @param ReplaceParam          $replaceParam     The insert tag replacer, for replace parameters.
+     * @param Connection            $connection       The database connection.
      */
     public function __construct(
         ViewCombination $viewCombination,
@@ -176,7 +177,7 @@ final class BuildFrontendUploadListener
             $extra['showThumbnail'] = true;
         }
 
-        $multipleModes = ['fe_multiple_upload', 'fe_multiple_upload_preview'];
+        $multipleModes     = ['fe_multiple_upload', 'fe_multiple_upload_preview'];
         $extra['multiple'] = false;
         if (\in_array($this->information['file_widgetMode'], $multipleModes, true)) {
             $extra['multiple'] = true;
@@ -191,7 +192,7 @@ final class BuildFrontendUploadListener
         $property->setExtra(\array_merge($property->getExtra(), $extra));
 
         // todo support sorting file. Can be remove if this attribute support order not has hack.
-        $properties = $event->getContainer()->getPropertiesDefinition();
+        $properties    = $event->getContainer()->getPropertiesDefinition();
         $propertyExtra = $property->getExtra();
         if (isset($propertyExtra['orderField']) && $properties->hasProperty($propertyExtra['orderField'])) {
             $orderProperty = $properties->getProperty($propertyExtra['orderField']);
@@ -310,7 +311,6 @@ final class BuildFrontendUploadListener
             if ($this->columnId) {
                 $this->autoincrement = (int) $tableDetails->getOption('autoincrement');
             }
-
         }
 
         if ($this->autoincrement && $this->columnId) {
