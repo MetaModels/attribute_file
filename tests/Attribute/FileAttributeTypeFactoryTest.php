@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,6 +32,7 @@ use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,19 +59,19 @@ class FileAttributeTypeFactoryTest extends TestCase
         $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTableName')
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getActiveLanguage')
-            ->will($this->returnValue($language));
+            ->willReturn($language);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getFallbackLanguage')
-            ->will($this->returnValue($fallbackLanguage));
+            ->willReturn($fallbackLanguage);
 
         return $metaModel;
     }
@@ -78,7 +79,7 @@ class FileAttributeTypeFactoryTest extends TestCase
     /**
      * Mock the database connection.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection(AbstractSchemaManager $schemaManager = null)
     {
@@ -87,7 +88,7 @@ class FileAttributeTypeFactoryTest extends TestCase
             ->getMock();
 
         $connection
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getSchemaManager')
             ->willReturn($schemaManager);
 
@@ -107,14 +108,12 @@ class FileAttributeTypeFactoryTest extends TestCase
         );
 
         $manager
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('listTableColumns')
-            ->will(
-                $this->returnCallback(
-                    function ($table) use ($tableSchema) {
-                        return $tableSchema[$table] ?? null;
-                    }
-                )
+            ->willReturnCallback(
+                function ($table) use ($tableSchema) {
+                    return $tableSchema[$table] ?? null;
+                }
             );
 
         return $manager;
@@ -125,7 +124,7 @@ class FileAttributeTypeFactoryTest extends TestCase
      *
      * @param Connection $connection The database connection mock.
      *
-     * @return TableManipulator|\PHPUnit_Framework_MockObject_MockObject
+     * @return TableManipulator|MockObject
      */
     private function mockTableManipulator(Connection $connection)
     {
@@ -212,10 +211,10 @@ class FileAttributeTypeFactoryTest extends TestCase
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertInstanceOf(File::class, $attribute);
+        self::assertInstanceOf(File::class, $attribute);
 
         foreach ($values as $key => $value) {
-            $this->assertEquals($value, $attribute->get($key), $key);
+            self::assertEquals($value, $attribute->get($key), $key);
         }
     }
 
@@ -244,6 +243,6 @@ class FileAttributeTypeFactoryTest extends TestCase
             $this->mockMetaModel('mm_test', 'de', 'en')
         );
 
-        $this->assertInstanceOf(FileOrder::class, $attribute);
+        self::assertInstanceOf(FileOrder::class, $attribute);
     }
 }

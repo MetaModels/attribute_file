@@ -30,6 +30,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * This test case test the extension.
+ *
+ * @covers \MetaModels\AttributeFileBundle\DependencyInjection\MetaModelsAttributeFileExtension
  */
 class MetaModelsAttributeFileExtensionTest extends TestCase
 {
@@ -42,8 +44,8 @@ class MetaModelsAttributeFileExtensionTest extends TestCase
     {
         $extension = new MetaModelsAttributeFileExtension();
 
-        $this->assertInstanceOf(MetaModelsAttributeFileExtension::class, $extension);
-        $this->assertInstanceOf(ExtensionInterface::class, $extension);
+        self::assertInstanceOf(MetaModelsAttributeFileExtension::class, $extension);
+        self::assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
     /**
@@ -56,12 +58,12 @@ class MetaModelsAttributeFileExtensionTest extends TestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
 
         $container
-            ->expects($this->atLeastOnce())
+            ->expects(self::atLeastOnce())
             ->method('setDefinition')
             ->withConsecutive(
                 [
                     'metamodels.attribute_file.factory',
-                    $this->callback(
+                    self::callback(
                         function ($value) {
                             /** @var Definition $value */
                             $this->assertInstanceOf(Definition::class, $value);

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -33,6 +33,7 @@ use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -53,17 +54,17 @@ class FileTest extends TestCase
      */
     protected function mockMetaModel($tableName, $language)
     {
-        $metaModel = $this->getMockForAbstractClass('MetaModels\IMetaModel');
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTableName')
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $metaModel
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getActiveLanguage')
-            ->will($this->returnValue($language));
+            ->willReturn($language);
 
         return $metaModel;
     }
@@ -73,7 +74,7 @@ class FileTest extends TestCase
      *
      * @param array $methods The method names to mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection($methods = [])
     {
@@ -88,7 +89,7 @@ class FileTest extends TestCase
      *
      * @param Connection $connection The database connection mock.
      *
-     * @return TableManipulator|\PHPUnit_Framework_MockObject_MockObject
+     * @return TableManipulator|MockObject
      */
     private function mockTableManipulator(Connection $connection)
     {
@@ -100,7 +101,7 @@ class FileTest extends TestCase
     /**
      * Mock the image factory.
      *
-     * @return ImageFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ImageFactoryInterface|MockObject
      */
     private function mockImageFactory()
     {
@@ -173,7 +174,7 @@ class FileTest extends TestCase
             $this->mockConfig()
         );
 
-        $this->assertInstanceOf('MetaModels\AttributeFileBundle\Attribute\File', $file);
+        self::assertInstanceOf(File::class, $file);
     }
 
     /**
@@ -199,11 +200,11 @@ class FileTest extends TestCase
             $this->mockConfig()
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(null, 1)
         );
-        $this->assertEquals(
+        self::assertEquals(
             ['bin' => [], 'value' => [], 'path' => [], 'meta' => []],
             $file->widgetToValue(array(), 1)
         );
@@ -222,7 +223,7 @@ class FileTest extends TestCase
 
         $platform = $this->getMockForAbstractClass(AbstractPlatform::class);
         $connection
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
@@ -232,7 +233,7 @@ class FileTest extends TestCase
             ->setMethods(['fetchAll'])
             ->getMock();
         $statement
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_COLUMN)
             ->willReturn(['1', '2', '3', '4', '5']);
@@ -243,18 +244,18 @@ class FileTest extends TestCase
             ->setMethods(['expr'])
             ->getMock();
 
-        $builder1->expects($this->once())->method('expr')->willReturn(new ExpressionBuilder($connection));
+        $builder1->expects(self::once())->method('expr')->willReturn(new ExpressionBuilder($connection));
 
         $builder2 = $this
             ->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['execute', 'expr'])
             ->getMock();
-        $builder2->expects($this->once())->method('expr')->willReturn(new ExpressionBuilder($connection));
-        $builder2->expects($this->once())->method('execute')->willReturn($statement);
+        $builder2->expects(self::once())->method('expr')->willReturn(new ExpressionBuilder($connection));
+        $builder2->expects(self::once())->method('execute')->willReturn($statement);
 
         $connection
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('createQueryBuilder')
             ->willReturnOnConsecutiveCalls($builder1, $builder2);
 
@@ -273,13 +274,13 @@ class FileTest extends TestCase
             $this->mockConfig()
         );
 
-        $this->assertSame(['1', '2', '3', '4', '5'], $file->searchFor('*test?value'));
+        self::assertSame(['1', '2', '3', '4', '5'], $file->searchFor('*test?value'));
 
         /** @var QueryBuilder $builder2 */
-        $this->assertSame(
+        self::assertSame(
             'SELECT id FROM mm_test WHERE file_attribute IN (SELECT uuid FROM tl_files WHERE path LIKE :value)',
             $builder2->getSQL()
         );
-        $this->assertSame(['value' => '%test_value'], $builder2->getParameters());
+        self::assertSame(['value' => '%test_value'], $builder2->getParameters());
     }
 }

@@ -41,27 +41,23 @@ class RemoveAttIdOptionsTest extends TestCase
         $environment = $this->getMockForAbstractClass(EnvironmentInterface::class);
 
         $environment
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getDataDefinition')
-            ->will(
-                $this->returnCallback(
-                    function () use (&$dataDefinition) {
-                        return $dataDefinition;
-                    }
-                )
+            ->willReturnCallback(
+                function () use (&$dataDefinition) {
+                    return $dataDefinition;
+                }
             );
 
         $environment
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('setDataDefinition')
-            ->will(
-                $this->returnCallback(
-                    function (ContainerInterface $container) use (&$dataDefinition, $environment) {
-                        $dataDefinition = $container;
+            ->willReturnCallback(
+                function (ContainerInterface $container) use (&$dataDefinition, $environment) {
+                    $dataDefinition = $container;
 
-                        return $environment;
-                    }
-                )
+                    return $environment;
+                }
             );
 
         return $environment;
@@ -72,7 +68,7 @@ class RemoveAttIdOptionsTest extends TestCase
         $dataDefinition = $this->getMockForAbstractClass(ContainerInterface::class);
 
         $dataDefinition
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getName')
             ->willReturn($name);
 
@@ -114,6 +110,6 @@ class RemoveAttIdOptionsTest extends TestCase
         $event->setOptions($options);
         $dispatcher->dispatch($event::NAME, $event);
 
-        $this->assertSame($expected, $event->getOptions());
+        self::assertSame($expected, $event->getOptions());
     }
 }

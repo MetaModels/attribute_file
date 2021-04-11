@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Sven Baumann <baummann.sv@gmail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -30,6 +30,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests the contao manager plugin.
+ *
+ * @covers \MetaModels\AttributeFileBundle\ContaoManager\Plugin
  */
 class PluginTest extends TestCase
 {
@@ -42,8 +44,8 @@ class PluginTest extends TestCase
     {
         $plugin = new Plugin();
 
-        $this->assertInstanceOf(Plugin::class, $plugin);
-        $this->assertInstanceOf(BundlePluginInterface::class, $plugin);
+        self::assertInstanceOf(Plugin::class, $plugin);
+        self::assertInstanceOf(BundlePluginInterface::class, $plugin);
     }
 
     /**
@@ -57,16 +59,16 @@ class PluginTest extends TestCase
         $plugin  = new Plugin();
         $bundles = $plugin->getBundles($parser);
 
-        $this->assertContainsOnlyInstancesOf(BundleConfig::class, $bundles);
-        $this->assertCount(1, $bundles);
+        self::assertContainsOnlyInstancesOf(BundleConfig::class, $bundles);
+        self::assertCount(1, $bundles);
 
         /** @var BundleConfig $bundleConfig */
         $bundleConfig = $bundles[0];
 
-        $this->assertEquals(
+        self::assertEquals(
             $bundleConfig->getLoadAfter(),
             [MetaModelsContaoFrontendEditingBundle::class, MetaModelsCoreBundle::class]
         );
-        $this->assertEquals($bundleConfig->getReplace(), ['metamodelsattribute_file']);
+        self::assertEquals($bundleConfig->getReplace(), ['metamodelsattribute_file']);
     }
 }

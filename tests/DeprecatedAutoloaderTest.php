@@ -31,6 +31,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * This class tests if the deprecated autoloader works.
+ *
+ * @covers \MetaModels\AttributeFileBundle\Attribute\File
+ * @covers \MetaModels\AttributeFileBundle\Attribute\FileOrder
+ * @covers \MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory
+ * @covers \MetaModels\AttributeFileBundle\Helper\UpgradeHandler
+ * @covers \MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition
+ * @covers \MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener
  */
 class DeprecatedAutoloaderTest extends TestCase
 {
@@ -74,11 +81,11 @@ class DeprecatedAutoloaderTest extends TestCase
      */
     public function testDeprecatedClassesAreAliased($oldClass, $newClass)
     {
-        $this->assertTrue(\class_exists($oldClass), \sprintf('Class select "%s" is not found.', $oldClass));
+        self::assertTrue(\class_exists($oldClass), \sprintf('Class select "%s" is not found.', $oldClass));
 
         $oldClassReflection = new \ReflectionClass($oldClass);
         $newClassReflection = new \ReflectionClass($newClass);
 
-        $this->assertSame($newClassReflection->getFileName(), $oldClassReflection->getFileName());
+        self::assertSame($newClassReflection->getFileName(), $oldClassReflection->getFileName());
     }
 }

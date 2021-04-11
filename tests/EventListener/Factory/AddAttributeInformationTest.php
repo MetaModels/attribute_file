@@ -187,6 +187,6 @@ class AddAttributeInformationTest extends TestCase
         $event->setAttributeInformation($information);
         $dispatcher->dispatch($event::NAME, $event);
 
-        $this->assertSame($expected, $event->getAttributeInformation());
+        self::assertSame($expected, $event->getAttributeInformation());
     }
 }
