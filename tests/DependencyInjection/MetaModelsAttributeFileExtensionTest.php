@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +22,7 @@ namespace MetaModels\AttributeFileBundle\Test\DependencyInjection;
 
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\DependencyInjection\MetaModelsAttributeFileExtension;
+use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -71,8 +73,31 @@ class MetaModelsAttributeFileExtensionTest extends TestCase
                     )
                 ]
             );
+        $container
+            ->method('getParameter')
+            ->willReturn(false, 'cache/dir', [MetaModelsContaoFrontendEditingBundle::class]);
+
+        $definition = $this->createMock(Definition::class);
+
+        $definition
+            ->method('setArgument')
+            ->willReturnCallback(
+                function (string $key, bool $value) {
+                    switch ($key) {
+                        case '$frontendEditing':
+                            self::assertTrue($value);
+                            break;
+                        default:
+                    }
+                }
+            );
+
+        $container
+            ->method('getDefinition')
+            ->willReturn($definition);
 
         $extension = new MetaModelsAttributeFileExtension();
         $extension->load([], $container);
+
     }
 }
