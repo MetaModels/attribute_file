@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -63,7 +63,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_validFileTypes'] = 
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['file_filesOnly'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'],
-    'inputType' => 'checkbox',
-    'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => ['tl_class' => 'w50 m12']
+    'inputType' => 'select',
+    'options'   => ['', '1', '2'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly_options'],
+    'eval'      => ['tl_class' => 'w50'],
+    'sql'       => ['type' => 'string', 'length' => 1, 'fixed' => true, 'default' => '']
 ];
