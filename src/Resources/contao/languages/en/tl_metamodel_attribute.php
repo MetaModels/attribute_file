@@ -33,9 +33,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes'][0] = 'Valid
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_validFileTypes'][1] =
     'To overwrite the contao standard file types, please enter a comma separated list of extensions of valid file ' .
     'types for this field.';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'][0]      = 'Allow files only';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'][0]      = 'Allowed types for selection';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_filesOnly'][1]      =
-    'Select this option to restrict the file browser to files only (folders not selectable).';
+    'Select a restriction on files or folders - default is no restriction on files or folders.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'][0]       = 'Multiple selection';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['file_multiple'][1]       =
     'If selected, user will be able to select more than one item.';
