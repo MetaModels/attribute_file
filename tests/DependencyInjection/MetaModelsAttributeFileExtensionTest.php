@@ -28,6 +28,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * This test case test the extension.
+ *
+ * @covers \MetaModels\AttributeFileBundle\DependencyInjection\MetaModelsAttributeFileExtension
  */
 class MetaModelsAttributeFileExtensionTest extends TestCase
 {
