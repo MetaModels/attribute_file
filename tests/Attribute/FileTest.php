@@ -33,6 +33,7 @@ use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,7 +74,7 @@ class FileTest extends TestCase
      *
      * @param array $methods The method names to mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection($methods = [])
     {
@@ -88,7 +89,7 @@ class FileTest extends TestCase
      *
      * @param Connection $connection The database connection mock.
      *
-     * @return TableManipulator|\PHPUnit_Framework_MockObject_MockObject
+     * @return TableManipulator|MockObject
      */
     private function mockTableManipulator(Connection $connection)
     {
@@ -100,7 +101,7 @@ class FileTest extends TestCase
     /**
      * Mock the image factory.
      *
-     * @return ImageFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ImageFactoryInterface|MockObject
      */
     private function mockImageFactory()
     {
