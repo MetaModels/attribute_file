@@ -35,7 +35,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize'][1]   =
     'fields blank, the original image size will be displayed.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_placeholder'][0] = 'Image placeholder';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_placeholder'][1] =
-    'Select an image as a placeholder if no image is selected';
+    'Select an image as a placeholder if no image is selected.';
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']  = 'File name (ascending)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc'] = 'File name (descending)';
