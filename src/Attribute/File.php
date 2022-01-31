@@ -524,10 +524,16 @@ class File extends BaseComplex
         $value = $rowData[$this->getColName()];
 
         // No data and show image, check placeholder.
-        if (!$value['bin']
-            && null !== $settings->get('file_showImage')
-            && null !== ($placeholder = $settings->get('file_placeholder'))) {
-            $value['bin'][]   = $placeholder;
+        if (!$value['bin'] ?? null) {
+            if (null === $settings->get('file_showImage')
+                || null === ($placeholder = $settings->get('file_placeholder'))) {
+                $template->files = [];
+                $template->src   = [];
+
+                return;
+            }
+
+            $value['bin'][] = $placeholder;
             $value['value'][] = StringUtil::binToUuid($placeholder);
         }
 
