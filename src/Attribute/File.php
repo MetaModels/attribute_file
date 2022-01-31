@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,8 @@
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -520,9 +521,15 @@ class File extends BaseComplex
     {
         parent::prepareTemplate($template, $rowData, $settings);
 
-        // No data, nothing to do.
-        if (!$rowData[$this->getColName()]) {
-            return;
+        $value = $rowData[$this->getColName()];
+
+        // No data, use placeholder or nothing to do.
+        if (!$value['bin'] ?? null) {
+            if (null === $placeholder = $settings->get('file_placeholder')) {
+                return;
+            }
+            $value['bin'][]   = $placeholder;
+            $value['value'][] = StringUtil::binToUuid($placeholder);
         }
 
         $toolbox = clone $this->toolboxFile;
@@ -547,8 +554,6 @@ class File extends BaseComplex
         if ($settings->get('file_imageSize')) {
             $toolbox->setResizeImages($settings->get('file_imageSize'));
         }
-
-        $value = $rowData[$this->getColName()];
 
         if (isset($value['value'])) {
             foreach ($value['value'] as $strFile) {
