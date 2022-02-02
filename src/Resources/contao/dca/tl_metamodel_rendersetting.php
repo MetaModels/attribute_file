@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,13 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 /**
- * Table tl_metamodel_attribute
+ * Table tl_metamodel_rendersettings
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['file extends default'] = [
@@ -30,7 +30,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['file extends d
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showImage'] = [
-    'file_imageSize'
+    'file_imageSize',
+    'file_placeholder'
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [
@@ -76,5 +77,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
         'nospace'            => true,
         'helpwizard'         => true,
         'tl_class'           => 'w50'
+    ]
+];
+
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_placeholder'] = [
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_placeholder'],
+    'exclude'   => true,
+    'inputType' => 'fileTree',
+    'sql'       => 'blob NULL',
+    'eval'      => [
+        'fieldType' => 'radio',
+        'files'     => true,
+        'filesOnly' => true,
+        'tl_class'  => 'clr w50'
     ]
 ];
