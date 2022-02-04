@@ -572,9 +572,7 @@ class File extends BaseComplex
             $toolbox->addPathById($value);
         }
 
-        if (!$settings->get('file_showLink') && !$settings->get('file_protectedDownload')) {
-            $toolbox->withDownloadKeys(false);
-        }
+        $toolbox->withDownloadKeys($settings->get('file_showLink') && $settings->get('file_protectedDownload'));
 
         $toolbox->resolveFiles();
         $data = $toolbox->sortFiles($settings->get('file_sortBy'), ($value['bin_sorted'] ?? []));

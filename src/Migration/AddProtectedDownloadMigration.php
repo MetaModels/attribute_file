@@ -24,10 +24,6 @@ namespace MetaModels\AttributeFileBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\ColumnDiff;
-use Doctrine\DBAL\Schema\TableDiff;
 use MetaModels\Helper\TableManipulator;
 
 /**
@@ -69,8 +65,9 @@ class AddProtectedDownloadMigration extends AbstractMigration
      */
     public function getName(): string
     {
-        return 'Add "file_protectedDownload" in MetaModels rendersettings if not exist '
-        . 'and set to checked if "file_showLink" is set as backward compatibility.';
+        return 'Add checkbox "Protected download" in MetaModels render-settings if not exist '
+               . 'and set to checked if checkbox "Create link as file download" is set as backward compatibility.'
+               . ' If you do not need this, remove the protection, as no cookies need to be set for this.';
     }
 
     /**
@@ -84,11 +81,11 @@ class AddProtectedDownloadMigration extends AbstractMigration
     {
         $schemaManager = $this->connection->getSchemaManager();
 
-        if (!$schemaManager->tablesExist(['tl_metamodel', 'tl_metamodel_rendersettings'])) {
+        if (!$schemaManager->tablesExist(['tl_metamodel', 'tl_metamodel_rendersetting'])) {
             return false;
         }
 
-        if (!$this->fieldExists('tl_metamodel_rendersettings', 'file_protectedDownload')) {
+        if (!$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
             return true;
         }
 
@@ -105,25 +102,25 @@ class AddProtectedDownloadMigration extends AbstractMigration
     {
         $hasChanges = false;
 
-        if (!$this->fieldExists('tl_metamodel_rendersettings', 'file_showLink')) {
+        if (!$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
             $this->tableManipulator->createColumn(
-                'tl_metamodel_rendersettings',
+                'tl_metamodel_rendersetting',
                 'file_protectedDownload',
                 'char(1) NOT NULL default \'\''
             );
             $hasChanges = true;
         }
 
-        if ($this->fieldExists('tl_metamodel_rendersettings', 'file_protectedDownload')) {
+        if ($this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
             $this->connection->createQueryBuilder()
-                ->update('tl_metamodel_rendersettings', 't')
+                ->update('tl_metamodel_rendersetting', 't')
                 ->set('t.file_protectedDownload', 't.file_showLink')
                 ->execute();
             $hasChanges = true;
         }
 
         if ($hasChanges) {
-            return new MigrationResult(true, 'Adjusted table tl_metamodel_rendersettings with file_protectedDownload');
+            return new MigrationResult(true, 'Adjusted table tl_metamodel_rendersetting with file_protectedDownload');
         }
 
         return new MigrationResult(true, 'Nothing to do.');
@@ -132,15 +129,15 @@ class AddProtectedDownloadMigration extends AbstractMigration
     /**
      * Check is a table column exists.
      *
-     * @param string $strTableName  Table name.
-     * @param string $strColumnName Column name.
+     * @param string $tableName  Table name.
+     * @param string $columnName Column name.
      *
      * @return bool
      */
-    private function fieldExists($strTableName, $strColumnName)
+    private function fieldExists(string $tableName, string $columnName): bool
     {
-        $columns = $this->connection->getSchemaManager()->listTableColumns($strTableName);
+        $columns = $this->connection->getSchemaManager()->listTableColumns($tableName);
 
-        return isset($columns[$strColumnName]);
+        return isset($columns[strtolower($columnName)]);
     }
 }

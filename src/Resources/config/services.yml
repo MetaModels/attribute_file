@@ -16,8 +16,9 @@ services:
         arguments:
             - "@metamodels.attribute_file.cache_system"
 
-    MetaModels\AttributeAliasBundle\Migration\SetProtectedDownloadLinkMigration:
+    MetaModels\AttributeFileBundle\Migration\AddProtectedDownloadMigration:
       arguments:
         - '@database_connection'
+        - '@metamodels.table_manipulator'
       tags:
         - name: contao.migration
