@@ -29,6 +29,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']['file extends d
     '+advanced' => ['file_sortBy', 'file_showLink', 'file_showImage']
 ];
 
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showLink'] = [
+    'file_protectedDownload'
+];
+
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showImage'] = [
     'file_imageSize',
     'file_placeholder'
@@ -51,7 +55,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink'],
     'inputType' => 'checkbox',
     'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => ['tl_class' => 'w50 m12']
+    'eval'      => [
+        'submitOnChange' => true,
+        'tl_class'       => 'clr w50 cbx m12'
+    ]
+];
+
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_protectedDownload'] = [
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_protectedDownload'],
+    'inputType' => 'checkbox',
+    'sql'       => 'char(1) NOT NULL default \'\'',
+    'eval'      => [
+        'tl_class' => 'w50 cbx m12'
+    ]
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = [
@@ -60,7 +76,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = [
     'sql'       => 'char(1) NOT NULL default \'\'',
     'eval'      => [
         'submitOnChange' => true,
-        'tl_class'       => 'clr'
+        'tl_class'       => 'clr w50 cbx m12'
     ]
 ];
 
@@ -76,7 +92,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
         'includeBlankOption' => true,
         'nospace'            => true,
         'helpwizard'         => true,
-        'tl_class'           => 'w50'
+        'tl_class'           => 'clr w50'
     ]
 ];
 
@@ -89,6 +105,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_placeholder'] =
         'fieldType' => 'radio',
         'files'     => true,
         'filesOnly' => true,
-        'tl_class'  => 'clr w50'
+        'tl_class'  => 'w50'
     ]
 ];
