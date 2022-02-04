@@ -100,26 +100,18 @@ class AddProtectedDownloadMigration extends AbstractMigration
      */
     public function run(): MigrationResult
     {
-        $hasChanges = false;
-
         if (!$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
             $this->tableManipulator->createColumn(
                 'tl_metamodel_rendersetting',
                 'file_protectedDownload',
                 'char(1) NOT NULL default \'\''
             );
-            $hasChanges = true;
-        }
 
-        if ($this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
             $this->connection->createQueryBuilder()
                 ->update('tl_metamodel_rendersetting', 't')
                 ->set('t.file_protectedDownload', 't.file_showLink')
                 ->execute();
-            $hasChanges = true;
-        }
 
-        if ($hasChanges) {
             return new MigrationResult(true, 'Adjusted table tl_metamodel_rendersetting with file_protectedDownload');
         }
 
