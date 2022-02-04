@@ -103,7 +103,7 @@ class AddProtectedDownloadMigration extends AbstractMigration
      */
     public function run(): MigrationResult
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $hasChanges = false;
 
         if (!$this->fieldExists('tl_metamodel_rendersettings', 'file_showLink')) {
             $this->tableManipulator->createColumn(
@@ -111,6 +111,7 @@ class AddProtectedDownloadMigration extends AbstractMigration
                 'file_protectedDownload',
                 'char(1) NOT NULL default \'\''
             );
+            $hasChanges = true;
         }
 
         if ($this->fieldExists('tl_metamodel_rendersettings', 'file_protectedDownload')) {
@@ -118,11 +119,14 @@ class AddProtectedDownloadMigration extends AbstractMigration
                 ->update('tl_metamodel_rendersettings', 't')
                 ->set('t.file_protectedDownload', 't.file_showLink')
                 ->execute();
-
-            $this->tableManipulator->dropColumn('tl_metamodel_attribute', 'get_land');
+            $hasChanges = true;
         }
 
-        return new MigrationResult(true, 'Adjusted table tl_metamodel_rendersettings with file_protectedDownload');
+        if ($hasChanges) {
+            return new MigrationResult(true, 'Adjusted table tl_metamodel_rendersettings with file_protectedDownload');
+        }
+
+        return new MigrationResult(true, 'Nothing to do.');
     }
 
     /**
