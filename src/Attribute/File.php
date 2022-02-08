@@ -521,9 +521,20 @@ class File extends BaseComplex
     {
         parent::prepareTemplate($template, $rowData, $settings);
 
-        // No data, nothing to do.
-        if (!$rowData[$this->getColName()]) {
-            return;
+        $value = $rowData[$this->getColName()];
+
+        // No data and show image, check placeholder.
+        if (!$value['bin'] ?? null) {
+            if (null === $settings->get('file_showImage')
+                || null === ($placeholder = $settings->get('file_placeholder'))) {
+                $template->files = [];
+                $template->src   = [];
+
+                return;
+            }
+
+            $value['bin'][] = $placeholder;
+            $value['value'][] = StringUtil::binToUuid($placeholder);
         }
 
         $toolbox = clone $this->toolboxFile;
@@ -549,8 +560,6 @@ class File extends BaseComplex
             $toolbox->setResizeImages($settings->get('file_imageSize'));
         }
 
-        $value = $rowData[$this->getColName()];
-
         if (isset($value['value'])) {
             foreach ($value['value'] as $strFile) {
                 $toolbox->addPathById($strFile);
@@ -563,7 +572,8 @@ class File extends BaseComplex
             $toolbox->addPathById($value);
         }
 
-        $toolbox->withDownloadKeys((bool) $settings->get('file_downloadKey'));
+        $toolbox->withDownloadKeys($settings->get('file_showLink') && $settings->get('file_protectedDownload'));
+
         $toolbox->resolveFiles();
         $data = $toolbox->sortFiles($settings->get('file_sortBy'), ($value['bin_sorted'] ?? []));
 
