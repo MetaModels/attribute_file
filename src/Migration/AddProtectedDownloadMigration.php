@@ -85,7 +85,8 @@ class AddProtectedDownloadMigration extends AbstractMigration
             return false;
         }
 
-        if (!$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
+        if ($this->fieldExists('tl_metamodel_rendersetting', 'file_showLink')
+            && !$this->fieldExists('tl_metamodel_rendersetting','file_protectedDownload')) {
             return true;
         }
 
