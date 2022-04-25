@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,11 +24,9 @@ namespace MetaModels\AttributeFileBundle\Attribute;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\Keywords\KeywordList;
 use MetaModels\Attribute\ISimple;
 use MetaModels\Attribute\IInternal;
-use MetaModels\AttributeFileBundle\Doctrine\DBAL\Platforms\Keywords\NotSupportedKeywordList;
 use MetaModels\IMetaModel;
 
 /**
@@ -203,11 +202,14 @@ class FileOrder implements ISimple, IInternal
     public function setDataFor($arrValues)
     {
         foreach ($arrValues as $id => $value) {
-            $this->connection->update(
-                $this->quoteReservedWord($this->getMetaModel()->getTableName()),
-                [$this->quoteReservedWord($this->getColName()) => $value ?: $this->serializeData([])],
-                [$this->quoteReservedWord('id') => $id]
-            );
+            $this->connection
+                ->createQueryBuilder()
+                ->update($this->getMetaModel()->getTableName(), 't')
+                ->set('t.' . $this->getColName(), ':' . $this->getColName())
+                ->set('t.id', ':id')
+                ->setParameter($this->getColName(), $value ?: $this->serializeData([]))
+                ->setParameter('id', $id)
+                ->execute();
         }
     }
 
@@ -362,30 +364,5 @@ class FileOrder implements ISimple, IInternal
     public function serializeData($value)
     {
         return \serialize($value);
-    }
-
-    /**
-     * Quote the reserved platform key word.
-     *
-     * @param string $word The key word.
-     *
-     * @return string
-     */
-    private function quoteReservedWord(string $word): string
-    {
-        if (null === $this->platformReservedWord) {
-            try {
-                $this->platformReservedWord = $this->connection->getDatabasePlatform()->getReservedKeywordsList();
-            } catch (DBALException $exception) {
-                // Add the not support key word list, if the platform has not a list of keywords.
-                $this->platformReservedWord = new NotSupportedKeywordList();
-            }
-        }
-
-        if (false === $this->platformReservedWord->isKeyword($word)) {
-            return $word;
-        }
-
-        return $this->connection->quoteIdentifier($word);
     }
 }
