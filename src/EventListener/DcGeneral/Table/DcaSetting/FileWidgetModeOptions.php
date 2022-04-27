@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -107,10 +108,10 @@ class FileWidgetModeOptions extends AbstractListener
     {
         $builder = $this->connection->createQueryBuilder();
         $builder
-            ->select('a.type')
-            ->from('tl_metamodel_attribute', 'a')
-            ->where($builder->expr()->eq('a.id', ':attributeId'))
-            ->setParameter(':attributeId', $event->getModel()->getProperty('attr_id'));
+            ->select('t.type')
+            ->from('tl_metamodel_attribute', 't')
+            ->where($builder->expr()->eq('t.id', ':id'))
+            ->setParameter('id', $event->getModel()->getProperty('attr_id'));
 
         $statement = $builder->execute();
         if (0 === $statement->columnCount()) {
