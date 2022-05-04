@@ -206,7 +206,7 @@ class FileOrder implements ISimple, IInternal
                 ->createQueryBuilder()
                 ->update($this->getMetaModel()->getTableName(), 't')
                 ->set('t.' . $this->getColName(), ':' . $this->getColName())
-                ->set('t.id', ':id')
+                ->where('t.id=:id')
                 ->setParameter($this->getColName(), $value ?: $this->serializeData([]))
                 ->setParameter('id', $id)
                 ->execute();
