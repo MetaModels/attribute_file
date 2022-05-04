@@ -347,7 +347,7 @@ class File extends BaseComplex
                 ->createQueryBuilder()
                 ->update($this->getMetaModel()->getTableName(), 't')
                 ->set('t.' . $this->getColName(), ':' . $this->getColName())
-                ->set('t.id', ':id')
+                ->where('t.id=:id')
                 ->setParameter($this->getColName(), $files)
                 ->setParameter('id', $id)
                 ->execute();
