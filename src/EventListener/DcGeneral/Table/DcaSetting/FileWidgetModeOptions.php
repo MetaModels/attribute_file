@@ -94,7 +94,7 @@ class FileWidgetModeOptions extends AbstractListener
             );
         }
 
-        $event->setOptions(\array_unique(\array_merge($event->getOptions(), $addOptions)));
+        $event->setOptions(\array_values(\array_unique(\array_merge($event->getOptions(), $addOptions))));
     }
 
     /**
