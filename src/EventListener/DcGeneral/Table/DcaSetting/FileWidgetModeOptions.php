@@ -113,13 +113,13 @@ class FileWidgetModeOptions extends AbstractListener
             ->where($builder->expr()->eq('t.id', ':id'))
             ->setParameter('id', $event->getModel()->getProperty('attr_id'));
 
-        $statement = $builder->execute();
+        $statement = $builder->executeQuery();
         if (0 === $statement->columnCount()) {
             return false;
         }
 
-        $result = $statement->fetch(\PDO::FETCH_OBJ);
-        return 'file' === $result->type;
+        $result = $statement->fetchAssociative();
+        return 'file' === $result['type'];
     }
 
     /**

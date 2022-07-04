@@ -248,7 +248,7 @@ class File extends BaseComplex
             ->where($builder->expr()->in($this->getColName(), $subSelect->getSQL()))
             ->setParameter('value', \str_replace(['*', '?'], ['%', '_'], $strPattern));
 
-        return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $builder->executeQuery()->fetchFirstColumn();
     }
 
     /**
@@ -288,10 +288,10 @@ class File extends BaseComplex
             $builder->addSelect($this->getColName() . '__sort AS file_sort');
         }
 
-        $query = $builder->execute();
+        $query = $builder->executeQuery();
 
         $data  = [];
-        while ($result = $query->fetch(\PDO::FETCH_OBJ)) {
+        while ($result = $query->fetchFirstColumn()) {
             $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result->file, true));
 
             if ($hasSort) {
