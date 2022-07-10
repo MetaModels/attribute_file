@@ -268,7 +268,7 @@ class File extends BaseComplex
             $builder->set('t.' . $this->getColName() . '__sort', ':null');
         }
 
-        $builder->execute();
+        $builder->executeQuery();
     }
 
     /**
@@ -291,12 +291,12 @@ class File extends BaseComplex
         $query = $builder->executeQuery();
 
         $data  = [];
-        while ($result = $query->fetchFirstColumn()) {
-            $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result->file, true));
+        while ($result = $query->fetchAssociative()) {
+            $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result['file'], true));
 
             if ($hasSort) {
                 // The sort key be can remove in later version. The new sort key is bin_sorted.
-                $row['sort'] = $sorted = $this->stringUtil->deserialize($result->file_sort, true);
+                $row['sort'] = $sorted = $this->stringUtil->deserialize($result['file_sort'], true);
 
                 foreach ($this->toolboxFile->convertValuesToMetaModels($sorted) as $sortedKey => $sortedValue) {
                     $row[$sortedKey . '_sorted'] = $sortedValue;
@@ -313,7 +313,7 @@ class File extends BaseComplex
                 }
             }
 
-            $data[$result->id] = $row;
+            $data[$result['id']] = $row;
         }
 
         return $data;

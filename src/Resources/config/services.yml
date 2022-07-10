@@ -5,13 +5,13 @@ services:
         public: true
 
     metamodels.attribute_file.cache_system:
-        class: Doctrine\Common\Cache\FilesystemCache
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
         public: false
         arguments:
             - "%metamodels.attribute_file.cache_dir%"
 
     metamodels.attribute_file.cache:
-        class: Cache\Adapter\Doctrine\DoctrineCachePool
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
         public: false
         arguments:
             - "@metamodels.attribute_file.cache_system"
