@@ -48,8 +48,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode'] = [
 ];
 
 // Load configuration for the frontend editing.
-if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer()->getParameter('kernel.bundles'), true)) {
-    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'] = [
+if (\in_array(
+    MetaModelsContaoFrontendEditingBundle::class,
+    System::getContainer()->getParameter('kernel.bundles'),
+    true
+)) {
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['eval']['submitOnChange'] = true;
+
+    $uploadSettings = [
         'upload_settings' => [
             'fe_widget_file_useHomeDir',
             'fe_widget_file_uploadFolder',
@@ -64,23 +70,33 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         ]
     ];
 
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'] =
+        $uploadSettings;
+
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload_preview'] =
-        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'];
+        \array_merge_recursive(
+            $uploadSettings,
+            ['upload_settings' => ['fe_widget_file_imageSize']]
+        );
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_multiple_upload'] =
-        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'];
+        \array_merge_recursive(
+            $uploadSettings,
+            ['upload_settings' => ['fe_widget_file_sortBy']]
+        );
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_multiple_upload_preview'] =
-        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['file_widgetMode']['fe_single_upload'];
-
-    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode']['eval']['submitOnChange'] = true;
+        \array_merge_recursive(
+            $uploadSettings,
+            ['upload_settings' => ['fe_widget_file_sortBy', 'fe_widget_file_imageSize']]
+        );
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_useHomeDir'] = [
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'],
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 cbx m12',
+            'tl_class' => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -90,8 +106,8 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'fileTree',
         'eval'      => [
-            'fieldType' =>'radio',
-            'tl_class'  =>'w50'
+            'fieldType' => 'radio',
+            'tl_class'  => 'w50'
         ],
         'sql'       => "binary(16) NULL"
     ];
@@ -101,7 +117,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 cbx m12 clr',
+            'tl_class' => 'w50 cbx m12 clr',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -111,7 +127,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 clr cbx m12',
+            'tl_class' => 'w50 clr cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -121,7 +137,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 cbx m12',
+            'tl_class' => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -130,7 +146,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'],
         'inputType' => 'text',
         'eval'      => [
-            'tl_class'      => 'w50 clr'
+            'tl_class' => 'w50 clr'
         ],
         'sql'       => "longtext"
     ];
@@ -140,7 +156,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 cbx m12',
+            'tl_class' => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -150,7 +166,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => [
-            'tl_class'  => 'w50 cbx m12',
+            'tl_class' => 'w50 cbx m12',
         ],
         'sql'       => "char(1) NOT NULL default ''",
     ];
@@ -159,7 +175,7 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_prefix_filename'],
         'inputType' => 'text',
         'eval'      => [
-            'tl_class'      => 'w50 clr'
+            'tl_class' => 'w50 clr'
         ],
         'sql'       => "longtext"
     ];
@@ -168,8 +184,37 @@ if (\in_array(MetaModelsContaoFrontendEditingBundle::class, System::getContainer
         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'],
         'inputType' => 'text',
         'eval'      => [
-            'tl_class'      => 'w50'
+            'tl_class' => 'w50'
         ],
         'sql'       => "longtext"
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_sortBy'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_sortBy'],
+        'exclude'   => true,
+        'inputType' => 'select',
+        'options'   => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'random'],
+        'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting'],
+        'sql'       => 'varchar(32) NOT NULL default \'\'',
+        'eval'      => [
+            'tl_class' => 'w50',
+            'chosen'   => true
+        ]
+    ];
+
+    $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_imageSize'] = [
+        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_imageSize'],
+        'exclude'   => true,
+        'inputType' => 'imageSize',
+        'options'   => $GLOBALS['TL_CROP'],
+        'reference' => &$GLOBALS['TL_LANG']['MSC'],
+        'sql'       => 'varchar(255) NOT NULL default \'\'',
+        'eval'      => [
+            'rgxp'               => 'digit',
+            'includeBlankOption' => true,
+            'nospace'            => true,
+            'helpwizard'         => true,
+            'tl_class'           => 'w50'
+        ]
     ];
 }
