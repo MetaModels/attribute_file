@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -170,6 +171,8 @@ final class BuildFrontendUploadListener
             'prefixFilename'        => $this->getPrefixFilename($event),
             'postfixFilename'       => $this->getPostfixFilename($event),
             'storeFile'             => true,
+            'imageSize'             => $this->information['fe_widget_file_imageSize'],
+            'sortBy'                => $this->information['fe_widget_file_sortBy'],
         ];
 
         $previewModes = ['fe_single_upload_preview', 'fe_multiple_upload_preview'];

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -75,5 +75,19 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'][1]        =
     'Here you can postfix the filename. The Contao insert tags are supported to postfix the filename. ' .
     'The insert tags from the custom sql filter work here too.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_imageSize'][0]               =
+    'Thumbnail width and height';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_imageSize'][1]               =
+    'Please enter either the image width, the image height or both measures to resize the image. If you leave both ' .
+    'fields blank, the original image size will be displayed.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_sortBy'][0]                  = 'Order by';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_sortBy'][1]                  =
+    'Please choose the sort order.';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['upload_settings_legend'] = 'File upload settings';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_asc']  = 'File name (ascending)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_desc'] = 'File name (descending)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['date_asc']  = 'Date (ascending)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['date_desc'] = 'Date (descending)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['random']    = 'Random order';
