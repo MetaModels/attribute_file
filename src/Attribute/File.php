@@ -340,7 +340,7 @@ class File extends BaseComplex
             if ($this->get('file_multiple')) {
                 $files = \serialize($files);
             } else {
-                $files = $files[0];
+                $files = $files[0] ?? null;
             }
 
             $this->connection
@@ -350,7 +350,7 @@ class File extends BaseComplex
                 ->where('t.id=:id')
                 ->setParameter($this->getColName(), $files)
                 ->setParameter('id', $id)
-                ->execute();
+                ->executeQuery();
         }
     }
 
@@ -411,7 +411,7 @@ class File extends BaseComplex
             return \serialize($data);
         }
 
-        return $data[0];
+        return $data[0] ?? '';
     }
 
     /**
