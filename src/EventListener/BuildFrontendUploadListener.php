@@ -320,7 +320,7 @@ final class BuildFrontendUploadListener
             $this->getInputProvider()->setValue($this->columnId->getName(), $this->autoincrement);
         }
 
-        $replaced = $this->replaceParam->replace(
+        $replaced = (string) $this->replaceParam->replace(
             $this->replaceTableName->replace(
                 $event->getContainer()->getName(),
                 StringUtil::decodeEntities($replace)
