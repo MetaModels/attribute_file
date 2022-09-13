@@ -38,7 +38,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_up
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_multiple_upload']         =
     'Multiple file upload [only for frontend editing]';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_multiple_upload_preview'] =
-    'Multiple file upload with show thumbnail  [only for frontend editing]';
+    'Multiple file upload with show thumbnail [only for frontend editing]';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'][0]          = 'Preserve existing files';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'][1]          =
