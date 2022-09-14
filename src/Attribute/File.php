@@ -39,6 +39,7 @@ use Contao\Validator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\Keywords\KeywordList;
 use MetaModels\Attribute\BaseComplex;
+use MetaModels\Attribute\ISchemaManagedAttribute;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
@@ -47,7 +48,7 @@ use MetaModels\Render\Template;
 /**
  * This is the MetaModel attribute class for handling file fields.
  */
-class File extends BaseComplex
+class File extends BaseComplex implements ISchemaManagedAttribute
 {
     /**
      * The database connection.

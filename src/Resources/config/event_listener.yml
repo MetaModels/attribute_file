@@ -66,3 +66,7 @@ services:
         tags:
             -   name: kernel.event_listener
                 event: dc-general.view.contao2backend.get-property-options
+
+    MetaModels\AttributeFileBundle\Schema\DoctrineSchemaGenerator:
+      tags:
+        - { name: 'metamodels.schema-generator.doctrine' }
