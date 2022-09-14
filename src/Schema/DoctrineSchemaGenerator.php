@@ -22,7 +22,7 @@ declare(strict_types = 1);
 namespace MetaModels\AttributeFileBundle\Schema;
 
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use MetaModels\Information\AttributeInformation;
 use MetaModels\Schema\Doctrine\AbstractAttributeTypeSchemaGenerator;
 
@@ -44,12 +44,12 @@ class DoctrineSchemaGenerator extends AbstractAttributeTypeSchemaGenerator
      */
     protected function generateAttribute(Table $tableSchema, AttributeInformation $attribute): void
     {
-        $this->setColumnData($tableSchema, $attribute->getName(), Type::BLOB, [
+        $this->setColumnData($tableSchema, $attribute->getName(), Types::BLOB, [
             'notnull' => false,
         ]);
 
         if ($attribute->getConfigurationValue('file_multiple')) {
-            $this->setColumnData($tableSchema, $attribute->getName() . '__sort', Type::BLOB, [
+            $this->setColumnData($tableSchema, $attribute->getName() . '__sort', Types::BLOB, [
                 'notnull' => false,
             ]);
         }

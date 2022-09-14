@@ -23,6 +23,7 @@ namespace MetaModels\AttributeFileBundle\Test\Schema;
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use MetaModels\AttributeFileBundle\Schema\DoctrineSchemaGenerator;
 use MetaModels\Information\AttributeInformation;
 use PHPUnit\Framework\TestCase;
@@ -51,7 +52,7 @@ class DoctrineSchemaGeneratorTest extends TestCase
         $this->assertTrue($tableSchema->hasColumn('test'));
         $column = $tableSchema->getColumn('test');
         $this->assertSame('test', $column->getName());
-        $this->assertSame(Type::getType(Type::BLOB), $column->getType());
+        $this->assertSame(Type::getType(Types::BLOB), $column->getType());
         $this->assertSame(false, $column->getNotnull());
 
         $this->assertFalse($tableSchema->hasColumn('test__sort'));
@@ -76,13 +77,13 @@ class DoctrineSchemaGeneratorTest extends TestCase
         $this->assertTrue($tableSchema->hasColumn('test'));
         $column = $tableSchema->getColumn('test');
         $this->assertSame('test', $column->getName());
-        $this->assertSame(Type::getType(Type::BLOB), $column->getType());
+        $this->assertSame(Type::getType(Types::BLOB), $column->getType());
         $this->assertSame(false, $column->getNotnull());
 
         $this->assertTrue($tableSchema->hasColumn('test__sort'));
         $column = $tableSchema->getColumn('test__sort');
         $this->assertSame('test__sort', $column->getName());
-        $this->assertSame(Type::getType(Type::BLOB), $column->getType());
+        $this->assertSame(Type::getType(Types::BLOB), $column->getType());
         $this->assertSame(false, $column->getNotnull());
     }
 }
