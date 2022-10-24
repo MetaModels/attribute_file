@@ -32,7 +32,7 @@
     "source": "https://github.com/MetaModels/attribute_file"
   },
   "require": {
-    "php": "^7.4 || ^8.0",
+    "php": "^8.1",
     "contao-community-alliance/dc-general": "^2.3@dev",
     "contao/core-bundle": "^4.13.0, <5.0",
     "metamodels/core": "^2.3@dev",
@@ -40,25 +40,12 @@
     "symfony/dependency-injection": "^5.4",
     "symfony/http-kernel": "^5.4"
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://token:3NGK_ffTb0VUjDNvaJnN82sXF0jI0_M9KAzTBHy3PjReTaGY_r9K1nG8DYgPcT5l@packages.cyberspectrum.de/r"
-    }
-  ],
   "require-dev": {
     "contao/manager-plugin": "^2.1",
-    "contao-community-alliance/dependency-container": "^2.1@dev",
-    "contao-community-alliance/events-contao-bindings": "^4.10@dev",
-    "contao-community-alliance/event-dispatcher": "^2.1@dev",
-    "contao-community-alliance/translator": "^2.3@dev",
-    "discordier/justtextwidgets": "dev-release/1.3.0 as 1.3.0",
     "metamodels/contao-frontend-editing": "^2.3@dev",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "phpcq/all-tasks": "^1.3"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "MetaModels\\AttributeFileBundle\\": "src"
