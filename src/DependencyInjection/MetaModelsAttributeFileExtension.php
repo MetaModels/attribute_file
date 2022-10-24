@@ -54,6 +54,10 @@ class MetaModelsAttributeFileExtension extends Extension
         }
 
         $this->addFrontendEditingArgument($container, $frontendEditing);
+
+        $managedSchemaTypeNames = $container->getParameter('metamodels.managed-schema-type-names') ?? [];
+        $managedSchemaTypeNames[] = 'file';
+        $container->setParameter('metamodels.managed-schema-type-names', $managedSchemaTypeNames);
     }
 
     /**
