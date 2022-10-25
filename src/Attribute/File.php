@@ -517,7 +517,7 @@ class File extends BaseComplex
     {
         parent::prepareTemplate($template, $rowData, $settings);
 
-        $value = $rowData[$this->getColName()];
+        $value = $rowData[$this->getColName()] ?? null;
 
         // No data and show image, check placeholder.
         if (!($value['bin'] ?? null)) {
