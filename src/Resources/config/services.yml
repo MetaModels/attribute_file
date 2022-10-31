@@ -16,6 +16,13 @@ services:
         arguments:
             - "@metamodels.attribute_file.cache_system"
 
+    MetaModels\AttributeFileBundle\Migration\AddSortFieldMigration:
+      arguments:
+        - '@database_connection'
+        - '@metamodels.table_manipulator'
+      tags:
+        - name: contao.migration
+
     MetaModels\AttributeFileBundle\Migration\AddProtectedDownloadMigration:
       arguments:
         - '@database_connection'
