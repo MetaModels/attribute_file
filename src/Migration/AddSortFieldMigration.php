@@ -140,7 +140,7 @@ class AddSortFieldMigration extends AbstractMigration
             ->setParameter('type', 'file')
             ->andWhere('attribute.file_multiple=:multiple')
             ->setParameter('multiple', '1')
-            ->executeQuery();
+            ->execute();
     }
 
     /**
