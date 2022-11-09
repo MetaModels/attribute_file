@@ -24,6 +24,7 @@ namespace MetaModels\AttributeFileBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Result;
 use MetaModels\Helper\TableManipulator;
 
 /**
@@ -125,9 +126,9 @@ class AddSortFieldMigration extends AbstractMigration
     /**
      * Get file attributes.
      *
-     * @return \Doctrine\DBAL\Result Returns database result.
+     * @return Result Returns database result.
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\DBAL\Exception The DBAL exception.
      */
     private function getFileAttributes()
     {
@@ -147,11 +148,11 @@ class AddSortFieldMigration extends AbstractMigration
     /**
      * Count missing sort columns.
      *
-     * @param $attributes The attribute.
+     * @param Result $attributes The attributes.
      *
      * @return int Returns columns count.
      */
-    private function countMissingSortColumns($attributes)
+    private function countMissingSortColumns($attributes): int
     {
         $countColumns = 0;
 
