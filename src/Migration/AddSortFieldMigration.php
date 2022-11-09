@@ -49,8 +49,8 @@ class AddSortFieldMigration extends AbstractMigration
     /**
      * Create a new instance.
      *
-     * @param Connection       $connection The database connection.
-     * @param TableManipulator $tableManipulator
+     * @param Connection       $connection       The database connection.
+     * @param TableManipulator $tableManipulator The table manipulator.
      */
     public function __construct(Connection $connection, TableManipulator $tableManipulator)
     {
@@ -125,7 +125,8 @@ class AddSortFieldMigration extends AbstractMigration
     /**
      * Get file attributes.
      *
-     * @return \Doctrine\DBAL\Result
+     * @return \Doctrine\DBAL\Result Returns database result.
+     *
      * @throws \Doctrine\DBAL\Exception
      */
     private function getFileAttributes()
@@ -146,11 +147,10 @@ class AddSortFieldMigration extends AbstractMigration
     /**
      * Count missing sort columns.
      *
-     * @param $attributes
+     * @param $attributes The attribute.
      *
-     * @return int
+     * @return int Returns columns count.
      */
-
     private function countMissingSortColumns($attributes)
     {
         $countColumns = 0;

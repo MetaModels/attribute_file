@@ -99,13 +99,6 @@ class File extends BaseComplex
     private $config;
 
     /**
-     * The platform reserved keyword list.
-     *
-     * @var KeywordList
-     */
-    private $platformReservedWord;
-
-    /**
      * Create a new instance.
      *
      * @param IMetaModel              $metaModel        The MetaModel instance this attribute belongs to.
@@ -290,7 +283,7 @@ class File extends BaseComplex
 
         $query = $builder->execute();
 
-        $data  = [];
+        $data = [];
         while ($result = $query->fetch(\PDO::FETCH_OBJ)) {
             $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result->file, true));
 
@@ -512,6 +505,8 @@ class File extends BaseComplex
 
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function prepareTemplate(Template $template, $rowData, $settings)
     {
@@ -520,7 +515,7 @@ class File extends BaseComplex
         $value = $rowData[$this->getColName()];
 
         // No data and show image, check placeholder.
-        if (!$value['bin'] ?? null) {
+        if (!($value['bin'] ?? null)) {
             if (null === $settings->get('file_showImage')
                 || null === ($placeholder = $settings->get('file_placeholder'))) {
                 $template->files = [];
@@ -529,7 +524,7 @@ class File extends BaseComplex
                 return;
             }
 
-            $value['bin'][] = $placeholder;
+            $value['bin'][]   = $placeholder;
             $value['value'][] = StringUtil::binToUuid($placeholder);
         }
 
