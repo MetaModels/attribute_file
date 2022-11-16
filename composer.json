@@ -40,8 +40,8 @@
     "contao/core-bundle": "^4.9.0, <4.13.0",
     "metamodels/core": "^2.2",
     "psr/simple-cache": "^1.0",
-    "symfony/dependency-injection": "4.4.*",
-    "symfony/event-dispatcher": "4.4.*",
+    "symfony/dependency-injection": "^4.4.6",
+    "symfony/event-dispatcher": "^4.4.6",
     "symfony/http-kernel": "~4.4.13"
   },
   "require-dev": {
