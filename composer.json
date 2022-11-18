@@ -32,16 +32,12 @@
     "source": "https://github.com/MetaModels/attribute_file"
   },
   "require": {
-    "php": "^7.4 || ^8.0",
-    "ext-pdo": "*",
-    "cache/array-adapter": "^1.0",
-    "cache/doctrine-adapter": "^1.0",
+    "php": "^8.1",
     "contao-community-alliance/dc-general": "^2.3@dev",
     "contao/core-bundle": "^4.13.0, <5.0",
     "metamodels/core": "^2.3@dev",
     "symfony/cache": "^5.4",
     "symfony/dependency-injection": "^5.4",
-    "symfony/event-dispatcher": "^5.4",
     "symfony/http-kernel": "^5.4"
   },
   "require-dev": {
