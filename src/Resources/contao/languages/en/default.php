@@ -10,15 +10,14 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels/attribute_file
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @package    MetaModels
+ * @subpackage AttributeFile
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-// Let our handler handle the necessary steps.
-$handler = new MetaModels\AttributeFileBundle\Helper\UpgradeHandler(
-    \Contao\System::getContainer()->get('database_connection')
-);
-$handler->perform();
+$GLOBALS['TL_LANG']['ERR']['both_input_not_match'] =
+    'The %s does not match the %s . Please check both entries.';
+

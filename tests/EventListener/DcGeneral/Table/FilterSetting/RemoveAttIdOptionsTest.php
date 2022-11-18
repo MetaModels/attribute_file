@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -41,27 +41,23 @@ class RemoveAttIdOptionsTest extends TestCase
         $environment = $this->getMockForAbstractClass(EnvironmentInterface::class);
 
         $environment
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getDataDefinition')
-            ->will(
-                $this->returnCallback(
-                    function () use (&$dataDefinition) {
-                        return $dataDefinition;
-                    }
-                )
+            ->willReturnCallback(
+                function () use (&$dataDefinition) {
+                    return $dataDefinition;
+                }
             );
 
         $environment
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('setDataDefinition')
-            ->will(
-                $this->returnCallback(
-                    function (ContainerInterface $container) use (&$dataDefinition, $environment) {
-                        $dataDefinition = $container;
+            ->willReturnCallback(
+                function (ContainerInterface $container) use (&$dataDefinition, $environment) {
+                    $dataDefinition = $container;
 
-                        return $environment;
-                    }
-                )
+                    return $environment;
+                }
             );
 
         return $environment;
@@ -72,7 +68,7 @@ class RemoveAttIdOptionsTest extends TestCase
         $dataDefinition = $this->getMockForAbstractClass(ContainerInterface::class);
 
         $dataDefinition
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getName')
             ->willReturn($name);
 
@@ -112,8 +108,8 @@ class RemoveAttIdOptionsTest extends TestCase
         $event = new GetPropertyOptionsEvent($environment, $this->mockModel());
         $event->setPropertyName($propertyName);
         $event->setOptions($options);
-        $dispatcher->dispatch($event::NAME, $event);
+        $dispatcher->dispatch($event, $event::NAME);
 
-        $this->assertSame($expected, $event->getOptions());
+        self::assertSame($expected, $event->getOptions());
     }
 }

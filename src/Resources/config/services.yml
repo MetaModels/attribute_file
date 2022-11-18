@@ -1,7 +1,31 @@
 services:
     metamodels.attribute_file.toolbox.file:
-        class: MetaModels\Helper\ToolboxFile
+        deprecated: 'The "%alias_id%" service is deprecated. Use the "@MetaModels\Helper\ToolboxFile".'
+        alias: MetaModels\Helper\ToolboxFile
         public: true
+
+    metamodels.attribute_file.cache_system:
+        class: Doctrine\Common\Cache\FilesystemCache
+        public: false
         arguments:
-            - "@contao.image.image_factory"
-            - "%kernel.project_dir%"
+            - "%metamodels.attribute_file.cache_dir%"
+
+    metamodels.attribute_file.cache:
+        class: Cache\Adapter\Doctrine\DoctrineCachePool
+        public: false
+        arguments:
+            - "@metamodels.attribute_file.cache_system"
+
+    MetaModels\AttributeFileBundle\Migration\AddSortFieldMigration:
+      arguments:
+        - '@database_connection'
+        - '@metamodels.table_manipulator'
+      tags:
+        - name: contao.migration
+
+    MetaModels\AttributeFileBundle\Migration\AddProtectedDownloadMigration:
+      arguments:
+        - '@database_connection'
+        - '@metamodels.table_manipulator'
+      tags:
+        - name: contao.migration

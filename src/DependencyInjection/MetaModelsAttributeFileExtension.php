@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,16 @@
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeFileBundle\DependencyInjection;
 
+use Doctrine\Common\Cache\ArrayCache;
+use MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\FileWidgetModeOptions;
+use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -39,5 +42,63 @@ class MetaModelsAttributeFileExtension extends Extension
         $loader->load('factory.yml');
         $loader->load('event_listener.yml');
         $loader->load('services.yml');
+
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $this->buildCacheService($container, $config);
+
+        $frontendEditing = false;
+        // Load configuration for the frontend editing.
+        if (\in_array(MetaModelsContaoFrontendEditingBundle::class, $container->getParameter('kernel.bundles'), true)) {
+            $frontendEditing = true;
+            $loader->load('frontend_editing/event_listener.yml');
+        }
+
+        $this->addFrontendEditingArgument($container, $frontendEditing);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration(
+            $container->getParameter('kernel.debug'),
+            $container->getParameter('metamodels.cache_dir')
+        );
+    }
+
+    /**
+     * Build the cache service.
+     *
+     * @param ContainerBuilder $container The container builder.
+     * @param array            $config    The configuration.
+     *
+     * @return void
+     */
+    private function buildCacheService(ContainerBuilder $container, array $config)
+    {
+        // if cache disabled, swap it out with the dummy cache.
+        if (!$config['enable_cache']) {
+            $cache = $container->getDefinition('metamodels.attribute_file.cache_system');
+            $cache->setClass(ArrayCache::class);
+            $cache->setArguments([]);
+            $container->setParameter('metamodels.attribute_file.cache_dir', null);
+            return;
+        }
+
+        $container->setParameter('metamodels.attribute_file.cache_dir', $config['cache_dir']);
+    }
+
+    /**
+     * Add the frontend editing argument to service, who it used.
+     *
+     * @param ContainerBuilder $container       The container builder.
+     * @param bool             $frontendEditing Is frontend editing extension installed.
+     *
+     * @return void
+     */
+    private function addFrontendEditingArgument(ContainerBuilder $container, bool $frontendEditing): void
+    {
+        $container->getDefinition(FileWidgetModeOptions::class)->setArgument('$frontendEditing', $frontendEditing);
     }
 }

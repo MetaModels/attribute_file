@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,8 @@
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,10 +37,8 @@ use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\Keywords\KeywordList;
 use MetaModels\Attribute\BaseComplex;
-use MetaModels\AttributeFileBundle\Doctrine\DBAL\Platforms\Keywords\NotSupportedKeywordList;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
@@ -98,13 +97,6 @@ class File extends BaseComplex
      * @var Adapter|Config|null
      */
     private $config;
-
-    /**
-     * The platform reserved keyword list.
-     *
-     * @var KeywordList
-     */
-    private $platformReservedWord;
 
     /**
      * Create a new instance.
@@ -227,8 +219,8 @@ class File extends BaseComplex
     {
         parent::initializeAUX();
         if ($colName = $this->getColName()) {
-            $tableName = $this->quoteReservedWord($this->getMetaModel()->getTableName());
-            $this->tableManipulator->createColumn($tableName, $this->quoteReservedWord($colName), 'blob NULL');
+            $tableName = $this->getMetaModel()->getTableName();
+            $this->tableManipulator->createColumn($tableName, $colName, 'blob NULL');
         }
     }
 
@@ -239,14 +231,14 @@ class File extends BaseComplex
     {
         $subSelect = $this->connection->createQueryBuilder();
         $subSelect
-            ->select($this->quoteReservedWord('uuid'))
-            ->from($this->quoteReservedWord('tl_files'))
-            ->where($subSelect->expr()->like($this->quoteReservedWord('path'), ':value'));
+            ->select('f.uuid')
+            ->from('tl_files', 'f')
+            ->where($subSelect->expr()->like('f.path', ':value'));
         $builder = $this->connection->createQueryBuilder();
         $builder
-            ->select($this->quoteReservedWord('id'))
-            ->from($this->getMetaModel()->getTableName())
-            ->where($builder->expr()->in($this->quoteReservedWord($this->getColName()), $subSelect->getSQL()))
+            ->select('t.id')
+            ->from($this->getMetaModel()->getTableName(), 't')
+            ->where($builder->expr()->in($this->getColName(), $subSelect->getSQL()))
             ->setParameter('value', \str_replace(['*', '?'], ['%', '_'], $strPattern));
 
         return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
@@ -259,14 +251,14 @@ class File extends BaseComplex
     {
         $builder = $this->connection->createQueryBuilder();
         $builder
-            ->update($this->quoteReservedWord($this->getMetaModel()->getTableName()))
-            ->set($this->quoteReservedWord($this->getColName()), ':null')
-            ->where($builder->expr()->in($this->quoteReservedWord('id'), ':values'))
-            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->setParameter('null', null);
+            ->update($this->getMetaModel()->getTableName(), 't')
+            ->set('t.' . $this->getColName(), ':null')
+            ->where($builder->expr()->in('t.id', ':values'))
+            ->setParameter('null', null)
+            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY);
 
         if ($this->getMetaModel()->hasAttribute($this->getColName() . '__sort')) {
-            $builder->set($this->quoteReservedWord($this->getColName() . '__sort'), ':null');
+            $builder->set('t.' . $this->getColName() . '__sort', ':null');
         }
 
         $builder->execute();
@@ -279,22 +271,19 @@ class File extends BaseComplex
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $idField   = $this->quoteReservedWord('id');
-        $aliasFile = $this->quoteReservedWord('file');
         $builder
-            ->select($idField, ' ' . $this->quoteReservedWord($this->getColName()) . ' ' . $aliasFile)
-            ->from($this->getMetaModel()->getTableName())
-            ->where($builder->expr()->in($idField, ':values'))
+            ->select('t.id', 't.' . $this->getColName() . ' AS file')
+            ->from($this->getMetaModel()->getTableName(), 't')
+            ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY);
 
         if ($hasSort = $this->getMetaModel()->hasAttribute($this->getColName() . '__sort')) {
-            $sortField     = $this->quoteReservedWord($this->getColName() . '__sort');
-            $aliasFileSort = $this->quoteReservedWord('file_sort');
-            $builder->addSelect($sortField . ' ' . $aliasFileSort);
+            $builder->addSelect($this->getColName() . '__sort AS file_sort');
         }
 
         $query = $builder->execute();
-        $data  = [];
+
+        $data = [];
         while ($result = $query->fetch(\PDO::FETCH_OBJ)) {
             $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result->file, true));
 
@@ -332,8 +321,6 @@ class File extends BaseComplex
      */
     public function setDataFor($arrValues)
     {
-        $tableName = $this->getMetaModel()->getTableName();
-        $colName   = $this->getColName();
         foreach ($arrValues as $id => $value) {
             if (null === $value) {
                 // The sort key be can remove in later version.
@@ -349,11 +336,14 @@ class File extends BaseComplex
                 $files = $files[0];
             }
 
-            $this->connection->update(
-                $this->quoteReservedWord($tableName),
-                [$this->quoteReservedWord($colName) => $files],
-                [$this->quoteReservedWord('id') => $id]
-            );
+            $this->connection
+                ->createQueryBuilder()
+                ->update($this->getMetaModel()->getTableName(), 't')
+                ->set('t.' . $this->getColName(), ':' . $this->getColName())
+                ->where('t.id=:id')
+                ->setParameter($this->getColName(), $files)
+                ->setParameter('id', $id)
+                ->execute();
         }
     }
 
@@ -447,8 +437,17 @@ class File extends BaseComplex
             $arrFieldDef['eval']['extensions'] = $this->get('file_validFileTypes');
         }
 
-        if ($this->get('file_filesOnly')) {
-            $arrFieldDef['eval']['filesOnly'] = true;
+        switch ($this->get('file_filesOnly')) {
+            case '1':
+                // Files only.
+                $fieldDefinition['eval']['filesOnly'] = true;
+                break;
+            case '2':
+                // Folders only.
+                $fieldDefinition['eval']['files'] = false;
+                break;
+            default:
+                // Files and files possible.
         }
     }
 
@@ -506,14 +505,27 @@ class File extends BaseComplex
 
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function prepareTemplate(Template $template, $rowData, $settings)
     {
         parent::prepareTemplate($template, $rowData, $settings);
 
-        // No data, nothing to do.
-        if (!$rowData[$this->getColName()]) {
-            return;
+        $value = $rowData[$this->getColName()];
+
+        // No data and show image, check placeholder.
+        if (!($value['bin'] ?? null)) {
+            if (null === $settings->get('file_showImage')
+                || null === ($placeholder = $settings->get('file_placeholder'))) {
+                $template->files = [];
+                $template->src   = [];
+
+                return;
+            }
+
+            $value['bin'][]   = $placeholder;
+            $value['value'][] = StringUtil::binToUuid($placeholder);
         }
 
         $toolbox = clone $this->toolboxFile;
@@ -539,8 +551,6 @@ class File extends BaseComplex
             $toolbox->setResizeImages($settings->get('file_imageSize'));
         }
 
-        $value = $rowData[$this->getColName()];
-
         if (isset($value['value'])) {
             foreach ($value['value'] as $strFile) {
                 $toolbox->addPathById($strFile);
@@ -553,35 +563,12 @@ class File extends BaseComplex
             $toolbox->addPathById($value);
         }
 
+        $toolbox->withDownloadKeys($settings->get('file_showLink') && $settings->get('file_protectedDownload'));
+
         $toolbox->resolveFiles();
         $data = $toolbox->sortFiles($settings->get('file_sortBy'), ($value['bin_sorted'] ?? []));
 
         $template->files = $data['files'];
         $template->src   = $data['source'];
-    }
-
-    /**
-     * Quote the reserved platform key word.
-     *
-     * @param string $word The key word.
-     *
-     * @return string
-     */
-    private function quoteReservedWord(string $word): string
-    {
-        if (null === $this->platformReservedWord) {
-            try {
-                $this->platformReservedWord = $this->connection->getDatabasePlatform()->getReservedKeywordsList();
-            } catch (DBALException $exception) {
-                // Add the not support key word list, if the platform has not a list of keywords.
-                $this->platformReservedWord = new NotSupportedKeywordList();
-            }
-        }
-
-        if (false === $this->platformReservedWord->isKeyword($word)) {
-            return $word;
-        }
-
-        return $this->connection->quoteIdentifier($word);
     }
 }

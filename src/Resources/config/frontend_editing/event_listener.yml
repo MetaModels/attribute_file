@@ -1,0 +1,17 @@
+services:
+    MetaModels\AttributeFileBundle\EventListener\BuildFrontendUploadListener:
+        public: false
+        calls:
+            -   method: setScopeDeterminator
+                arguments:
+                    - '@cca.dc-general.scope-matcher'
+        arguments:
+            - '@metamodels.view_combination'
+            - '@security.token_storage'
+            - '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName'
+            - '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam'
+            - '@database_connection'
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.dc-general.events.metamodel.build.attribute
+                priority: -128
