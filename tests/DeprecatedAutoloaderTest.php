@@ -26,7 +26,6 @@ use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
 use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
-use MetaModels\AttributeFileBundle\Helper\UpgradeHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,7 +34,6 @@ use PHPUnit\Framework\TestCase;
  * @covers \MetaModels\AttributeFileBundle\Attribute\File
  * @covers \MetaModels\AttributeFileBundle\Attribute\FileOrder
  * @covers \MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory
- * @covers \MetaModels\AttributeFileBundle\Helper\UpgradeHandler
  * @covers \MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition
  * @covers \MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener
  */
@@ -50,7 +48,6 @@ class DeprecatedAutoloaderTest extends TestCase
         'MetaModels\Attribute\File\File'                    => File::class,
         'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
         'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
-        'MetaModels\Attribute\File\Helper\UpgradeHandler'   => UpgradeHandler::class,
         'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
         'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class,
     ];

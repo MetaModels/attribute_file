@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     David Greminger <david.greminger@1up.io>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,7 +25,6 @@ namespace MetaModels\AttributeFileBundle\Test\Attribute;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
@@ -218,14 +217,8 @@ class FileTest extends TestCase
     public function testSearchFor()
     {
         $metaModel    = $this->mockMetaModel('mm_test', 'en');
-        $connection   = $this->mockConnection(['createQueryBuilder', 'getDatabasePlatform']);
+        $connection   = $this->mockConnection(['createQueryBuilder']);
         $manipulator  = $this->mockTableManipulator($connection);
-
-        $platform = $this->getMockForAbstractClass(AbstractPlatform::class);
-        $connection
-            ->expects(self::once())
-            ->method('getDatabasePlatform')
-            ->willReturn($platform);
 
         $statement = $this
             ->getMockBuilder(Statement::class)
@@ -278,7 +271,7 @@ class FileTest extends TestCase
 
         /** @var QueryBuilder $builder2 */
         self::assertSame(
-            'SELECT id FROM mm_test WHERE file_attribute IN (SELECT uuid FROM tl_files WHERE path LIKE :value)',
+            'SELECT t.id FROM mm_test t WHERE file_attribute IN (SELECT f.uuid FROM tl_files f WHERE f.path LIKE :value)',
             $builder2->getSQL()
         );
         self::assertSame(['value' => '%test_value'], $builder2->getParameters());

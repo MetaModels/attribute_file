@@ -99,13 +99,6 @@ class File extends BaseComplex
     private $config;
 
     /**
-     * The platform reserved keyword list.
-     *
-     * @var KeywordList
-     */
-    private $platformReservedWord;
-
-    /**
      * Create a new instance.
      *
      * @param IMetaModel              $metaModel        The MetaModel instance this attribute belongs to.
@@ -290,7 +283,7 @@ class File extends BaseComplex
 
         $query = $builder->executeQuery();
 
-        $data  = [];
+        $data = [];
         while ($result = $query->fetchAssociative()) {
             $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result['file'], true));
 
@@ -512,6 +505,8 @@ class File extends BaseComplex
 
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function prepareTemplate(Template $template, $rowData, $settings)
     {

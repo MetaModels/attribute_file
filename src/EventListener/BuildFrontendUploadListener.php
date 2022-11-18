@@ -194,7 +194,9 @@ final class BuildFrontendUploadListener
 
         $property->setExtra(\array_merge($property->getExtra(), $extra));
 
-        // todo support sorting file. Can be remove if this attribute support order not has hack.
+        // @codingStandardsIgnoreStart
+        // TODO: support sorting file. Can be remove if this attribute support order not has hack.
+        // @codingStandardsIgnoreEnd
         $properties    = $event->getContainer()->getPropertiesDefinition();
         $propertyExtra = $property->getExtra();
         if (isset($propertyExtra['orderField']) && $properties->hasProperty($propertyExtra['orderField'])) {
@@ -294,6 +296,8 @@ final class BuildFrontendUploadListener
      * @param string              $replace The replacement.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function replaceInsertTag(BuildAttributeEvent $event, string $replace): string
     {

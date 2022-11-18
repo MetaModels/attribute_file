@@ -58,13 +58,6 @@ class FileOrder implements ISimple, IInternal
     private $connection;
 
     /**
-     * The platform reserved keyword list.
-     *
-     * @var KeywordList
-     */
-    private $platformReservedWord;
-
-    /**
      * Create a new instance.
      *
      * @param null       $metaModel   The MetaModel.

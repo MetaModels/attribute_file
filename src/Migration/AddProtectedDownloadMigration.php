@@ -49,8 +49,8 @@ class AddProtectedDownloadMigration extends AbstractMigration
     /**
      * Create a new instance.
      *
-     * @param Connection       $connection The database connection.
-     * @param TableManipulator $tableManipulator
+     * @param Connection       $connection       The database connection.
+     * @param TableManipulator $tableManipulator The table manipulator.
      */
     public function __construct(Connection $connection, TableManipulator $tableManipulator)
     {
@@ -65,9 +65,9 @@ class AddProtectedDownloadMigration extends AbstractMigration
      */
     public function getName(): string
     {
-        return 'Add checkbox "Protected download" in MetaModels render-settings if not exist '
-               . 'and set to checked if checkbox "Create link as file download" is set as backward compatibility.'
-               . ' If you do not need this, remove the protection, as no cookies need to be set for this.';
+        return 'Add checkbox "Protected download" in MetaModels render-settings if not exist and set to checked if ' .
+               'checkbox "Create link as file download" is set as backward compatibility. If you do not need this, ' .
+               'remove the protection, as no cookies need to be set for this.';
     }
 
     /**
@@ -86,7 +86,7 @@ class AddProtectedDownloadMigration extends AbstractMigration
         }
 
         if ($this->fieldExists('tl_metamodel_rendersetting', 'file_showLink')
-            && !$this->fieldExists('tl_metamodel_rendersetting','file_protectedDownload')) {
+            && !$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
             return true;
         }
 
