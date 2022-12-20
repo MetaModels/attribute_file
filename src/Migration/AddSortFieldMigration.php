@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Kim Wormer <info@kim-wormer.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -155,8 +156,8 @@ class AddSortFieldMigration extends AbstractMigration
     private function countMissingSortColumns($attributes): int
     {
         $countColumns = 0;
-
-        while ($row = $attributes->fetchAssociative()) {
+        $rows = $attributes->fetchAllAssociative();
+        foreach ($rows as $row) {
             if ($this->fieldExists($row['tableName'], $row['colname'] . '__sort')) {
                 continue;
             }
