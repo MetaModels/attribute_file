@@ -156,11 +156,13 @@ class AddSortFieldMigration extends AbstractMigration
     private function countMissingSortColumns($attributes): int
     {
         $countColumns = 0;
-        $rows = $attributes->fetchAllAssociative();
+        $rows         = $attributes->fetchAllAssociative();
+
         foreach ($rows as $row) {
             if ($this->fieldExists($row['tableName'], $row['colname'] . '__sort')) {
                 continue;
             }
+
             $countColumns++;
         }
 
