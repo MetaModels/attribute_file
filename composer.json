@@ -64,10 +64,7 @@
     }
   },
   "extra": {
-    "contao-manager-plugin": "MetaModels\\AttributeFileBundle\\ContaoManager\\Plugin",
-    "branch-alias": {
-      "dev-hotfix/2.2.2": "2.2.2-dev"
-    }
+    "contao-manager-plugin": "MetaModels\\AttributeFileBundle\\ContaoManager\\Plugin"
   },
   "config": {
     "allow-plugins": {
