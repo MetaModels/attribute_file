@@ -47,7 +47,7 @@ class DoctrineSchemaGenerator extends AbstractAttributeTypeSchemaGenerator
     {
         $this->setColumnData($tableSchema, $attribute->getName(), Types::BLOB, [
             'notnull' => false,
-            'length' => 65535,
+            'length'  => 65535,
         ]);
 
         if ($attribute->getConfigurationValue('file_multiple')) {
