@@ -23,6 +23,10 @@ namespace MetaModels\AttributeFileBundle\Test\DependencyInjection;
 use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\DependencyInjection\MetaModelsAttributeFileExtension;
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
+use MetaModels\AttributeFileBundle\EventListener\BuildAttributeListener;
+use MetaModels\AttributeFileBundle\EventListener\BuildDataDefinitionListener;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
+use MetaModels\AttributeFileBundle\Schema\DoctrineSchemaGenerator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -69,6 +73,51 @@ class MetaModelsAttributeFileExtensionTest extends TestCase
                             $this->assertInstanceOf(Definition::class, $value);
                             $this->assertEquals(AttributeTypeFactory::class, $value->getClass());
                             $this->assertCount(1, $value->getTag('metamodels.attribute_factory'));
+
+                            return true;
+                        }
+                    )
+                ],
+                [
+                    'metamodels.attribute_file.event_listener.image_size_options',
+                    $this->callback(function ($value) {
+                        /** @var Definition $value */
+                        $this->assertInstanceOf(Definition::class, $value);
+                        $this->assertEquals(ImageSizeOptionsListener::class, $value->getClass());
+                        $this->assertCount(1, $value->getTag('kernel.event_listener'));
+
+                        return true;
+                    })
+                ],
+                [
+                    'metamodels.attribute_file.event_listener.build_attribute',
+                    $this->callback(function ($value) {
+                        /** @var Definition $value */
+                        $this->assertInstanceOf(Definition::class, $value);
+                        $this->assertEquals(BuildAttributeListener::class, $value->getClass());
+                        $this->assertCount(1, $value->getTag('kernel.event_listener'));
+
+                        return true;
+                    })
+                ],
+                [
+                    'metamodels.attribute_file.event_listener.build-data-definition',
+                    $this->callback(function ($value) {
+                        /** @var Definition $value */
+                        $this->assertInstanceOf(Definition::class, $value);
+                        $this->assertEquals(BuildDataDefinitionListener::class, $value->getClass());
+                        $this->assertCount(1, $value->getTag('kernel.event_listener'));
+
+                        return true;
+                    })
+                ],
+                [
+                    DoctrineSchemaGenerator::class,
+                    $this->callback(
+                        function ($value) {
+                            /** @var Definition $value */
+                            $this->assertInstanceOf(Definition::class, $value);
+                            $this->assertCount(1, $value->getTag('metamodels.schema-generator.doctrine'));
 
                             return true;
                         }
