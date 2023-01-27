@@ -529,10 +529,13 @@ class File extends BaseComplex
         }
 
         $toolbox = clone $this->toolboxFile;
+        if ($this->getMetaModel()->isTranslated()) {
+            $toolbox
+                ->setBaseLanguage($this->getMetaModel()->getActiveLanguage())
+                ->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage());
+        }
 
         $toolbox
-            ->setBaseLanguage($this->getMetaModel()->getActiveLanguage())
-            ->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage())
             ->setLightboxId(
                 \sprintf(
                     '%s.%s.%s',
