@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/attribute_file.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/el/
+ * Last-updated: 2023-02-01T15:52:28+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2013-05-13T22:12:39+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_asc']            = 'Ημερομηνία (αύξουσα)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['date_desc']           = 'Ημερομηνία (Φθίνουσα) ';
@@ -21,7 +31,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['0']  = 'Δη
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['1']  = 'Wraps το στοιχειο σε ένα σύνδεσμο που θα δείξει το fullscreen εικόνα ή λυψη αρχείου.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['0']    = 'Ταξινόμηση κατά';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['1']    = 'Παρακαλώ επιλέξτε τη σειρά ταξινόμησης. ';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']                = 'Αρχείο Meta (meta.txt) ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']            = 'Όνομα αρχείου (αύξουσα) ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']           = 'Όνομα αρχείου (φθίνουσα)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['random']              = 'Τυχαία σειρά';
+

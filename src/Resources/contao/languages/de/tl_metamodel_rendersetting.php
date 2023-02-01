@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-20T13:46:30+01:00
+ * Last-updated: 2023-02-01T15:52:28+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -36,7 +36,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink']['1']         
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['0']            = 'Sortierung nach';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy']['1']            = 'Bitte wählen Sie die Sortierreihenfolge.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['manual']                      = 'Manuelle Sortierung';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['meta']                        = 'Meta-Datei (meta.txt)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_asc']                    = 'Dateiname (aufsteigend)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['name_desc']                   = 'Dateiname (absteigend)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['random']                      = 'Zufällige Reihenfolge';
