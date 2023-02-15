@@ -172,7 +172,10 @@ class AddSortFieldMigration extends AbstractMigration
         $rows         = $attributes->fetchAllAssociative();
 
         foreach ($rows as $row) {
-            if ($this->fieldExists($row['tableName'], $row['colname'] . '__sort')) {
+            if (
+                !$this->fieldExists($row['tableName'], $row['colname'])
+                || $this->fieldExists($row['tableName'], $row['colname'] . '__sort')
+            ) {
                 continue;
             }
 
