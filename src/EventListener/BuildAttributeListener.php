@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/attribute_file
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -50,16 +51,13 @@ class BuildAttributeListener
         $name       = $attribute->getColName();
         $nameSort   = \sprintf('%s__sort', $name);
 
-        if ($properties->hasProperty($nameSort)) {
-            $this->addAttributeToDefinition($container, $name);
-            $properties->getProperty($name . '__sort')->setWidgetType('fileTreeOrder');
-
-            return;
+        if (!$properties->hasProperty($nameSort)) {
+            $properties->addProperty(new DefaultProperty($nameSort));
         }
 
-        $properties->addProperty($property = new DefaultProperty($name . '__sort'));
-        $property->setWidgetType('fileTreeOrder');
-
+        $properties->getProperty($nameSort)
+            ->setWidgetType('fileTreeOrder')
+            ->setLabel($nameSort);
         $this->addAttributeToDefinition($container, $name);
     }
 
