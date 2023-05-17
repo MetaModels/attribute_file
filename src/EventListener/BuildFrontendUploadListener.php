@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,17 +22,11 @@ declare(strict_types=1);
 
 namespace MetaModels\AttributeFileBundle\EventListener;
 
-use Contao\FrontendUser;
-use Contao\InsertTags;
-use Contao\StringUtil;
-use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminatorAwareTrait;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Schema\Column;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
+use Contao\FrontendUser;
 use MetaModels\AttributeFileBundle\Attribute\File;
-use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
-use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -49,85 +43,51 @@ final class BuildFrontendUploadListener
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The token storage.
      *
      * @var TokenStorageInterface
      */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * The property information from the input screen.
      *
      * @var array
      */
-    private $information;
-
-    /**
-     * The insert tag replacer, for replace the table name.
-     *
-     * @var ReplaceTableName
-     */
-    private $replaceTableName;
-
-    /**
-     * The insert tag replacer, for replace parameters.
-     *
-     * @var ReplaceParam
-     */
-    private $replaceParam;
-
-    /**
-     * The database connection.
-     *
-     * @var Connection
-     */
-    private $connection;
+    private array $information;
 
     /**
      * The input provider.
      *
      * @var InputProviderInterface
      */
-    private $inputProvider;
+    private InputProviderInterface $inputProvider;
 
     /**
-     * The autoincrement.
+     * The insert tag parser.
      *
-     * @var int
+     * @var InsertTagParser
      */
-    private $autoincrement;
-
-    /**
-     * The id column.
-     *
-     * @var Column
-     */
-    private $columnId;
+    private InsertTagParser $insertTagParser;
 
     /**
      * The constructor.
      *
      * @param ViewCombination       $viewCombination  The view combination.
      * @param TokenStorageInterface $tokenStorage     The token storage.
-     * @param ReplaceTableName      $replaceTableName The insert tag replacer, for replace the table name.
-     * @param ReplaceParam          $replaceParam     The insert tag replacer, for replace parameters.
-     * @param Connection            $connection       The database connection.
+     * @param InsertTagParser       $insertTagParser  The insert tag parser.
      */
     public function __construct(
         ViewCombination $viewCombination,
         TokenStorageInterface $tokenStorage,
-        ReplaceTableName $replaceTableName,
-        ReplaceParam $replaceParam,
-        Connection $connection
+        InsertTagParser $insertTagParser
     ) {
         $this->viewCombination  = $viewCombination;
         $this->tokenStorage     = $tokenStorage;
-        $this->replaceTableName = $replaceTableName;
-        $this->replaceParam     = $replaceParam;
-        $this->connection       = $connection;
+        $this->insertTagParser  = $insertTagParser;
     }
 
     /**
@@ -165,11 +125,11 @@ final class BuildFrontendUploadListener
             'deselect'              => (bool) $this->information['fe_widget_file_deselect'],
             'delete'                => (bool) $this->information['fe_widget_file_delete'],
             'uploadFolder'          => $this->getUserHomeDir() ?: $this->getTargetFolder(),
-            'extendFolder'          => $this->getExtendFolder($event),
+            'extendFolder'          => $this->getExtendFolder(),
             'normalizeExtendFolder' => (bool) $this->information['fe_widget_file_normalize_extend_folder'],
             'normalizeFilename'     => (bool) $this->information['fe_widget_file_normalize_filename'],
-            'prefixFilename'        => $this->getPrefixFilename($event),
-            'postfixFilename'       => $this->getPostfixFilename($event),
+            'prefixFilename'        => $this->getPrefixFilename(),
+            'postfixFilename'       => $this->getPostfixFilename(),
             'storeFile'             => true,
             'imageSize'             => $this->information['fe_widget_file_imageSize'],
             'sortBy'                => $this->information['fe_widget_file_sortBy'],
@@ -238,109 +198,61 @@ final class BuildFrontendUploadListener
     /**
      * Get the extend folder.
      *
-     * @param BuildAttributeEvent $event The event.
-     *
      * @return string|null
      */
-    private function getExtendFolder(BuildAttributeEvent $event): ?string
+    private function getExtendFolder(): ?string
     {
         if (!($extendFolder = $this->information['fe_widget_file_extend_folder'])
-            || (false === \strpos($extendFolder, '{{'))
+            || (!str_contains($extendFolder, '{{'))
         ) {
             return $extendFolder ?: null;
         }
 
-        return $this->replaceInsertTag($event, $extendFolder);
+        return $this->replaceInsertTag($extendFolder);
     }
 
     /**
      * Get the prefix for the filename.
      *
-     * @param BuildAttributeEvent $event The event.
-     *
      * @return string|null
      */
-    private function getPrefixFilename(BuildAttributeEvent $event): ?string
+    private function getPrefixFilename(): ?string
     {
         if (!($extendFolder = $this->information['fe_widget_file_prefix_filename'])
-            || (false === \strpos($extendFolder, '{{'))
+            || (!str_contains($extendFolder, '{{'))
         ) {
             return $extendFolder ?: null;
         }
 
-        return $this->replaceInsertTag($event, $extendFolder);
+        return $this->replaceInsertTag($extendFolder);
     }
 
     /**
      * Get the postfix for the filename.
      *
-     * @param BuildAttributeEvent $event The event.
-     *
      * @return string|null
      */
-    private function getPostfixFilename(BuildAttributeEvent $event): ?string
+    private function getPostfixFilename(): ?string
     {
         if (!($extendFolder = $this->information['fe_widget_file_postfix_filename'])
-            || (false === \strpos($extendFolder, '{{'))
+            || (!str_contains($extendFolder, '{{'))
         ) {
             return $extendFolder ?: null;
         }
 
-        return $this->replaceInsertTag($event, $extendFolder);
+        return $this->replaceInsertTag($extendFolder);
     }
 
     /**
      * Replace the insert tag.
      *
-     * @param BuildAttributeEvent $event   The event.
-     * @param string              $replace The replacement.
+     * @param string $replace The replacement.
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function replaceInsertTag(BuildAttributeEvent $event, string $replace): string
+    private function replaceInsertTag(string $replace): string
     {
-        if ((!$this->autoincrement || !$this->columnId)
-            || !$this->getInputProvider()->hasParameter('act')
-            || ('create' === $this->getInputProvider()->getParameter('act'))
-        ) {
-            $tableDetails = $this->connection->getSchemaManager()->listTableDetails($event->getContainer()->getName());
-            foreach ($tableDetails->getColumns() as $column) {
-                if (!$column->getAutoincrement()) {
-                    continue;
-                }
-
-                $this->columnId = $column;
-                break;
-            }
-
-            if ($this->columnId) {
-                $this->autoincrement = (int) $tableDetails->getOption('autoincrement');
-            }
-        }
-
-        if ($this->autoincrement && $this->columnId) {
-            $this->getInputProvider()->setValue($this->columnId->getName(), $this->autoincrement);
-        }
-
-        $replaced = (string) $this->replaceParam->replace(
-            $this->replaceTableName->replace(
-                $event->getContainer()->getName(),
-                StringUtil::decodeEntities($replace)
-            )
-        );
-
-        if ($this->autoincrement && $this->columnId) {
-            $this->getInputProvider()->unsetValue($this->columnId->getName());
-        }
-
-        if ((false === \strpos($replaced, '{{'))) {
-            return $replaced;
-        }
-
-        $replacer = new InsertTags();
-        return $replacer->replace($replaced);
+        return $this->insertTagParser->replace($replace);
     }
 
     /**
@@ -353,22 +265,8 @@ final class BuildFrontendUploadListener
     private function storeFileToTempFolder(array $extra): bool
     {
         return (isset($extra['extendFolder']) && $extra['extendFolder'])
-               // Test if in the extend folder path find insert tag.
-               && (false !== \strpos($extra['extendFolder'], '{{'));
-    }
-
-    /**
-     * Get the input provider.
-     *
-     * @return InputProviderInterface
-     */
-    private function getInputProvider(): InputProviderInterface
-    {
-        if (null === $this->inputProvider) {
-            $this->inputProvider = new InputProvider();
-        }
-
-        return $this->inputProvider;
+               // Test if in the extent folder path find insert tag.
+               && (str_contains($extra['extendFolder'], '{{'));
     }
 
     /**
@@ -399,6 +297,7 @@ final class BuildFrontendUploadListener
             || !($inputScreen = $this->viewCombination->getScreen($event->getContainer()->getName()))
             || !(isset($inputScreen['properties']) && ($properties = $inputScreen['properties']))
         ) {
+
             return false;
         }
 

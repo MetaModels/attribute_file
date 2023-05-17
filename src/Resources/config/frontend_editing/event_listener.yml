@@ -8,9 +8,7 @@ services:
         arguments:
             - '@metamodels.view_combination'
             - '@security.token_storage'
-            - '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName'
-            - '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam'
-            - '@database_connection'
+            - '@contao.insert_tag.parser'
         tags:
             -   name: kernel.event_listener
                 event: metamodels.dc-general.events.metamodel.build.attribute
