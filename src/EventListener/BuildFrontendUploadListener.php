@@ -244,7 +244,7 @@ final class BuildFrontendUploadListener
     }
 
     /**
-     * Replace the insert tag.
+     * Replace the insert tag - without converting to esi tags.
      *
      * @param string $replace The replacement.
      *
@@ -252,7 +252,7 @@ final class BuildFrontendUploadListener
      */
     private function replaceInsertTag(string $replace): string
     {
-        return $this->insertTagParser->replace($replace);
+        return $this->insertTagParser->replaceInline($replace);
     }
 
     /**
