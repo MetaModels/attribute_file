@@ -552,7 +552,7 @@ class File extends BaseComplex
                     '%s.%s.%s',
                     $this->getMetaModel()->getTableName(),
                     $settings->get('id'),
-                    $rowData['id']
+                    ($rowData['id'] ?? 0)
                 )
             )
             ->setShowImages($settings->get('file_showImage'));
