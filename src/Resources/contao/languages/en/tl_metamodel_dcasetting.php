@@ -32,9 +32,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['gallery']   
     'Show files as sortable images e.g. for gallery.';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload']           =
-    'Single file upload [only for frontend editing]';
+    'Single file upload [only for frontend editing] - Deprecated!';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload_preview']   =
-    'Single file upload with show thumbnail [only for frontend editing]';
+    'Single file upload with show thumbnail [only for frontend editing] - Deprecated!';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_multiple_upload']         =
     'Multiple file upload [only for frontend editing]';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_multiple_upload_preview'] =

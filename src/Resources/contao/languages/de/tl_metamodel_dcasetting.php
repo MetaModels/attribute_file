@@ -52,8 +52,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetMode']['1']          
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['downloads']                  = 'Dateien als sortierbare Dateiliste anzeigen z.B. für Downloads.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_multiple_upload']         = 'Mehrfacher Datei-Upload [nur für Frontend-Bearbeitung]';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_multiple_upload_preview'] = 'Mehrfacher Datei-Upload mit Anzeige der Vorschaubilder [nur für Frontend-Bearbeitung]';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload']           = 'Einzelner Datei-Upload [nur für Frontend-Bearbeitung]';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload_preview']   = 'Einzelner Datei-Upload mit Anzeige der Vorschaubilder [nur für Frontend-Bearbeitung]';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload']           = 'Einzelner Datei-Upload [nur für Frontend-Bearbeitung] - Deprecated!';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['fe_single_upload_preview']   = 'Einzelner Datei-Upload mit Anzeige der Vorschaubilder [nur für Frontend-Bearbeitung] - Deprecated!';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['gallery']                    = 'Dateien als sortierbare Bilder anzeigen z.B. für eine Galerie.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes']['normal']                     = 'Dateien als Liste anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_asc']                                       = 'Dateiname (aufsteigend)';
