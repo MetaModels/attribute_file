@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -79,14 +79,16 @@ class AddProtectedDownloadMigration extends AbstractMigration
      */
     public function shouldRun(): bool
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
 
         if (!$schemaManager->tablesExist(['tl_metamodel', 'tl_metamodel_rendersetting'])) {
             return false;
         }
 
-        if ($this->fieldExists('tl_metamodel_rendersetting', 'file_showLink')
-            && !$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')) {
+        if (
+            $this->fieldExists('tl_metamodel_rendersetting', 'file_showLink')
+            && !$this->fieldExists('tl_metamodel_rendersetting', 'file_protectedDownload')
+        ) {
             return true;
         }
 
@@ -111,7 +113,7 @@ class AddProtectedDownloadMigration extends AbstractMigration
             $this->connection->createQueryBuilder()
                 ->update('tl_metamodel_rendersetting', 't')
                 ->set('t.file_protectedDownload', 't.file_showLink')
-                ->execute();
+                ->executeQuery();
 
             return new MigrationResult(true, 'Adjusted table tl_metamodel_rendersetting with file_protectedDownload');
         }
@@ -129,7 +131,7 @@ class AddProtectedDownloadMigration extends AbstractMigration
      */
     private function fieldExists(string $tableName, string $columnName): bool
     {
-        $columns = $this->connection->getSchemaManager()->listTableColumns($tableName);
+        $columns = $this->connection->createSchemaManager()->listTableColumns($tableName);
 
         return isset($columns[strtolower($columnName)]);
     }

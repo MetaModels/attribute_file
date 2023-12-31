@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -85,9 +86,19 @@ class RemoveAttIdOptionsTest extends TestCase
 
         return [
             [['foo' => 'bar [file]', 'filesort' => 'foo'], 'foo', 'foo', ['foo' => 'bar [file]', 'filesort' => 'foo']],
-            [['foo' => 'bar [file]', 'filesort' => 'foo'], 'foo', 'attr_id', ['foo' => 'bar [file]', 'filesort' => 'foo']],
+            [
+                ['foo' => 'bar [file]', 'filesort' => 'foo'],
+                'foo',
+                'attr_id',
+                ['foo' => 'bar [file]', 'filesort' => 'foo']
+            ],
             [['foo' => 'bar [file]'], 'tl_metamodel_filtersetting', 'attr_id', ['foo' => 'bar [file]']],
-            [['foo' => 'bar [file]'], 'tl_metamodel_filtersetting', 'attr_id', ['foo' => 'bar [file]', 'foo__sort' => 'foo']]
+            [
+                ['foo' => 'bar [file]'],
+                'tl_metamodel_filtersetting',
+                'attr_id',
+                ['foo' => 'bar [file]', 'foo__sort' => 'foo']
+            ]
         ];
     }
 

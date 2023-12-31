@@ -110,8 +110,10 @@ class AddSortFieldMigration extends AbstractMigration
     {
         $attributes = $this->getFileAttributes();
 
-        if (!$this->fieldExists('tl_metamodel_attribute', 'file_multiple')
-            && !$attributes->rowCount()) {
+        if (
+            !$this->fieldExists('tl_metamodel_attribute', 'file_multiple')
+            && !$attributes->rowCount()
+        ) {
             return new MigrationResult(true, 'Nothing to do.');
         }
 
@@ -132,7 +134,8 @@ class AddSortFieldMigration extends AbstractMigration
 
         return new MigrationResult(
             true,
-            \sprintf('Add columns for attribute file: %s', \implode(', ', $messages)));
+            \sprintf('Add columns for attribute file: %s', \implode(', ', $messages))
+        );
     }
 
     /**
@@ -147,7 +150,7 @@ class AddSortFieldMigration extends AbstractMigration
         return $this
             ->connection
             ->createQueryBuilder()
-            ->select('metamodel.tableName', 'attribute.colname')
+            ->select('metamodel.tableName, attribute.colname')
             ->from('tl_metamodel_attribute', 'attribute')
             ->leftJoin('attribute', 'tl_metamodel', 'metamodel', 'metamodel.id=attribute.pid')
             ->where('attribute.type=:type')

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,20 +14,26 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeFileBundle\DependencyInjection;
 
-use Doctrine\Common\Cache\ArrayCache;
 use MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\FileWidgetModeOptions;
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+
+use function assert;
+use function in_array;
+use function is_array;
+use function is_bool;
+use function is_string;
 
 /**
  * This is the class that loads and manages the bundle configuration
@@ -36,27 +42,37 @@ class MetaModelsAttributeFileExtension extends Extension
 {
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('factory.yml');
         $loader->load('event_listener.yml');
         $loader->load('services.yml');
 
-        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $configuration = $this->getConfiguration($configs, $container);
+        assert($configuration instanceof Configuration);
+        $config = $this->processConfiguration($configuration, $configs);
         $this->buildCacheService($container, $config);
 
         $frontendEditing = false;
+
+        $bundles = $container->getParameter('kernel.bundles');
+        assert(is_array($bundles));
         // Load configuration for the frontend editing.
-        if (\in_array(MetaModelsContaoFrontendEditingBundle::class, $container->getParameter('kernel.bundles'), true)) {
+        if (in_array(MetaModelsContaoFrontendEditingBundle::class, $bundles, true)) {
             $frontendEditing = true;
             $loader->load('frontend_editing/event_listener.yml');
         }
 
         $this->addFrontendEditingArgument($container, $frontendEditing);
 
-        $managedSchemaTypeNames   = $container->getParameter('metamodels.managed-schema-type-names') ?? [];
+        $typeNames                = $container->hasParameter('metamodels.managed-schema-type-names')
+            ? $container->getParameter('metamodels.managed-schema-type-names')
+            : null;
+        $managedSchemaTypeNames   = is_array($typeNames) ? $typeNames : [];
         $managedSchemaTypeNames[] = 'file';
         $container->setParameter('metamodels.managed-schema-type-names', $managedSchemaTypeNames);
     }
@@ -66,10 +82,10 @@ class MetaModelsAttributeFileExtension extends Extension
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new Configuration(
-            $container->getParameter('kernel.debug'),
-            $container->getParameter('metamodels.cache_dir')
-        );
+        $debug = $container->getParameter('kernel.debug');
+        assert(is_bool($debug));
+
+        return new Configuration($debug);
     }
 
     /**
@@ -85,7 +101,7 @@ class MetaModelsAttributeFileExtension extends Extension
         // if cache disabled, swap it out with the dummy cache.
         if (!$config['enable_cache']) {
             $cache = $container->getDefinition('metamodels.attribute_file.cache_system');
-            $cache->setClass(ArrayCache::class);
+            $cache->setClass(ArrayAdapter::class);
             $cache->setArguments([]);
             $container->setParameter('metamodels.attribute_file.cache_dir', null);
             return;

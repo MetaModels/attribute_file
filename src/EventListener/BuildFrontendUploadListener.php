@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace MetaModels\AttributeFileBundle\EventListener;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminatorAwareTrait;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Contao\CoreBundle\InsertTag\InsertTagParser;
@@ -33,6 +34,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 /**
  * This event build the attribute for upload field, in the frontend editing scope.
+ *
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 final class BuildFrontendUploadListener
 {
@@ -57,14 +60,7 @@ final class BuildFrontendUploadListener
      *
      * @var array
      */
-    private array $information;
-
-    /**
-     * The input provider.
-     *
-     * @var InputProviderInterface
-     */
-    private InputProviderInterface $inputProvider;
+    private array $information = [];
 
     /**
      * The insert tag parser.
@@ -124,7 +120,7 @@ final class BuildFrontendUploadListener
             'doNotOverwrite'        => $this->information['fe_widget_file_doNotOverwrite'],
             'deselect'              => (bool) $this->information['fe_widget_file_deselect'],
             'delete'                => (bool) $this->information['fe_widget_file_delete'],
-            'uploadFolder'          => $this->getUserHomeDir() ?: $this->getTargetFolder(),
+            'uploadFolder'          => $this->getUserHomeDir() ?? $this->getTargetFolder() ?? '',
             'extendFolder'          => $this->getExtendFolder(),
             'normalizeExtendFolder' => (bool) $this->information['fe_widget_file_normalize_extend_folder'],
             'normalizeFilename'     => (bool) $this->information['fe_widget_file_normalize_filename'],
@@ -172,13 +168,13 @@ final class BuildFrontendUploadListener
      */
     private function getUserHomeDir(): ?string
     {
-        /** @var FrontendUser $feUser */
-        if ($this->information['fe_widget_file_useHomeDir']
-            && ($user = $this->tokenStorage->getToken())
-            && ($feUser = $user->getUser())
-            && $feUser->assignDir
-            && $feUser->homeDir
-        ) {
+        if (!$this->information['fe_widget_file_useHomeDir'] || (null === ($user = $this->tokenStorage->getToken()))) {
+            return null;
+        }
+        $feUser = $user->getUser();
+        assert($feUser instanceof FrontendUser);
+
+        if (((bool) $feUser->assignDir) && $feUser->homeDir) {
             return $feUser->homeDir;
         }
 
@@ -202,13 +198,7 @@ final class BuildFrontendUploadListener
      */
     private function getExtendFolder(): ?string
     {
-        if (!($extendFolder = $this->information['fe_widget_file_extend_folder'])
-            || (!str_contains($extendFolder, '{{'))
-        ) {
-            return $extendFolder ?: null;
-        }
-
-        return $this->replaceInsertTag($extendFolder);
+        return $this->replaceInsertTagIfNeeded($this->information['fe_widget_file_extend_folder'] ?? null);
     }
 
     /**
@@ -218,13 +208,7 @@ final class BuildFrontendUploadListener
      */
     private function getPrefixFilename(): ?string
     {
-        if (!($extendFolder = $this->information['fe_widget_file_prefix_filename'])
-            || (!str_contains($extendFolder, '{{'))
-        ) {
-            return $extendFolder ?: null;
-        }
-
-        return $this->replaceInsertTag($extendFolder);
+        return $this->replaceInsertTagIfNeeded($this->information['fe_widget_file_prefix_filename'] ?? null);
     }
 
     /**
@@ -234,13 +218,17 @@ final class BuildFrontendUploadListener
      */
     private function getPostfixFilename(): ?string
     {
-        if (!($extendFolder = $this->information['fe_widget_file_postfix_filename'])
-            || (!str_contains($extendFolder, '{{'))
-        ) {
-            return $extendFolder ?: null;
-        }
+        return $this->replaceInsertTagIfNeeded($this->information['fe_widget_file_postfix_filename'] ?? null);
+    }
 
-        return $this->replaceInsertTag($extendFolder);
+    private function replaceInsertTagIfNeeded(mixed $value): ?string
+    {
+        if (null === $value) {
+            return null;
+        }
+        assert(\is_string($value));
+
+        return \str_contains($value, '{{') ? $this->replaceInsertTag($value) : $value;
     }
 
     /**
@@ -266,7 +254,7 @@ final class BuildFrontendUploadListener
     {
         return (isset($extra['extendFolder']) && $extra['extendFolder'])
                // Test if in the extent folder path find insert tag.
-               && (str_contains($extra['extendFolder'], '{{'));
+               && (\str_contains($extra['extendFolder'], '{{'));
     }
 
     /**
@@ -278,8 +266,11 @@ final class BuildFrontendUploadListener
      */
     private function wantToHandle(BuildAttributeEvent $event): bool
     {
-        return $this->scopeDeterminator->currentScopeIsFrontend()
-               && !$this->scopeDeterminator->currentScopeIsUnknown()
+        $scopeDeterminator = $this->scopeDeterminator;
+        assert($scopeDeterminator instanceof RequestScopeDeterminator);
+
+        return $scopeDeterminator->currentScopeIsFrontend()
+               && !$scopeDeterminator->currentScopeIsUnknown()
                && $this->isSingleUploadField($event);
     }
 
@@ -292,12 +283,12 @@ final class BuildFrontendUploadListener
      */
     private function isSingleUploadField(BuildAttributeEvent $event): bool
     {
-        $properties = [];
-        if (!(($attribute = $event->getAttribute()) instanceof File)
-            || !($inputScreen = $this->viewCombination->getScreen($event->getContainer()->getName()))
-            || !(isset($inputScreen['properties']) && ($properties = $inputScreen['properties']))
-        ) {
+        if (!(($attribute = $event->getAttribute()) instanceof File)) {
+            return false;
+        }
+        $inputScreen = $this->viewCombination->getScreen($event->getContainer()->getName());
 
+        if ((null === $inputScreen) || (!\is_array($properties = $inputScreen['properties'] ?? null))) {
             return false;
         }
 
@@ -308,7 +299,8 @@ final class BuildFrontendUploadListener
             'fe_multiple_upload_preview'
         ];
         $information    = $properties[\array_flip(\array_column($properties, 'attr_id'))[$attribute->get('id')]];
-        if (!isset($information['file_widgetMode'])
+        if (
+            !isset($information['file_widgetMode'])
             || !\in_array($information['file_widgetMode'], $supportedModes, true)
         ) {
             return false;
