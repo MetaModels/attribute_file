@@ -36,9 +36,10 @@ use Contao\FilesModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
 use MetaModels\Attribute\BaseComplex;
+use MetaModels\Attribute\ManagedAttributeTrait;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
@@ -46,70 +47,75 @@ use MetaModels\Render\Template;
 
 /**
  * This is the MetaModel attribute class for handling file fields.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class File extends BaseComplex
 {
+    use ManagedAttributeTrait;
+
     /**
      * The database connection.
      *
-     * @var Connection|null
+     * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Table manipulator instance.
      *
-     * @var TableManipulator|null
+     * @var TableManipulator
      */
-    private $tableManipulator;
+    private TableManipulator $tableManipulator;
 
     /**
      * The toolbox for file.
      *
-     * @var ToolboxFile|null
+     * @var ToolboxFile
      */
-    private $toolboxFile;
+    private ToolboxFile $toolboxFile;
 
     /**
      * The string util.
      *
-     * @var Adapter|StringUtil|null
+     * @var Adapter<StringUtil>
      */
-    private $stringUtil;
+    private Adapter $stringUtil;
 
     /**
      * The validator.
      *
-     * @var Adapter|Validator|null
+     * @var Adapter<Validator>
      */
-    private $validator;
+    private Adapter $validator;
 
     /**
      * The repository for files.
      *
-     * @var Adapter|FilesModel|null
+     * @var Adapter<FilesModel>
      */
-    private $fileRepository;
+    private Adapter $fileRepository;
 
     /**
      * The contao configurations.
      *
-     * @var Adapter|Config|null
+     * @var Adapter<Config>
      */
-    private $config;
+    private Adapter $config;
 
     /**
      * Create a new instance.
      *
-     * @param IMetaModel              $metaModel        The MetaModel instance this attribute belongs to.
-     * @param array                   $information      The attribute information.
-     * @param Connection|null         $connection       The database connection.
-     * @param TableManipulator|null   $tableManipulator Table manipulator instance.
-     * @param ToolboxFile|null        $toolboxFile      The toolbox for file.
-     * @param Adapter|StringUtil|null $stringUtil       The string util.
-     * @param Adapter|Validator|null  $validator        The validator.
-     * @param Adapter|FilesModel|null $fileRepository   The repository for files.
-     * @param Adapter|Config|null     $config           The contao configurations.
+     * @param IMetaModel            $metaModel        The MetaModel instance this attribute belongs to.
+     * @param array                 $information      The attribute information.
+     * @param Connection|null       $connection       The database connection.
+     * @param TableManipulator|null $tableManipulator Table manipulator instance.
+     * @param ToolboxFile|null      $toolboxFile      The toolbox for file.
+     * @param Adapter|null          $stringUtil       The string util.
+     * @param Adapter|null          $validator        The validator.
+     * @param Adapter|null          $fileRepository   The repository for files.
+     * @param Adapter|null          $config           The contao configurations.
      */
     public function __construct(
         IMetaModel $metaModel,
@@ -124,16 +130,19 @@ class File extends BaseComplex
     ) {
         parent::__construct($metaModel, $information);
 
-        if (null === $toolboxFile) {
-            // @codingStandardsIgnoreStart
-            @\trigger_error(
-                '"toolboxFile"" is missing. It has to be passed in the constructor.' .
-                'Fallback will get removed in MetaModels 3.0',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if (null === $connection) {
+            $connection = $this->fetchServiceForFallback('connection', 'database_connection');
+            assert($connection instanceof Connection);
+        }
 
-            $toolboxFile = System::getContainer()->get('metamodels.attribute_file.toolbox.file');
+        if (null === $tableManipulator) {
+            $tableManipulator = $this->fetchServiceForFallback('tableManipulator', 'metamodels.table_manipulator');
+            assert($tableManipulator instanceof TableManipulator);
+        }
+
+        if (null === $toolboxFile) {
+            $toolboxFile = $this->fetchServiceForFallback('toolboxFile', 'metamodels.attribute_file.toolbox.file');
+            assert($toolboxFile instanceof ToolboxFile);
         }
 
         if (null === $stringUtil) {
@@ -145,7 +154,8 @@ class File extends BaseComplex
             );
             // @codingStandardsIgnoreEnd
 
-            $stringUtil = System::getContainer()->get('contao.framework')->getAdapter(StringUtil::class);
+            $stringUtil = System::getContainer()->get('contao.framework')?->getAdapter(StringUtil::class);
+            assert($stringUtil instanceof Adapter);
         }
 
         if (null === $validator) {
@@ -157,7 +167,8 @@ class File extends BaseComplex
             );
             // @codingStandardsIgnoreEnd
 
-            $validator = System::getContainer()->get('contao.framework')->getAdapter(Validator::class);
+            $validator = System::getContainer()->get('contao.framework')?->getAdapter(Validator::class);
+            assert($validator instanceof Adapter);
         }
 
         if (null === $fileRepository) {
@@ -169,7 +180,8 @@ class File extends BaseComplex
             );
             // @codingStandardsIgnoreEnd
 
-            $fileRepository = System::getContainer()->get('contao.framework')->getAdapter(FilesModel::class);
+            $fileRepository = System::getContainer()->get('contao.framework')?->getAdapter(FilesModel::class);
+            assert($fileRepository instanceof Adapter);
         }
 
         if (null === $config) {
@@ -181,7 +193,8 @@ class File extends BaseComplex
             );
             // @codingStandardsIgnoreEnd
 
-            $config = System::getContainer()->get('contao.framework')->getAdapter(Config::class);
+            $config = System::getContainer()->get('contao.framework')?->getAdapter(Config::class);
+            assert($config instanceof Adapter);
         }
 
         $this->connection       = $connection;
@@ -205,11 +218,12 @@ class File extends BaseComplex
 
         $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
+        /** @psalm-suppress DeprecatedMethod */
         parent::destroyAUX();
         $metaModel = $this->getMetaModel()->getTableName();
 
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
-        $tableColumns = $this->connection->getSchemaManager()->listTableColumns($metaModel);
+        $tableColumns = $this->connection->createSchemaManager()->listTableColumns($metaModel);
         if (($colName = $this->getColName()) && \array_key_exists($colName, $tableColumns)) {
             $this->tableManipulator->dropColumn($metaModel, $colName);
         }
@@ -231,6 +245,7 @@ class File extends BaseComplex
 
         $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
+        /** @psalm-suppress DeprecatedMethod */
         parent::initializeAUX();
         if ($colName = $this->getColName()) {
             $tableName = $this->getMetaModel()->getTableName();
@@ -269,7 +284,7 @@ class File extends BaseComplex
             ->set('t.' . $this->getColName(), ':null')
             ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('null', null)
-            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY);
+            ->setParameter('values', $arrIds, ArrayParameterType::STRING);
 
         if ($this->getMetaModel()->hasAttribute($this->getColName() . '__sort')) {
             $builder->set('t.' . $this->getColName() . '__sort', ':null');
@@ -286,10 +301,10 @@ class File extends BaseComplex
         $builder = $this->connection->createQueryBuilder();
 
         $builder
-            ->select('t.id', 't.' . $this->getColName() . ' AS file')
+            ->select('t.id, t.' . $this->getColName() . ' AS file')
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where($builder->expr()->in('t.id', ':values'))
-            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY);
+            ->setParameter('values', $arrIds, ArrayParameterType::STRING);
 
         if ($hasSort = $this->getMetaModel()->hasAttribute($this->getColName() . '__sort')) {
             $builder->addSelect($this->getColName() . '__sort AS file_sort');
@@ -299,7 +314,8 @@ class File extends BaseComplex
 
         $data = [];
         while ($result = $query->fetchAssociative()) {
-            $row = $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result['file'], true));
+            $row =
+                $this->toolboxFile->convertValuesToMetaModels($this->stringUtil->deserialize($result['file'], true));
 
             if ($hasSort) {
                 // The sort key be can remove in later version. The new sort key is bin_sorted.
@@ -434,8 +450,8 @@ class File extends BaseComplex
             // Set root path of file chooser depending on contao version.
             $file = null;
 
-            if ($this->validator->isUuid($this->get('file_uploadFolder'))) {
-                $file = $this->fileRepository->findByUuid($this->get('file_uploadFolder'));
+            if ($this->validator->isUuid($this->get('file_uploadFolder') ?? '')) {
+                $file = $this->fileRepository->findByUuid($this->get('file_uploadFolder') ?? '');
             }
 
             // Check if we have a file.
@@ -454,11 +470,11 @@ class File extends BaseComplex
         switch ($this->get('file_filesOnly')) {
             case '1':
                 // Files only.
-                $fieldDefinition['eval']['filesOnly'] = true;
+                $arrFieldDef['eval']['filesOnly'] = true;
                 break;
             case '2':
                 // Folders only.
-                $fieldDefinition['eval']['files'] = false;
+                $arrFieldDef['eval']['files'] = false;
                 break;
             default:
                 // Files and files possible.
@@ -479,9 +495,7 @@ class File extends BaseComplex
 
         $widgetMode = $this->getOverrideValue('file_widgetMode', $arrOverrides);
 
-        if (('normal' !== $widgetMode)
-            && ((bool) $this->get('file_multiple'))
-        ) {
+        if (('normal' !== $widgetMode) && ((bool) $this->get('file_multiple'))) {
             $fieldDefinition['eval']['orderField'] = $this->getColName() . '__sort';
         }
 
@@ -522,18 +536,32 @@ class File extends BaseComplex
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function prepareTemplate(Template $template, $rowData, $settings)
+    protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
-        parent::prepareTemplate($template, $rowData, $settings);
+        parent::prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-        $value = $rowData[$this->getColName()] ?? null;
+        /** @var array{
+         *    bin: list<string>,
+         *    value: list<string>,
+         *    path: list<string>,
+         *    meta: list<string>,
+         *    bin_sorted?: list<string>,
+         *    value_sorted?: list<string>,
+         *    path_sorted?: list<string>,
+         *    meta_sorted?: list<string>
+         *  }|null $value */
+        $value = $arrRowData[$this->getColName()] ?? null;
+        if (null === $value) {
+            $value = ['bin' => [], 'value' => [], 'path' => [], 'meta' => []];
+        }
+
+        $showImage = (bool) $objSettings->get('file_showImage');
 
         // No data and show image, check placeholder.
-        if (!($value['bin'] ?? null)) {
-            if (null === $settings->get('file_showImage')
-                || null === ($placeholder = $settings->get('file_placeholder'))) {
-                $template->files = [];
-                $template->src   = [];
+        if ([] === $value['bin']) {
+            if (null === ($placeholder = $objSettings->get('file_placeholder'))) {
+                $objTemplate->files = [];
+                $objTemplate->src   = [];
 
                 return;
             }
@@ -544,6 +572,7 @@ class File extends BaseComplex
 
         $toolbox = clone $this->toolboxFile;
 
+        /** @psalm-suppress DeprecatedMethod */
         $toolbox
             ->setBaseLanguage($this->getMetaModel()->getActiveLanguage())
             ->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage())
@@ -551,38 +580,45 @@ class File extends BaseComplex
                 \sprintf(
                     '%s.%s.%s',
                     $this->getMetaModel()->getTableName(),
-                    $settings->get('id'),
-                    ($rowData['id'] ?? 0)
+                    (string) ($objSettings->get('id') ?? ''),
+                    (string) ($arrRowData['id'] ?? '0')
                 )
             )
-            ->setShowImages($settings->get('file_showImage'));
+            ->setShowImages($showImage);
 
         if ($this->get('file_validFileTypes')) {
             $toolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
         }
 
-        if ($settings->get('file_imageSize')) {
-            $toolbox->setResizeImages($settings->get('file_imageSize'));
+        if (\is_array($imageSize = $objSettings->get('file_imageSize'))) {
+            $toolbox->setResizeImages($imageSize);
         }
 
-        if (isset($value['value'])) {
-            foreach ($value['value'] as $strFile) {
-                $toolbox->addPathById($strFile);
-            }
-        } elseif (\is_array($value)) {
-            foreach ($value as $strFile) {
-                $toolbox->addPathById($strFile);
-            }
-        } else {
-            $toolbox->addPathById($value);
+        foreach ($value['value'] ?? [] as $strFile) {
+            $toolbox->addPathById($strFile);
         }
 
-        $toolbox->withDownloadKeys($settings->get('file_showLink') && $settings->get('file_protectedDownload'));
+        $toolbox->withDownloadKeys(
+            ((bool) $objSettings->get('file_showLink')) && ((bool) $objSettings->get('file_protectedDownload'))
+        );
 
         $toolbox->resolveFiles();
-        $data = $toolbox->sortFiles($settings->get('file_sortBy'), ($value['bin_sorted'] ?? []));
+        $data = $toolbox->sortFiles($objSettings->get('file_sortBy') ?? 'name_asc', ($value['bin_sorted'] ?? []));
 
-        $template->files = $data['files'];
-        $template->src   = $data['source'];
+        $objTemplate->files = $data['files'];
+        $objTemplate->src   = $data['source'];
+    }
+
+    private function fetchServiceForFallback(string $parameter, string $serviceName): null|object
+    {
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            '"'. $parameter . '" is missing. It has to be passed in the constructor.' .
+            'Fallback will get removed in MetaModels 3.0',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
+        return System::getContainer()->get($serviceName);
     }
 }

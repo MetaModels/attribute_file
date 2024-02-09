@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/attribute_file
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,7 +21,9 @@
 namespace MetaModels\AttributeFileBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\CollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultDataProvider;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 
 /**
  * Get the options for the image size.
@@ -37,8 +39,12 @@ class ImageSizeOptionsListener
      */
     public function getPropertyOptions(GetPropertyOptionsEvent $event)
     {
-        if (('file_imageSize' !== $event->getPropertyName())
-            || ('tl_metamodel_rendersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('file_imageSize' !== $event->getPropertyName())
+            || ('tl_metamodel_rendersetting' !== $dataDefinition->getName())
         ) {
             return;
         }
@@ -48,10 +54,11 @@ class ImageSizeOptionsListener
             return;
         }
 
-        $options                = $event->getOptions();
-        $options['image_sizes'] = \array_replace($sizes, (array) $options['image_sizes']);
-
-        $event->setOptions($options);
+        $options = $event->getOptions();
+        if (\is_array($options) && \array_key_exists('image_sizes', $options)) {
+            $options['image_sizes'] = \array_replace($sizes, $options['image_sizes']);
+            $event->setOptions($options);
+        }
     }
 
     /**
@@ -59,16 +66,17 @@ class ImageSizeOptionsListener
      *
      * @return array
      */
-    private function getThemeImageSizes()
+    private function getThemeImageSizes(): array
     {
         $dataProvider = new DefaultDataProvider();
         $dataProvider->setBaseConfig(['source' => 'tl_image_size']);
 
         $config = $dataProvider->getEmptyConfig();
         $config->setFields(['id', 'name', 'width', 'height']);
-        $config->setSorting(['pid', 'name']);
+        $config->setSorting(['pid' => 'ASC', 'name' => 'ASC']);
 
         $collection = $dataProvider->fetchAll($config);
+        assert($collection instanceof CollectionInterface);
         if (!$collection->count()) {
             return [];
         }

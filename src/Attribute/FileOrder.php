@@ -24,7 +24,6 @@ namespace MetaModels\AttributeFileBundle\Attribute;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
 use MetaModels\Attribute\ISimple;
 use MetaModels\Attribute\IInternal;
 use MetaModels\IMetaModel;
@@ -41,30 +40,30 @@ class FileOrder implements ISimple, IInternal
      *
      * @var IMetaModel
      */
-    private $metaModel;
+    private IMetaModel $metaModel;
 
     /**
      * The column name.
      *
      * @var string
      */
-    private $colName;
+    private string $colName;
 
     /**
      * The connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
      *
-     * @param null       $metaModel   The MetaModel.
+     * @param IMetaModel $metaModel   The MetaModel.
      * @param array      $information The attribute information.
      * @param Connection $connection  The connection.
      */
-    public function __construct($metaModel, array $information, Connection $connection)
+    public function __construct(IMetaModel $metaModel, array $information, Connection $connection)
     {
         $this->metaModel  = $metaModel;
         $this->colName    = $information['colname'];
@@ -76,7 +75,7 @@ class FileOrder implements ISimple, IInternal
      */
     public function getName()
     {
-        return null;
+        return '';
     }
 
     /**

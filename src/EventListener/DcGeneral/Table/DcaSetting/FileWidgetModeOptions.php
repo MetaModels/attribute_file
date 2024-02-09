@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -38,7 +38,7 @@ class FileWidgetModeOptions extends AbstractListener
      *
      * @var bool
      */
-    private $frontendEditing;
+    private bool $frontendEditing;
 
     /**
      * {@inheritDoc}
@@ -62,7 +62,8 @@ class FileWidgetModeOptions extends AbstractListener
      */
     public function __invoke(GetPropertyOptionsEvent $event): void
     {
-        if (('file_widgetMode' !== $event->getPropertyName())
+        if (
+            ('file_widgetMode' !== $event->getPropertyName())
             || (false === $this->wantToHandle($event))
             || (false === $this->isAttributeFile($event))
         ) {
@@ -94,7 +95,7 @@ class FileWidgetModeOptions extends AbstractListener
             );
         }
 
-        $event->setOptions(\array_values(\array_unique(\array_merge($event->getOptions(), $addOptions))));
+        $event->setOptions(\array_values(\array_unique(\array_merge($event->getOptions() ?? [], $addOptions))));
     }
 
     /**
@@ -119,7 +120,8 @@ class FileWidgetModeOptions extends AbstractListener
         }
 
         $result = $statement->fetchAssociative();
-        return 'file' === $result['type'];
+
+        return 'file' === ($result['type'] ?? null);
     }
 
     /**
