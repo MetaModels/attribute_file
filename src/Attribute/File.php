@@ -270,7 +270,10 @@ class File extends BaseComplex
             ->where($builder->expr()->in($this->getColName(), $subSelect->getSQL()))
             ->setParameter('value', \str_replace(['*', '?'], ['%', '_'], $strPattern));
 
-        return $builder->executeQuery()->fetchFirstColumn();
+        $statement = $builder->executeQuery();
+
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
+        return \array_map(static fn(mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
