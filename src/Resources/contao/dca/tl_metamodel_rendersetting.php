@@ -16,6 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -96,11 +97,21 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
     'description' => 'file_imageSize.description',
     'exclude'     => true,
     'inputType'   => 'imageSize',
-    'options'     => $GLOBALS['TL_CROP'],
+    'options_callback' => static function ()
+    {
+        return System::getContainer()->get('contao.image.sizes')->getOptionsForUser(BackendUser::getInstance());
+    },
     'reference'   => &$GLOBALS['TL_LANG']['MSC'],
     'sql'         => 'varchar(255) NOT NULL default \'\'',
     'eval'        => [
         'rgxp'               => 'digit',
+    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize'],
+    'exclude'   => true,
+    'inputType' => 'imageSize',
+    'reference' => &$GLOBALS['TL_LANG']['MSC'],
+    'sql'       => 'varchar(255) NOT NULL default \'\'',
+    'eval'      => [
+        'rgxp'               => 'natural',
         'includeBlankOption' => true,
         'nospace'            => true,
         'helpwizard'         => true,
