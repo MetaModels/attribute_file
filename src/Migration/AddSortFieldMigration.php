@@ -109,6 +109,7 @@ class AddSortFieldMigration extends AbstractMigration
     public function run(): MigrationResult
     {
         $attributes = $this->getFileAttributes();
+        $rows       = $attributes->fetchAllAssociative();
 
         if (
             !$this->fieldExists('tl_metamodel_attribute', 'file_multiple')
@@ -118,7 +119,7 @@ class AddSortFieldMigration extends AbstractMigration
         }
 
         $messages = [];
-        while ($row = $attributes->fetchAssociative()) {
+        foreach ($rows as $row) {
             if ($this->fieldExists($row['tableName'], $row['colname'] . '__sort')) {
                 continue;
             }
