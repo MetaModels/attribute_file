@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,16 +36,25 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['file_widgetMode'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetMode'],
-    'exclude'   => true,
-    'inputType' => 'radio',
-    'default'   => 'normal',
-    'options'   => ['normal'],
-    'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['file_widgetModes'],
-    'eval'      => [
+    'label'       => 'file_widgetMode.label',
+    'description' => 'file_widgetMode.description',
+    'exclude'     => true,
+    'inputType'   => 'radio',
+    'default'     => 'normal',
+    'options'     => ['normal'],
+    'reference'   => [
+        'normal'                     => 'file_widgetModes.normal',
+        'downloads'                  => 'file_widgetModes.downloads',
+        'gallery'                    => 'file_widgetModes.gallery',
+        'fe_single_upload'           => 'file_widgetModes.fe_single_upload',
+        'fe_single_upload_preview'   => 'file_widgetModes.fe_single_upload_preview',
+        'fe_multiple_upload'         => 'file_widgetModes.fe_multiple_upload',
+        'fe_multiple_upload_preview' => 'file_widgetModes.fe_multiple_upload_preview',
+    ],
+    'eval'        => [
         'tl_class' => 'clr w50'
     ],
-    'sql'       => 'char(32) NOT NULL default \'normal\''
+    'sql'         => 'char(32) NOT NULL default \'normal\''
 ];
 
 // Load configuration for the frontend editing.
@@ -96,124 +105,142 @@ if (\in_array(
         );
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_useHomeDir'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_useHomeDir'],
-        'exclude'   => true,
-        'inputType' => 'checkbox',
-        'eval'      => [
+        'label'       => 'fe_widget_file_useHomeDir.label',
+        'description' => 'fe_widget_file_useHomeDir.description',
+        'exclude'     => true,
+        'inputType'   => 'checkbox',
+        'eval'        => [
             'tl_class' => 'w50 cbx m12',
         ],
-        'sql'       => "char(1) NOT NULL default ''",
+        'sql'         => "char(1) NOT NULL default ''",
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_uploadFolder'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_uploadFolder'],
-        'exclude'   => true,
-        'inputType' => 'fileTree',
-        'eval'      => [
+        'label'       => 'fe_widget_file_uploadFolder.label',
+        'description' => 'fe_widget_file_uploadFolder.description',
+        'exclude'     => true,
+        'inputType'   => 'fileTree',
+        'eval'        => [
             'fieldType' => 'radio',
             'tl_class'  => 'w50'
         ],
-        'sql'       => "binary(16) NULL"
+        'sql'         => "binary(16) NULL"
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_doNotOverwrite'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_doNotOverwrite'],
-        'exclude'   => true,
-        'inputType' => 'checkbox',
-        'eval'      => [
+        'label'       => 'fe_widget_file_doNotOverwrite.label',
+        'description' => 'fe_widget_file_doNotOverwrite.description',
+        'exclude'     => true,
+        'inputType'   => 'checkbox',
+        'eval'        => [
             'tl_class' => 'w50 cbx m12 clr',
         ],
-        'sql'       => "char(1) NOT NULL default ''",
+        'sql'         => "char(1) NOT NULL default ''",
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_deselect'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_deselect'],
-        'exclude'   => true,
-        'inputType' => 'checkbox',
-        'eval'      => [
+        'label'       => 'fe_widget_file_deselect.label',
+        'description' => 'fe_widget_file_deselect.description',
+        'exclude'     => true,
+        'inputType'   => 'checkbox',
+        'eval'        => [
             'tl_class' => 'w50 clr cbx m12',
         ],
-        'sql'       => "char(1) NOT NULL default ''",
+        'sql'         => "char(1) NOT NULL default ''",
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_delete'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_delete'],
-        'exclude'   => true,
-        'inputType' => 'checkbox',
-        'eval'      => [
+        'label'       => 'fe_widget_file_delete.label',
+        'description' => 'fe_widget_file_delete.description',
+        'exclude'     => true,
+        'inputType'   => 'checkbox',
+        'eval'        => [
             'tl_class' => 'w50 cbx m12',
         ],
-        'sql'       => "char(1) NOT NULL default ''",
+        'sql'         => "char(1) NOT NULL default ''",
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_extend_folder'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_extend_folder'],
-        'inputType' => 'text',
-        'eval'      => [
+        'label'       => 'fe_widget_file_extend_folder.label',
+        'description' => 'fe_widget_file_extend_folder.description',
+        'inputType'   => 'text',
+        'eval'        => [
             'tl_class' => 'w50 clr'
         ],
-        'sql'       => "longtext"
+        'sql'         => "longtext"
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_normalize_extend_folder'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_extend_folder'],
-        'exclude'   => true,
-        'inputType' => 'checkbox',
-        'eval'      => [
+        'label'       => 'fe_widget_file_normalize_extend_folder.label',
+        'description' => 'fe_widget_file_normalize_extend_folder.description',
+        'exclude'     => true,
+        'inputType'   => 'checkbox',
+        'eval'        => [
             'tl_class' => 'w50 cbx m12',
         ],
-        'sql'       => "char(1) NOT NULL default ''",
+        'sql'         => "char(1) NOT NULL default ''",
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_normalize_filename'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_normalize_filename'],
-        'exclude'   => true,
-        'inputType' => 'checkbox',
-        'eval'      => [
+        'label'       => 'fe_widget_file_normalize_filename.label',
+        'description' => 'fe_widget_file_normalize_filename.description',
+        'exclude'     => true,
+        'inputType'   => 'checkbox',
+        'eval'        => [
             'tl_class' => 'w50 cbx m12',
         ],
-        'sql'       => "char(1) NOT NULL default ''",
+        'sql'         => "char(1) NOT NULL default ''",
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_prefix_filename'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_prefix_filename'],
-        'inputType' => 'text',
-        'eval'      => [
+        'label'       => 'fe_widget_file_prefix_filename.label',
+        'description' => 'fe_widget_file_prefix_filename.description',
+        'inputType'   => 'text',
+        'eval'        => [
             'tl_class' => 'w50 clr'
         ],
-        'sql'       => "longtext"
+        'sql'         => "longtext"
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_postfix_filename'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_postfix_filename'],
-        'inputType' => 'text',
-        'eval'      => [
+        'label'       => 'fe_widget_file_postfix_filename.label',
+        'description' => 'fe_widget_file_postfix_filename.description',
+        'inputType'   => 'text',
+        'eval'        => [
             'tl_class' => 'w50'
         ],
-        'sql'       => "longtext"
+        'sql'         => "longtext"
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_sortBy'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_sortBy'],
-        'exclude'   => true,
-        'inputType' => 'select',
-        'options'   => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'random'],
-        'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting'],
-        'sql'       => 'varchar(32) NOT NULL default \'\'',
-        'eval'      => [
+        'label'       => 'fe_widget_file_sortBy.label',
+        'description' => 'fe_widget_file_sortBy.description',
+        'exclude'     => true,
+        'inputType'   => 'select',
+        'options'     => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'random'],
+        'reference'   => [
+            'name_asc'  => 'fe_widget_file_sortBy.name_asc',
+            'name_desc' => 'fe_widget_file_sortBy.name_desc',
+            'date_asc'  => 'fe_widget_file_sortBy.date_asc',
+            'date_desc' => 'fe_widget_file_sortBy.date_desc',
+            'random'    => 'fe_widget_file_sortBy.random',
+        ],
+        'sql'         => 'varchar(32) NOT NULL default \'\'',
+        'eval'        => [
             'tl_class' => 'w50',
             'chosen'   => true
         ]
     ];
 
     $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['fe_widget_file_imageSize'] = [
-        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['fe_widget_file_imageSize'],
-        'exclude'   => true,
-        'inputType' => 'imageSize',
-        'options'   => $GLOBALS['TL_CROP'],
-        'reference' => &$GLOBALS['TL_LANG']['MSC'],
-        'sql'       => 'varchar(255) NOT NULL default \'\'',
-        'eval'      => [
+        'label'       => 'fe_widget_file_imageSize.label',
+        'description' => 'fe_widget_file_imageSize.description',
+        'exclude'     => true,
+        'inputType'   => 'imageSize',
+        'options'     => $GLOBALS['TL_CROP'],
+        'reference'   => &$GLOBALS['TL_LANG']['MSC'],
+        'sql'         => 'varchar(255) NOT NULL default \'\'',
+        'eval'        => [
             'rgxp'               => 'digit',
             'includeBlankOption' => true,
             'nospace'            => true,

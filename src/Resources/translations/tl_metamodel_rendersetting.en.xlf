@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_rendersetting.en.xlf">
+    <body>
+      <trans-unit id="file_showImage.label" resname="file_showImage.label">
+        <source>Enable as image field with thumbnail</source>
+      </trans-unit>
+      <trans-unit id="file_showImage.description" resname="file_showImage.description">
+        <source>If selected, a thumbnail will be created for image files.</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.label" resname="file_sortBy.label">
+        <source>Order by</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.description" resname="file_sortBy.description">
+        <source>Please choose the sort order.</source>
+      </trans-unit>
+      <trans-unit id="file_showLink.label" resname="file_showLink.label">
+        <source>Create link as file download or image lightbox</source>
+      </trans-unit>
+      <trans-unit id="file_showLink.description" resname="file_showLink.description">
+        <source>Wraps the item in a link that will show the fullscreen image or download the file.</source>
+      </trans-unit>
+      <trans-unit id="file_imageSize.label" resname="file_imageSize.label">
+        <source>Image width and height</source>
+      </trans-unit>
+      <trans-unit id="file_imageSize.description" resname="file_imageSize.description">
+        <source>Please enter either the image width, the image height or both measures to resize the image. If you leave both fields blank, the original image size will be displayed.</source>
+      </trans-unit>
+      <trans-unit id="file_placeholder.label" resname="file_placeholder.label">
+        <source>Image placeholder</source>
+      </trans-unit>
+      <trans-unit id="file_placeholder.description" resname="file_placeholder.description">
+        <source>Select an image as a placeholder if no image is selected.</source>
+      </trans-unit>
+      <trans-unit id="file_protectedDownload.label" resname="file_protectedDownload.label">
+        <source>Protected download</source>
+      </trans-unit>
+      <trans-unit id="file_protectedDownload.description" resname="file_protectedDownload.description">
+        <source>If this option is selected, the URL is only temporarily valid.</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.name_asc" resname="file_sortBy.name_asc">
+        <source>File name (ascending)</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.name_desc" resname="file_sortBy.name_desc">
+        <source>File name (descending)</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.date_asc" resname="file_sortBy.date_asc">
+        <source>Date (ascending)</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.date_desc" resname="file_sortBy.date_desc">
+        <source>Date (descending)</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.random" resname="file_sortBy.random">
+        <source>Random order</source>
+      </trans-unit>
+      <trans-unit id="file_sortBy.manual" resname="file_sortBy.manual">
+        <source>Manual sorting</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
