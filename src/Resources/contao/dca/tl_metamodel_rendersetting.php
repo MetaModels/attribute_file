@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -39,55 +39,67 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metasubpalettes']['file_showIm
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_sortBy'],
-    'exclude'   => true,
-    'inputType' => 'select',
-    'options'   => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'manual', 'random'],
-    'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting'],
-    'sql'       => 'varchar(32) NOT NULL default \'\'',
-    'eval'      => [
+    'label'       => 'file_sortBy.label',
+    'description' => 'file_sortBy.description',
+    'exclude'     => true,
+    'inputType'   => 'select',
+    'options'     => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'manual', 'random'],
+    'reference'   => [
+    'name_asc'  => 'file_sortBy.name_asc',
+    'name_desc' => 'file_sortBy.name_desc',
+    'date_asc'  => 'file_sortBy.date_asc',
+    'date_desc' => 'file_sortBy.date_desc',
+    'random'    => 'file_sortBy.random',
+    'manual'    => 'file_sortBy.manual',
+],
+    'sql'         => 'varchar(32) NOT NULL default \'\'',
+    'eval'        => [
         'tl_class' => 'w50',
         'chosen'   => true
     ]
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showLink'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showLink'],
-    'inputType' => 'checkbox',
-    'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => [
+    'label'       => 'file_showLink.label',
+    'description' => 'file_showLink.description',
+    'inputType'   => 'checkbox',
+    'sql'         => 'char(1) NOT NULL default \'\'',
+    'eval'        => [
         'submitOnChange' => true,
         'tl_class'       => 'clr w50 cbx m12'
     ]
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_protectedDownload'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_protectedDownload'],
-    'inputType' => 'checkbox',
-    'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => [
+    'label'       => 'file_protectedDownload.label',
+    'description' => 'file_protectedDownload.description',
+    'inputType'   => 'checkbox',
+    'sql'         => 'char(1) NOT NULL default \'\'',
+    'eval'        => [
         'tl_class' => 'w50 cbx m12'
     ]
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_showImage'],
-    'inputType' => 'checkbox',
-    'sql'       => 'char(1) NOT NULL default \'\'',
-    'eval'      => [
+    'label'       => 'file_showImage.label',
+    'description' => 'file_showImage.description',
+    'inputType'   => 'checkbox',
+    'sql'         => 'char(1) NOT NULL default \'\'',
+    'eval'        => [
         'submitOnChange' => true,
         'tl_class'       => 'clr w50 cbx m12'
     ]
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_imageSize'],
-    'exclude'   => true,
-    'inputType' => 'imageSize',
-    'options'   => $GLOBALS['TL_CROP'],
-    'reference' => &$GLOBALS['TL_LANG']['MSC'],
-    'sql'       => 'varchar(255) NOT NULL default \'\'',
-    'eval'      => [
+    'label'       => 'file_imageSize.label',
+    'description' => 'file_imageSize.description',
+    'exclude'     => true,
+    'inputType'   => 'imageSize',
+    'options'     => $GLOBALS['TL_CROP'],
+    'reference'   => &$GLOBALS['TL_LANG']['MSC'],
+    'sql'         => 'varchar(255) NOT NULL default \'\'',
+    'eval'        => [
         'rgxp'               => 'digit',
         'includeBlankOption' => true,
         'nospace'            => true,
@@ -97,11 +109,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_placeholder'] = [
-    'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['file_placeholder'],
-    'exclude'   => true,
-    'inputType' => 'fileTree',
-    'sql'       => 'blob NULL',
-    'eval'      => [
+    'label'       => 'file_placeholder.label',
+    'description' => 'file_placeholder.description',
+    'exclude'     => true,
+    'inputType'   => 'fileTree',
+    'sql'         => 'blob NULL',
+    'eval'        => [
         'fieldType' => 'radio',
         'files'     => true,
         'filesOnly' => true,

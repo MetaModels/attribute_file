@@ -49,12 +49,7 @@
     "metamodels/contao-frontend-editing": "^2.3@dev",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.cyberspectrum.de/r"
-    }
-  ],
+  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
       "MetaModels\\AttributeFileBundle\\": "src"
