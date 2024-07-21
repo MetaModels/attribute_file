@@ -1,0 +1,78 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_rendersetting.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="file_showImage.label" resname="file_showImage.label">
+        <source>Enable as image field with thumbnail</source>
+        <target>Als Bildfeld mit Vorschaubild benutzen</target>
+      </trans-unit>
+      <trans-unit id="file_showImage.description" resname="file_showImage.description">
+        <source>If selected, a thumbnail will be created for image files.</source>
+        <target>Falls aktiviert, wird für das Bild ein verkleinertes Vorschaubild generiert.</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.label" resname="file_sortBy.label">
+        <source>Order by</source>
+        <target>Sortierung nach</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.description" resname="file_sortBy.description">
+        <source>Please choose the sort order.</source>
+        <target>Bitte wählen Sie die Sortierreihenfolge.</target>
+      </trans-unit>
+      <trans-unit id="file_showLink.label" resname="file_showLink.label">
+        <source>Create link as file download or image lightbox</source>
+        <target>Link als Download oder Lightbox erstellen</target>
+      </trans-unit>
+      <trans-unit id="file_showLink.description" resname="file_showLink.description">
+        <source>Wraps the item in a link that will show the fullscreen image or download the file.</source>
+        <target>Das Item wird in einen Link eingebettet, der entweder für eine Großansicht oder einen Download dienen kann.</target>
+      </trans-unit>
+      <trans-unit id="file_imageSize.label" resname="file_imageSize.label">
+        <source>Image width and height</source>
+        <target>Bildbreite und -höhe</target>
+      </trans-unit>
+      <trans-unit id="file_imageSize.description" resname="file_imageSize.description">
+        <source>Please enter either the image width, the image height or both measures to resize the image. If you leave both fields blank, the original image size will be displayed.</source>
+        <target>Bitte geben Sie entweder die Bildbreite, die Bildhöhe oder beides ein, damit das Bild skaliert wird. Falls Sie beide Felder leer lassen, wird das Bild in Originalgröße ausgegeben.</target>
+      </trans-unit>
+      <trans-unit id="file_placeholder.label" resname="file_placeholder.label">
+        <source>Image placeholder</source>
+        <target>Bild als Platzhalter</target>
+      </trans-unit>
+      <trans-unit id="file_placeholder.description" resname="file_placeholder.description">
+        <source>Select an image as a placeholder if no image is selected.</source>
+        <target>Wählen Sie ein Bild als Platzhalter, wenn kein Bild ausgewählt ist.</target>
+      </trans-unit>
+      <trans-unit id="file_protectedDownload.label" resname="file_protectedDownload.label">
+        <source>Protected download</source>
+        <target>Geschützter Download</target>
+      </trans-unit>
+      <trans-unit id="file_protectedDownload.description" resname="file_protectedDownload.description">
+        <source>If this option is selected, the URL is only temporarily valid.</source>
+        <target>Wenn diese Option ausgewählt ist, ist die URL nur vorübergehend gültig.</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.name_asc" resname="file_sortBy.name_asc">
+        <source>File name (ascending)</source>
+        <target>Dateiname (aufsteigend)</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.name_desc" resname="file_sortBy.name_desc">
+        <source>File name (descending)</source>
+        <target>Dateiname (absteigend)</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.date_asc" resname="file_sortBy.date_asc">
+        <source>Date (ascending)</source>
+        <target>Datum (aufsteigend)</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.date_desc" resname="file_sortBy.date_desc">
+        <source>Date (descending)</source>
+        <target>Datum (absteigend)</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.random" resname="file_sortBy.random">
+        <source>Random order</source>
+        <target>Zufällige Reihenfolge</target>
+      </trans-unit>
+      <trans-unit id="file_sortBy.manual" resname="file_sortBy.manual">
+        <source>Manual sorting</source>
+        <target>Manuelle Sortierung</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
