@@ -16,6 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -45,13 +46,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_sortBy'] = [
     'inputType'   => 'select',
     'options'     => ['name_asc', 'name_desc', 'date_asc', 'date_desc', 'manual', 'random'],
     'reference'   => [
-    'name_asc'  => 'file_sortBy.name_asc',
-    'name_desc' => 'file_sortBy.name_desc',
-    'date_asc'  => 'file_sortBy.date_asc',
-    'date_desc' => 'file_sortBy.date_desc',
-    'random'    => 'file_sortBy.random',
-    'manual'    => 'file_sortBy.manual',
-],
+        'name_asc'  => 'file_sortBy.name_asc',
+        'name_desc' => 'file_sortBy.name_desc',
+        'date_asc'  => 'file_sortBy.date_asc',
+        'date_desc' => 'file_sortBy.date_desc',
+        'random'    => 'file_sortBy.random',
+        'manual'    => 'file_sortBy.manual',
+    ],
     'sql'         => 'varchar(32) NOT NULL default \'\'',
     'eval'        => [
         'tl_class' => 'w50',
@@ -92,20 +93,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_showImage'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
-    'label'       => 'file_imageSize.label',
-    'description' => 'file_imageSize.description',
-    'exclude'     => true,
-    'inputType'   => 'imageSize',
-    'options'     => $GLOBALS['TL_CROP'],
-    'reference'   => &$GLOBALS['TL_LANG']['MSC'],
-    'sql'         => 'varchar(255) NOT NULL default \'\'',
-    'eval'        => [
-        'rgxp'               => 'digit',
+    'label'            => 'file_imageSize.label',
+    'description'      => 'file_imageSize.description',
+    'exclude'          => true,
+    'inputType'        => 'imageSize',
+    'options_callback' => static function () {
+        return System::getContainer()->get('contao.image.sizes')?->getOptionsForUser(BackendUser::getInstance());
+    },
+    'reference'        => &$GLOBALS['TL_LANG']['MSC'],
+    'eval'             => [
+        'rgxp'               => 'natural',
         'includeBlankOption' => true,
         'nospace'            => true,
         'helpwizard'         => true,
         'tl_class'           => 'clr w50'
-    ]
+    ],
+    'sql'              => 'varchar(255) NOT NULL default \'\'',
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_placeholder'] = [
