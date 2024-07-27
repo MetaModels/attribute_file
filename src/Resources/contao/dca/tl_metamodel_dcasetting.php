@@ -237,7 +237,9 @@ if (\in_array(
         'description' => 'fe_widget_file_imageSize.description',
         'exclude'     => true,
         'inputType'   => 'imageSize',
-        'options'     => $GLOBALS['TL_CROP'],
+        'options_callback' => static function () {
+            return System::getContainer()->get('contao.image.sizes')?->getOptionsForUser(BackendUser::getInstance());
+        },
         'reference'   => &$GLOBALS['TL_LANG']['MSC'],
         'sql'         => 'varchar(255) NOT NULL default \'\'',
         'eval'        => [
