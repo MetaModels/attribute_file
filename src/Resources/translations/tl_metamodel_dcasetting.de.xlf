@@ -122,12 +122,12 @@
         <target>Dateien als sortierbare Bilder anzeigen z.B. für eine Galerie.</target>
       </trans-unit>
       <trans-unit id="file_widgetModes.fe_single_upload" resname="file_widgetModes.fe_single_upload">
-        <source>Single file upload [only for frontend editing] - Deprecated!</source>
-        <target>Einzelner Datei-Upload [nur für Frontend-Bearbeitung] - Deprecated!</target>
+        <source>Single file upload [only for frontend editing]</source>
+        <target>Einzelner Datei-Upload [nur für Frontend-Bearbeitung]</target>
       </trans-unit>
       <trans-unit id="file_widgetModes.fe_single_upload_preview" resname="file_widgetModes.fe_single_upload_preview">
-        <source>Single file upload with show thumbnail [only for frontend editing] - Deprecated!</source>
-        <target>Einzelner Datei-Upload mit Anzeige der Vorschaubilder [nur für Frontend-Bearbeitung] - Deprecated!</target>
+        <source>Single file upload with show thumbnail [only for frontend editing]</source>
+        <target>Einzelner Datei-Upload mit Anzeige der Vorschaubilder [nur für Frontend-Bearbeitung]</target>
       </trans-unit>
       <trans-unit id="file_widgetModes.fe_multiple_upload" resname="file_widgetModes.fe_multiple_upload">
         <source>Multiple file upload [only for frontend editing]</source>

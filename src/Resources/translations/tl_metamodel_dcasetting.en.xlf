@@ -93,10 +93,10 @@
         <source>Show files as sortable images e.g. for gallery.</source>
       </trans-unit>
       <trans-unit id="file_widgetModes.fe_single_upload" resname="file_widgetModes.fe_single_upload">
-        <source>Single file upload [only for frontend editing] - Deprecated!</source>
+        <source>Single file upload [only for frontend editing]</source>
       </trans-unit>
       <trans-unit id="file_widgetModes.fe_single_upload_preview" resname="file_widgetModes.fe_single_upload_preview">
-        <source>Single file upload with show thumbnail [only for frontend editing] - Deprecated!</source>
+        <source>Single file upload with show thumbnail [only for frontend editing]</source>
       </trans-unit>
       <trans-unit id="file_widgetModes.fe_multiple_upload" resname="file_widgetModes.fe_multiple_upload">
         <source>Multiple file upload [only for frontend editing]</source>

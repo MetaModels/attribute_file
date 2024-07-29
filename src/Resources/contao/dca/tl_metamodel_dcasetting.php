@@ -21,6 +21,7 @@
  * @filesource
  */
 
+use Contao\BackendUser;
 use Contao\System;
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 
