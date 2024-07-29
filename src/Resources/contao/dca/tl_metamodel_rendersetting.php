@@ -22,6 +22,9 @@
  * @filesource
  */
 
+use Contao\BackendUser;
+use Contao\System;
+
 /**
  * Table tl_metamodel_rendersettings
  */
