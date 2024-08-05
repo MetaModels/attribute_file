@@ -100,18 +100,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
     'description'      => 'file_imageSize.description',
     'exclude'          => true,
     'inputType'        => 'imageSize',
-    'options_callback' => static function () {
-        return System::getContainer()->get('contao.image.sizes')?->getOptionsForUser(BackendUser::getInstance());
-    },
-    'reference'        => &$GLOBALS['TL_LANG']['MSC'],
     'eval'             => [
         'rgxp'               => 'natural',
         'includeBlankOption' => true,
         'nospace'            => true,
-        'helpwizard'         => true,
         'tl_class'           => 'clr w50'
     ],
-    'sql'              => 'varchar(255) NOT NULL default \'\'',
+    'sql'              => 'varchar(128) COLLATE ascii_bin NOT NULL  \'\'',
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_placeholder'] = [
