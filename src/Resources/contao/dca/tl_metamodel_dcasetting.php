@@ -238,16 +238,11 @@ if (\in_array(
         'description' => 'fe_widget_file_imageSize.description',
         'exclude'     => true,
         'inputType'   => 'imageSize',
-        'options_callback' => static function () {
-            return System::getContainer()->get('contao.image.sizes')?->getOptionsForUser(BackendUser::getInstance());
-        },
-        'reference'   => &$GLOBALS['TL_LANG']['MSC'],
         'sql'         => 'varchar(255) NOT NULL default \'\'',
         'eval'        => [
             'rgxp'               => 'digit',
             'includeBlankOption' => true,
             'nospace'            => true,
-            'helpwizard'         => true,
             'tl_class'           => 'w50'
         ]
     ];

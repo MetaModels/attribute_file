@@ -19,19 +19,19 @@
 
 declare(strict_types=1);
 
-namespace MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\RenderSetting;
+namespace MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use Doctrine\DBAL\Connection;
 use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsProvider;
-use MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSetting\AbstractListener;
+use MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AbstractListener;
 use MetaModels\IFactory;
 
 /**
- * Add the options for the file image size.
+ * Add the options for the FEE file image size.
  */
-final class FileImageSizeOptions extends AbstractListener
+final class FeeFileImageSizeOptions extends AbstractListener
 {
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
@@ -52,7 +52,7 @@ final class FileImageSizeOptions extends AbstractListener
     public function __invoke(GetPropertyOptionsEvent $event): void
     {
         if (
-            ('file_imageSize' !== $event->getPropertyName())
+            ('fe_widget_file_imageSize' !== $event->getPropertyName())
             || (false === $this->wantToHandle($event))
             || (false === $this->isAttributeFile($event))
         ) {

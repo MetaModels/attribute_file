@@ -79,8 +79,8 @@ tasks:
     config:
       exclude:
         - tests
-        - src/CoreBundle/EventListener/DcGeneral/DefinitionBuilder
-        - src/CoreBundle/Resources/contao/dca
+        - src/EventListener/DcGeneral/Table/DcaSetting/FeeFileImageSizeOptions.php
+        - src/EventListener/DcGeneral/Table/RenderSetting/FileImageSizeOptions.php
 
   phpmd:
     plugin: phpmd
