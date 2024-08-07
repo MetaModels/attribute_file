@@ -26,7 +26,7 @@ use MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\File
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use MetaModels\AttributeFileBundle\EventListener\BuildAttributeListener;
 use MetaModels\AttributeFileBundle\EventListener\BuildDataDefinitionListener;
-use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsProvider;
 use MetaModels\AttributeFileBundle\Schema\DoctrineSchemaGenerator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -65,8 +65,6 @@ class MetaModelsAttributeFileExtensionTest extends TestCase
         self::assertCount(1, $definition->getTag('kernel.event_listener'));
 
         self::assertTrue($container->hasDefinition('metamodels.attribute_file.event_listener.image_size_options'));
-        $definition = $container->getDefinition('metamodels.attribute_file.event_listener.image_size_options');
-        self::assertCount(1, $definition->getTag('kernel.event_listener'));
 
         self::assertTrue($container->hasDefinition('metamodels.attribute_file.event_listener.build-data-definition'));
         $definition = $container->getDefinition('metamodels.attribute_file.event_listener.build-data-definition');
