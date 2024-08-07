@@ -4,7 +4,7 @@ services:
         arguments:
             - "@database_connection"
             - "@metamodels.table_manipulator"
-            - "@metamodels.attribute_file.toolbox.file"
+            - '@MetaModels\Helper\ToolboxFile'
             - "@=service('contao.framework').getAdapter('Contao\\\\StringUtil')"
             - "@=service('contao.framework').getAdapter('Contao\\\\Validator')"
             - "@=service('contao.framework').getAdapter('Contao\\\\FilesModel')"
