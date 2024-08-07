@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@ namespace MetaModels\AttributeFileBundle\DependencyInjection;
 use MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\FileWidgetModeOptions;
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -33,7 +34,6 @@ use function assert;
 use function in_array;
 use function is_array;
 use function is_bool;
-use function is_string;
 
 /**
  * This is the class that loads and manages the bundle configuration
@@ -80,7 +80,7 @@ class MetaModelsAttributeFileExtension extends Extension
     /**
      * {@inheritDoc}
      */
-    public function getConfiguration(array $config, ContainerBuilder $container)
+    public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         $debug = $container->getParameter('kernel.debug');
         assert(is_bool($debug));

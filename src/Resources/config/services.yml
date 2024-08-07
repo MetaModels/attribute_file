@@ -1,6 +1,9 @@
 services:
     metamodels.attribute_file.toolbox.file:
-        deprecated: 'The "%alias_id%" service is deprecated. Use the "@MetaModels\Helper\ToolboxFile".'
+        deprecated:
+            package: metamodels /attribute_file
+            version: 2.1
+            message: 'The "%alias_id%" service is deprecated. Use the "@MetaModels\Helper\ToolboxFile".'
         alias: MetaModels\Helper\ToolboxFile
         public: true
 
