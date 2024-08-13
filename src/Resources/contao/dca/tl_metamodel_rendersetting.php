@@ -106,7 +106,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_imageSize'] = [
         'nospace'            => true,
         'tl_class'           => 'clr w50'
     ],
-    'sql'              => 'varchar(128) COLLATE ascii_bin NOT NULL  \'\'',
+    'sql'              => 'varchar(128) COLLATE ascii_bin NOT NULL default \'\'',
 ];
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['fields']['file_placeholder'] = [
