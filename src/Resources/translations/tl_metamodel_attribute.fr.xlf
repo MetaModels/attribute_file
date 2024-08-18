@@ -1,0 +1,62 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_attribute.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="typeOptions.file" resname="typeOptions.file">
+        <source>File</source>
+        <target>Fichier</target>
+      </trans-unit>
+      <trans-unit id="file_customFiletree.label" resname="file_customFiletree.label">
+        <source>Customize the file tree</source>
+        <target>Personnaliser l'arborescence</target>
+      </trans-unit>
+      <trans-unit id="file_customFiletree.description" resname="file_customFiletree.description">
+        <source>Allows you to set custom options for the filetree.</source>
+        <target>Permet de personnaliser les options de l'arborescence.</target>
+      </trans-unit>
+      <trans-unit id="file_uploadFolder.label" resname="file_uploadFolder.label">
+        <source>Set file root folder</source>
+        <target>Spécifier le dossier racine</target>
+      </trans-unit>
+      <trans-unit id="file_uploadFolder.description" resname="file_uploadFolder.description">
+        <source>Selects the root point from which the user will select this file field.</source>
+        <target>Sélectionne le point racine à partir duquel l'utilisateur sélectionnera ce champ de fichier.</target>
+      </trans-unit>
+      <trans-unit id="file_validFileTypes.label" resname="file_validFileTypes.label">
+        <source>Valid file types</source>
+        <target>Types de fichiers autorisés</target>
+      </trans-unit>
+      <trans-unit id="file_validFileTypes.description" resname="file_validFileTypes.description">
+        <source>To overwrite the contao standard file types, please enter a comma separated list of extensions of valid file types for this field.</source>
+        <target>Saisir une liste d'extensions de fichiers séparées par des virgules pour remplacer les types standards définis dans Contao.</target>
+      </trans-unit>
+      <trans-unit id="file_filesOnly.label" resname="file_filesOnly.label">
+        <source>Allowed types for selection</source>
+        <target>Types autorisés à la sélection</target>
+      </trans-unit>
+      <trans-unit id="file_filesOnly.description" resname="file_filesOnly.description">
+        <source>Select a restriction on files or folders - default is no restriction on files or folders.</source>
+        <target>Définir une restriction de fichiers ou de dossiers. Par défaut, pas de restriction.</target>
+      </trans-unit>
+      <trans-unit id="file_multiple.label" resname="file_multiple.label">
+        <source>Multiple selection</source>
+        <target>Sélection multiple</target>
+      </trans-unit>
+      <trans-unit id="file_multiple.description" resname="file_multiple.description">
+        <source>If selected, user will be able to select more than one item.</source>
+        <target>Si coché, l'utilisateur pourra sélectionner plusieurs éléments.</target>
+      </trans-unit>
+      <trans-unit id="file_filesOnly_options.allow_both" resname="file_filesOnly_options.allow_both">
+        <source>Allow files and folders</source>
+        <target>Autoriser fichiers et dossiers</target>
+      </trans-unit>
+      <trans-unit id="file_filesOnly_options.allow_files" resname="file_filesOnly_options.allow_files">
+        <source>Allow files only</source>
+        <target>Autoriser seulement les fichiers</target>
+      </trans-unit>
+      <trans-unit id="file_filesOnly_options.allow_folder" resname="file_filesOnly_options.allow_folder">
+        <source>Allow folders only</source>
+        <target>Autoriser seulement les dossiers</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
