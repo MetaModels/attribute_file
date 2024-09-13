@@ -39,9 +39,11 @@
       </trans-unit>
       <trans-unit id="fe_widget_file_extend_folder.label" resname="fe_widget_file_extend_folder.label">
         <source>Extend folder</source>
+        <target>Étendre le chemin du dossier</target>
       </trans-unit>
       <trans-unit id="fe_widget_file_extend_folder.description" resname="fe_widget_file_extend_folder.description">
         <source>Here you can extend the base upload folder path. The Contao insert tags are supported to extend the path.</source>
+        <target>Ici vous pouvez étendre le chemin du dossier de téléchargement de base. Les insert tags de Contao sont supportés. </target>
       </trans-unit>
       <trans-unit id="fe_widget_file_deselect.label" resname="fe_widget_file_deselect.label">
         <source>Deselect file</source>
@@ -61,15 +63,19 @@
       </trans-unit>
       <trans-unit id="fe_widget_file_normalize_extend_folder.label" resname="fe_widget_file_normalize_extend_folder.label">
         <source>Normalize extend folder</source>
+        <target>Normaliser l'extension du chemin du dossier</target>
       </trans-unit>
       <trans-unit id="fe_widget_file_normalize_extend_folder.description" resname="fe_widget_file_normalize_extend_folder.description">
         <source>Normalize the extend folder with an alias generator from the string util.</source>
+        <target> Normaliser l'extension de dossier avec un générateur d'alias à partir de la chaîne util.</target>
       </trans-unit>
       <trans-unit id="fe_widget_file_normalize_filename.label" resname="fe_widget_file_normalize_filename.label">
         <source>Normalize filename</source>
+        <target>Normaliser le nom de fichier.</target>
       </trans-unit>
       <trans-unit id="fe_widget_file_normalize_filename.description" resname="fe_widget_file_normalize_filename.description">
         <source>Normalize the filename with an alias generator from the string util.</source>
+        <target> Normaliser le nom de fichier avec un générateur d'alias à partir de la chaîne util.</target>
       </trans-unit>
       <trans-unit id="fe_widget_file_prefix_filename.label" resname="fe_widget_file_prefix_filename.label">
         <source>Prefix filename</source>
