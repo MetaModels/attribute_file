@@ -92,6 +92,9 @@ class FileUsageProvider implements FileUsageProviderInterface
             }
 
             foreach ($allData as $itemId => $selectedFiles) {
+                if([] === $selectedFiles['value']) {
+                    continue;
+                }
                 $collection->addResult(
                     $selectedFiles['value'][0],
                     $this->createFileResult($table, $attributeName, $itemId, false)
