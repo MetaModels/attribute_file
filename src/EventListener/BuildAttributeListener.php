@@ -27,9 +27,6 @@ use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 
-/**
- * Class Attribute
- */
 class BuildAttributeListener
 {
     /**
@@ -42,7 +39,10 @@ class BuildAttributeListener
     public function buildAttribute(BuildAttributeEvent $event)
     {
         $attribute = $event->getAttribute();
-        if (!($attribute instanceof File) || !$attribute->get('file_multiple')) {
+        if (
+            !($attribute instanceof File)
+            || !$attribute->get('file_multiple')
+        ) {
             return;
         }
 
@@ -59,6 +59,7 @@ class BuildAttributeListener
             ->setWidgetType('fileTreeOrder')
             ->setLabel($nameSort)
             ->setExtra(['tl_class' => 'hidden']);
+
         $this->addAttributeToDefinition($container, $name);
     }
 
@@ -75,6 +76,7 @@ class BuildAttributeListener
         if (!$container->hasDefinition('metamodels.file-attributes')) {
             $container->setDefinition('metamodels.file-attributes', new AttributeFileDefinition());
         }
+
         $definition = $container->getDefinition('metamodels.file-attributes');
         assert($definition instanceof AttributeFileDefinition);
 

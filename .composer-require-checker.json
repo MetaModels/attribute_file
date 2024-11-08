@@ -6,6 +6,11 @@
     "Contao\\ManagerPlugin\\Bundle\\Config\\BundleConfig",
     "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
     "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
-    "MetaModels\\ContaoFrontendEditingBundle\\MetaModelsContaoFrontendEditingBundle"
+    "MetaModels\\ContaoFrontendEditingBundle\\MetaModelsContaoFrontendEditingBundle",
+    "InspiredMinds\\ContaoFileUsage\\Provider\\FileUsageProviderInterface",
+    "InspiredMinds\\ContaoFileUsage\\Result\\FileTreeMultipleResult",
+    "InspiredMinds\\ContaoFileUsage\\Result\\FileTreeSingleResult",
+    "InspiredMinds\\ContaoFileUsage\\Result\\ResultInterface",
+    "InspiredMinds\\ContaoFileUsage\\Result\\ResultsCollection"
   ]
 }
