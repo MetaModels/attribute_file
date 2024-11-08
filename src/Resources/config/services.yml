@@ -32,3 +32,14 @@ services:
         - '@metamodels.table_manipulator'
       tags:
         - name: contao.migration
+
+#    MetaModels\AttributeFileBundle\FileUsage\FileUsageProvider:
+#      public: true
+#      arguments:
+#        $factory: '@metamodels.factory'
+#        $urlGenerator: '@router'
+#        $requestStack: '@request_stack'
+#        $csrfTokenManager: '@contao.csrf.token_manager'
+#        $csrfTokenName: '%contao.csrf_token_name%'
+#      tags:
+#        - { name: contao_file_usage.provider }

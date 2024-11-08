@@ -39,12 +39,15 @@
     "symfony/cache": "^5.4",
     "symfony/config": "^5.4",
     "symfony/dependency-injection": "^5.4",
+    "symfony/http-foundation": "^5.4",
     "symfony/http-kernel": "^5.4",
+    "symfony/routing": "^5.4",
     "symfony/security-core": "^5.4",
     "symfony/translation-contracts": "^2.5.2"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.1",
+    "inspiredminds/contao-file-usage": "^3.0.1",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "metamodels/contao-frontend-editing": "^2.3@dev",
     "phpcq/runner-bootstrap": "^1.0@dev"
