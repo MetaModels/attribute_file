@@ -45,6 +45,17 @@ use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Template;
 
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function array_values;
+use function is_array;
+use function serialize;
+use function sprintf;
+use function str_replace;
+use function trigger_error;
+use function trim;
+
 /**
  * This is the MetaModel attribute class for handling file fields.
  *
@@ -147,7 +158,7 @@ class File extends BaseComplex
 
         if (null === $stringUtil) {
             // @codingStandardsIgnoreStart
-            @\trigger_error(
+            @trigger_error(
                 '"stringUtil"" is missing. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
@@ -160,7 +171,7 @@ class File extends BaseComplex
 
         if (null === $validator) {
             // @codingStandardsIgnoreStart
-            @\trigger_error(
+            @trigger_error(
                 '"validator"" is missing. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
@@ -173,7 +184,7 @@ class File extends BaseComplex
 
         if (null === $fileRepository) {
             // @codingStandardsIgnoreStart
-            @\trigger_error(
+            @trigger_error(
                 '"fileRepository"" is missing. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
@@ -186,7 +197,7 @@ class File extends BaseComplex
 
         if (null === $config) {
             // @codingStandardsIgnoreStart
-            @\trigger_error(
+            @trigger_error(
                 '"config"" is missing. It has to be passed in the constructor.' .
                 'Fallback will get removed in MetaModels 3.0',
                 E_USER_DEPRECATED
@@ -224,11 +235,11 @@ class File extends BaseComplex
 
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
         $tableColumns = $this->connection->createSchemaManager()->listTableColumns($metaModel);
-        if (($colName = $this->getColName()) && \array_key_exists($colName, $tableColumns)) {
+        if (($colName = $this->getColName()) && array_key_exists($colName, $tableColumns)) {
             $this->tableManipulator->dropColumn($metaModel, $colName);
         }
 
-        if (\array_key_exists($colName . '__sort', $tableColumns)) {
+        if (array_key_exists($colName . '__sort', $tableColumns)) {
             $this->tableManipulator->dropColumn($metaModel, $colName . '__sort');
         }
     }
@@ -254,26 +265,53 @@ class File extends BaseComplex
     }
 
     /**
+     * Search for file names or UUIDs.
+     * Find items if one or more files are stored (serialised array) or the parent folder has been selected.
+     *
      * {@inheritdoc}
      */
-    public function searchFor($strPattern)
+    public function searchFor($strPattern): ?array
     {
         $subSelect = $this->connection->createQueryBuilder();
         $subSelect
-            ->select('f.uuid')
-            ->from('tl_files', 'f')
-            ->where($subSelect->expr()->like('f.path', ':value'));
+            ->select('f.uuid', 'f.pid')
+            ->from('tl_files', 'f');
+
+        if (Validator::isUuid($uuid = trim($strPattern, '*'))) {
+            $subSelect
+                ->where(('f.uuid = :value'))
+                ->setParameter('value', StringUtil::uuidToBin($uuid));
+        } else {
+            $subSelect
+                ->where($subSelect->expr()->like('f.name', ':value'))
+                ->setParameter('value', str_replace(['*', '?'], ['%', '_'], $strPattern));
+        }
+
+        if ([] === ($subResults = $subSelect->executeQuery()->fetchAllAssociative())) {
+            return [];
+        }
+
         $builder = $this->connection->createQueryBuilder();
         $builder
             ->select('t.id')
-            ->from($this->getMetaModel()->getTableName(), 't')
-            ->where($builder->expr()->in($this->getColName(), $subSelect->getSQL()))
-            ->setParameter('value', \str_replace(['*', '?'], ['%', '_'], $strPattern));
+            ->from($this->getMetaModel()->getTableName(), 't');
+
+        $uuids = [];
+        foreach ($subResults as $subResult) {
+            $uuids[$subResult['pid']]  = $subResult['pid'];
+            $uuids[$subResult['uuid']] = $subResult['uuid'];
+        }
+        $colName = $this->getColName();
+        foreach (array_values($uuids) as $key => $uuid) {
+            $builder
+                ->orWhere(sprintf('t.%s LIKE :value_%s', $colName, $key))
+                ->setParameter('value_' . $key, '%' . $uuid . '%');
+        }
 
         $statement = $builder->executeQuery();
 
         // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
-        return \array_map(static fn(mixed $value) => (string) $value, $statement->fetchFirstColumn());
+        return array_map(static fn(mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
@@ -330,7 +368,7 @@ class File extends BaseComplex
 
                 if (isset($row['sort'])) {
                     // @codingStandardsIgnoreStart
-                    @\trigger_error(
+                    @trigger_error(
                         'The sort key from the attribute file is deprecated since 2.1 and where removed in 3.0' .
                         'Use the key bin_sorted',
                         E_USER_DEPRECATED
@@ -364,7 +402,7 @@ class File extends BaseComplex
 
             // Check single file or multiple file.
             if ($this->get('file_multiple')) {
-                $files = \serialize($files);
+                $files = serialize($files);
             } else {
                 $files = $files[0] ?? null;
             }
@@ -393,7 +431,7 @@ class File extends BaseComplex
      */
     public function getAttributeSettingNames()
     {
-        return \array_merge(
+        return array_merge(
             parent::getAttributeSettingNames(),
             [
                 'file_multiple',
@@ -434,7 +472,7 @@ class File extends BaseComplex
 
         // Check single file or multiple file.
         if ($this->get('file_multiple')) {
-            return \serialize($data);
+            return serialize($data);
         }
 
         return $data[0] ?? '';
@@ -580,7 +618,7 @@ class File extends BaseComplex
             ->setBaseLanguage($this->getMetaModel()->getActiveLanguage())
             ->setFallbackLanguage($this->getMetaModel()->getFallbackLanguage())
             ->setLightboxId(
-                \sprintf(
+                sprintf(
                     '%s.%s.%s',
                     $this->getMetaModel()->getTableName(),
                     (string) ($objSettings->get('id') ?? ''),
@@ -593,7 +631,7 @@ class File extends BaseComplex
             $toolbox->setAcceptedExtensions($this->get('file_validFileTypes'));
         }
 
-        if (\is_array($imageSize = $objSettings->get('file_imageSize'))) {
+        if (is_array($imageSize = $objSettings->get('file_imageSize'))) {
             $toolbox->setResizeImages($imageSize);
         }
 
@@ -615,7 +653,7 @@ class File extends BaseComplex
     private function fetchServiceForFallback(string $parameter, string $serviceName): null|object
     {
         // @codingStandardsIgnoreStart
-        @\trigger_error(
+        @trigger_error(
             '"'. $parameter . '" is missing. It has to be passed in the constructor.' .
             'Fallback will get removed in MetaModels 3.0',
             E_USER_DEPRECATED

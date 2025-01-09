@@ -24,7 +24,6 @@ namespace MetaModels\AttributeFileBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminatorAwareTrait;
-use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Contao\CoreBundle\InsertTag\InsertTagParser;
 use Contao\FrontendUser;
 use MetaModels\AttributeFileBundle\Attribute\File;

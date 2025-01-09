@@ -92,7 +92,7 @@ class FileUsageProvider implements FileUsageProviderInterface
             }
 
             foreach ($allData as $itemId => $selectedFiles) {
-                if([] === $selectedFiles['value']) {
+                if ([] === $selectedFiles['value']) {
                     continue;
                 }
                 $collection->addResult(
