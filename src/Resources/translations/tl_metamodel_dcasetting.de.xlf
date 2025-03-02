@@ -43,7 +43,7 @@
       </trans-unit>
       <trans-unit id="fe_widget_file_extend_folder.description" resname="fe_widget_file_extend_folder.description">
         <source>Here you can extend the base upload folder path. The Contao insert tags are supported to extend the path.</source>
-        <target>Hier können Sie den Basis-Upload-Ordnerpfad erweitern. Die Contao Insert-Tags werden unterstützt, um den Pfad zu erweitern. Die Insert-Tags aus der Filterregel &quot;Eigener SQL&quot; funktionieren auch hier.</target>
+        <target>Hier können Sie den Basis-Upload-Ordnerpfad erweitern. Die Contao Insert-Tags werden unterstützt, um den Pfad zu erweitern.</target>
       </trans-unit>
       <trans-unit id="fe_widget_file_deselect.label" resname="fe_widget_file_deselect.label">
         <source>Deselect file</source>
