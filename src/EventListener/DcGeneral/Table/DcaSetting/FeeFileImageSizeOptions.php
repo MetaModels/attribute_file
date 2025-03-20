@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,9 +11,8 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/attribute_file
- * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,32 +24,22 @@ namespace MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSettin
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use Doctrine\DBAL\Connection;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsProvider;
 use MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AbstractListener;
 use MetaModels\IFactory;
 
 /**
- * Add the options for the file widget mode.
+ * Add the options for the FEE file image size.
  */
-class FileWidgetModeOptions extends AbstractListener
+final class FeeFileImageSizeOptions extends AbstractListener
 {
-    /**
-     * Frontend editing extension installed.
-     *
-     * @var bool
-     */
-    private bool $frontendEditing;
-
-    /**
-     * {@inheritDoc}
-     */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        bool $frontendEditing
+        private readonly ImageSizeOptionsProvider $optionsProvider,
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection);
-        $this->frontendEditing = $frontendEditing;
     }
 
     /**
@@ -63,39 +52,14 @@ class FileWidgetModeOptions extends AbstractListener
     public function __invoke(GetPropertyOptionsEvent $event): void
     {
         if (
-            ('file_widgetMode' !== $event->getPropertyName())
+            ('fe_widget_file_imageSize' !== $event->getPropertyName())
             || (false === $this->wantToHandle($event))
             || (false === $this->isAttributeFile($event))
         ) {
             return;
         }
 
-        $this->addOptions($event);
-    }
-
-    /**
-     * Add the options.
-     *
-     * @param GetPropertyOptionsEvent $event The event.
-     *
-     * @return void
-     */
-    private function addOptions(GetPropertyOptionsEvent $event): void
-    {
-        $addOptions = ['downloads', 'gallery'];
-        if (true === $this->isFrontendEditingExtensionInstalled()) {
-            $addOptions = \array_merge(
-                $addOptions,
-                [
-                    'fe_single_upload',
-                    'fe_single_upload_preview',
-                    'fe_multiple_upload',
-                    'fe_multiple_upload_preview'
-                ]
-            );
-        }
-
-        $event->setOptions(\array_values(\array_unique(\array_merge($event->getOptions() ?? [], $addOptions))));
+        $this->optionsProvider->addOptions($event);
     }
 
     /**
@@ -122,15 +86,5 @@ class FileWidgetModeOptions extends AbstractListener
         $result = $statement->fetchAssociative();
 
         return 'file' === ($result['type'] ?? null);
-    }
-
-    /**
-     * Is frontend editing extension installed.
-     *
-     * @return bool
-     */
-    private function isFrontendEditingExtensionInstalled(): bool
-    {
-        return $this->frontendEditing;
     }
 }

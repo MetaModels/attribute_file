@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,16 +13,21 @@
  * @package    MetaModels/attribute_file
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\AttributeFileBundle\Test\DependencyInjection;
 
-use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\DependencyInjection\MetaModelsAttributeFileExtension;
+use MetaModels\AttributeFileBundle\EventListener\DcGeneral\Table\DcaSetting\FileWidgetModeOptions;
 use MetaModels\ContaoFrontendEditingBundle\MetaModelsContaoFrontendEditingBundle;
+use MetaModels\AttributeFileBundle\EventListener\BuildAttributeListener;
+use MetaModels\AttributeFileBundle\EventListener\BuildDataDefinitionListener;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsProvider;
+use MetaModels\AttributeFileBundle\Schema\DoctrineSchemaGenerator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -35,12 +40,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
  */
 class MetaModelsAttributeFileExtensionTest extends TestCase
 {
-    /**
-     * Test that extension can be instantiated.
-     *
-     * @return void
-     */
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
         $extension = new MetaModelsAttributeFileExtension();
 
@@ -48,58 +48,42 @@ class MetaModelsAttributeFileExtensionTest extends TestCase
         self::assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
-    /**
-     * Test that the services are loaded.
-     *
-     * @return void
-     */
-    public function testFactoryIsRegistered()
+    public function testFactoryIsRegistered(): void
     {
-        $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-
-        $container
-            ->expects(self::atLeastOnce())
-            ->method('setDefinition')
-            ->withConsecutive(
-                [
-                    'metamodels.attribute_file.factory',
-                    self::callback(
-                        function ($value) {
-                            /** @var Definition $value */
-                            $this->assertInstanceOf(Definition::class, $value);
-                            $this->assertEquals(AttributeTypeFactory::class, $value->getClass());
-                            $this->assertCount(1, $value->getTag('metamodels.attribute_factory'));
-
-                            return true;
-                        }
-                    )
-                ]
-            );
-        $container
-            ->method('getParameter')
-            ->willReturn(false, 'cache/dir', [MetaModelsContaoFrontendEditingBundle::class]);
-
-        $definition = $this->createMock(Definition::class);
-
-        $definition
-            ->method('setArgument')
-            ->willReturnCallback(
-                function (string $key, bool $value) {
-                    switch ($key) {
-                        case '$frontendEditing':
-                            self::assertTrue($value);
-                            break;
-                        default:
-                    }
-                }
-            );
-
-        $container
-            ->method('getDefinition')
-            ->willReturn($definition);
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.debug', false);
+        $container->setParameter('metamodels.cache_dir', 'cache/dir');
+        $container->setParameter('kernel.bundles', [MetaModelsContaoFrontendEditingBundle::class]);
 
         $extension = new MetaModelsAttributeFileExtension();
         $extension->load([], $container);
 
+        self::assertTrue($container->hasAlias('metamodels.attribute_file.toolbox.file'));
+
+        self::assertTrue($container->hasDefinition('metamodels.attribute_file.event_listener.build_attribute'));
+        $definition = $container->getDefinition('metamodels.attribute_file.event_listener.build_attribute');
+        self::assertCount(1, $definition->getTag('kernel.event_listener'));
+
+        self::assertTrue($container->hasDefinition('metamodels.attribute_file.event_listener.image_size_options'));
+
+        self::assertTrue($container->hasDefinition('metamodels.attribute_file.event_listener.build-data-definition'));
+        $definition = $container->getDefinition('metamodels.attribute_file.event_listener.build-data-definition');
+        self::assertCount(1, $definition->getTag('kernel.event_listener'));
+
+        self::assertTrue($container->hasDefinition(DoctrineSchemaGenerator::class));
+        $definition = $container->getDefinition(DoctrineSchemaGenerator::class);
+        self::assertCount(1, $definition->getTag('metamodels.schema-generator.doctrine'));
+
+        self::assertTrue($container->hasParameter('metamodels.managed-schema-type-names'));
+        self::assertSame(['file'], $container->getParameter('metamodels.managed-schema-type-names'));
+        self::assertTrue($container->hasParameter('metamodels.attribute_file.cache_dir'));
+        self::assertSame(
+            '%metamodels.cache_dir%/attribute_file',
+            $container->getParameter('metamodels.attribute_file.cache_dir')
+        );
+
+        self::assertTrue($container->hasDefinition(FileWidgetModeOptions::class));
+        $definition = $container->getDefinition(FileWidgetModeOptions::class);
+        self::assertTrue($definition->getArgument('$frontendEditing'));
     }
 }

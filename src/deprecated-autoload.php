@@ -23,7 +23,7 @@ use MetaModels\AttributeFileBundle\Attribute\AttributeTypeFactory;
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\AttributeFileBundle\Attribute\FileOrder;
 use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
-use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsListener;
+use MetaModels\AttributeFileBundle\EventListener\ImageSizeOptionsProvider;
 
 // This hack is to load the "old locations" of the classes.
 spl_autoload_register(
@@ -33,7 +33,7 @@ spl_autoload_register(
             'MetaModels\Attribute\File\FileOrder'               => FileOrder::class,
             'MetaModels\Attribute\File\AttributeTypeFactory'    => AttributeTypeFactory::class,
             'MetaModels\DcGeneral\AttributeFileDefinition'      => AttributeFileDefinition::class,
-            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsListener::class
+            'MetaModels\Events\Attribute\File\ImageSizeOptions' => ImageSizeOptionsProvider::class
         ];
 
         if (isset($classes[$class])) {

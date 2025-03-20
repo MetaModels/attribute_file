@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/attribute_file
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +22,7 @@ declare(strict_types=1);
 
 namespace MetaModels\AttributeFileBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -34,25 +36,16 @@ final class Configuration implements ConfigurationInterface
      *
      * @var bool
      */
-    private $debug;
-
-    /**
-     * The root directory.
-     *
-     * @var string
-     */
-    private $rootDir;
+    private bool $debug;
 
     /**
      * Constructor.
      *
-     * @param bool        $debug   The debug flag.
-     * @param string|null $rootDir The root directory.
+     * @param bool $debug The debug flag.
      */
-    public function __construct(bool $debug, ?string $rootDir)
+    public function __construct(bool $debug)
     {
         $this->debug   = $debug;
-        $this->rootDir = $rootDir;
     }
 
     /**
@@ -60,18 +53,15 @@ final class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('metamodels_attribute_file');
+        $treeBuilder = new TreeBuilder('metamodels_attribute_file');
 
-        $rootNode
-            ->children()
-                ->booleanNode('enable_cache')
-                    ->defaultValue(!$this->debug)
-                ->end()
-                ->scalarNode('cache_dir')
-                    ->defaultValue('%metamodels.cache_dir%' . DIRECTORY_SEPARATOR . 'attribute_file')
-                ->end()
-            ->end();
+        $rootNode = $treeBuilder->getRootNode();
+        assert($rootNode instanceof ArrayNodeDefinition);
+        $children = $rootNode->children();
+        $children->booleanNode('enable_cache')->defaultValue(!$this->debug)->end();
+        $children
+            ->scalarNode('cache_dir')
+            ->defaultValue('%metamodels.cache_dir%' . DIRECTORY_SEPARATOR . 'attribute_file');
 
         return $treeBuilder;
     }

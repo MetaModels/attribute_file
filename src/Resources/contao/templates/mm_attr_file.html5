@@ -7,7 +7,7 @@
             ?>
             <li class="<?= $arrFile['class'] ?>">
                 <?php if ($arrFile['isPicture'] && $this->settings->get('file_showImage')): ?>
-                    <figure class="image_container<?= $arrFile['floatClass'] ?>"<?php if ($arrFile['margin']): ?> style="<?= $arrFile['margin'] ?>"<?php endif; ?>>
+                    <figure class="image_container<?= $arrFile['floatClass'] ?? '' ?>"<?php if (($arrFile['margin'] ?? null)): ?> style="<?= $arrFile['margin'] ?>"<?php endif; ?>>
                 <?php endif; ?>
 
                     <?php if ($this->settings->get('file_showLink')): ?>

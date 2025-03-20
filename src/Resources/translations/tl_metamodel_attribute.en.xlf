@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_attribute.en.xlf">
+    <body>
+      <trans-unit id="typeOptions.file" resname="typeOptions.file">
+        <source>File</source>
+      </trans-unit>
+      <trans-unit id="file_customFiletree.label" resname="file_customFiletree.label">
+        <source>Customize the file tree</source>
+      </trans-unit>
+      <trans-unit id="file_customFiletree.description" resname="file_customFiletree.description">
+        <source>Allows you to set custom options for the filetree.</source>
+      </trans-unit>
+      <trans-unit id="file_uploadFolder.label" resname="file_uploadFolder.label">
+        <source>Set file root folder</source>
+      </trans-unit>
+      <trans-unit id="file_uploadFolder.description" resname="file_uploadFolder.description">
+        <source>Selects the root point from which the user will select this file field.</source>
+      </trans-unit>
+      <trans-unit id="file_validFileTypes.label" resname="file_validFileTypes.label">
+        <source>Valid file types</source>
+      </trans-unit>
+      <trans-unit id="file_validFileTypes.description" resname="file_validFileTypes.description">
+        <source>To overwrite the contao standard file types, please enter a comma separated list of extensions of valid file types for this field.</source>
+      </trans-unit>
+      <trans-unit id="file_filesOnly.label" resname="file_filesOnly.label">
+        <source>Allowed types for selection</source>
+      </trans-unit>
+      <trans-unit id="file_filesOnly.description" resname="file_filesOnly.description">
+        <source>Select a restriction on files or folders - default is no restriction on files or folders.</source>
+      </trans-unit>
+      <trans-unit id="file_multiple.label" resname="file_multiple.label">
+        <source>Multiple selection</source>
+      </trans-unit>
+      <trans-unit id="file_multiple.description" resname="file_multiple.description">
+        <source>If selected, user will be able to select more than one item.</source>
+      </trans-unit>
+      <trans-unit id="file_filesOnly_options.allow_both" resname="file_filesOnly_options.allow_both">
+        <source>Allow files and folders</source>
+      </trans-unit>
+      <trans-unit id="file_filesOnly_options.allow_files" resname="file_filesOnly_options.allow_files">
+        <source>Allow files only</source>
+      </trans-unit>
+      <trans-unit id="file_filesOnly_options.allow_folder" resname="file_filesOnly_options.allow_folder">
+        <source>Allow folders only</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

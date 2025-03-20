@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/Resources/translations/tl_metamodel_dcasetting.en.xlf">
+    <body>
+      <trans-unit id="upload_settings_legend" resname="upload_settings_legend">
+        <source>File upload settings</source>
+      </trans-unit>
+      <trans-unit id="file_widgetMode.label" resname="file_widgetMode.label">
+        <source>Widget mode</source>
+      </trans-unit>
+      <trans-unit id="file_widgetMode.description" resname="file_widgetMode.description">
+        <source>With the mode the display type can be selected.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_doNotOverwrite.label" resname="fe_widget_file_doNotOverwrite.label">
+        <source>Preserve existing files</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_doNotOverwrite.description" resname="fe_widget_file_doNotOverwrite.description">
+        <source>Add a numeric suffix to the new file, if the file name already exists.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_useHomeDir.label" resname="fe_widget_file_useHomeDir.label">
+        <source>Use home directory</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_useHomeDir.description" resname="fe_widget_file_useHomeDir.description">
+        <source>If this option is active, store the file in the home directory if there is an authenticated user. If the target folder configured too and the user is authenticated, so this folder is the base upload folder.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_uploadFolder.label" resname="fe_widget_file_uploadFolder.label">
+        <source>Target folder</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_uploadFolder.description" resname="fe_widget_file_uploadFolder.description">
+        <source>Please select the target folder from the files directory. If the home dir configured too and is not authenticated a user, so this folder is the base folder.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_extend_folder.label" resname="fe_widget_file_extend_folder.label">
+        <source>Extend folder</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_extend_folder.description" resname="fe_widget_file_extend_folder.description">
+        <source>Here you can extend the base upload folder path. The Contao insert tags are supported to extend the path.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_deselect.label" resname="fe_widget_file_deselect.label">
+        <source>Deselect file</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_deselect.description" resname="fe_widget_file_deselect.description">
+        <source>If this option deselect file is active, then that file entry is remove from this model.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_delete.label" resname="fe_widget_file_delete.label">
+        <source>Delete file</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_delete.description" resname="fe_widget_file_delete.description">
+        <source>If this option delete file is active, then that file entry is remove from this model and from the file directory.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_normalize_extend_folder.label" resname="fe_widget_file_normalize_extend_folder.label">
+        <source>Normalize extend folder</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_normalize_extend_folder.description" resname="fe_widget_file_normalize_extend_folder.description">
+        <source>Normalize the extend folder with an alias generator from the string util.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_normalize_filename.label" resname="fe_widget_file_normalize_filename.label">
+        <source>Normalize filename</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_normalize_filename.description" resname="fe_widget_file_normalize_filename.description">
+        <source>Normalize the filename with an alias generator from the string util.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_prefix_filename.label" resname="fe_widget_file_prefix_filename.label">
+        <source>Prefix filename</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_prefix_filename.description" resname="fe_widget_file_prefix_filename.description">
+        <source>Here you can prefix the filename. The Contao insert tags are supported to prefix the filename.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_postfix_filename.label" resname="fe_widget_file_postfix_filename.label">
+        <source>Postfix filename</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_postfix_filename.description" resname="fe_widget_file_postfix_filename.description">
+        <source>Here you can postfix the filename. The Contao insert tags are supported to postfix the filename.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_imageSize.label" resname="fe_widget_file_imageSize.label">
+        <source>Thumbnail width and height</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_imageSize.description" resname="fe_widget_file_imageSize.description">
+        <source>Please enter either the image width, the image height or both measures to resize the image. If you leave both fields blank, the original image size will be displayed.</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.label" resname="fe_widget_file_sortBy.label">
+        <source>Order by</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.description" resname="fe_widget_file_sortBy.description">
+        <source>Please choose the sort order.</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.normal" resname="file_widgetModes.normal">
+        <source>Show files as list.</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.downloads" resname="file_widgetModes.downloads">
+        <source>Show files as sortable file list e.g. for downloads.</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.gallery" resname="file_widgetModes.gallery">
+        <source>Show files as sortable images e.g. for gallery.</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.fe_single_upload" resname="file_widgetModes.fe_single_upload">
+        <source>Single file upload [only for frontend editing]</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.fe_single_upload_preview" resname="file_widgetModes.fe_single_upload_preview">
+        <source>Single file upload with show thumbnail [only for frontend editing]</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.fe_multiple_upload" resname="file_widgetModes.fe_multiple_upload">
+        <source>Multiple file upload [only for frontend editing]</source>
+      </trans-unit>
+      <trans-unit id="file_widgetModes.fe_multiple_upload_preview" resname="file_widgetModes.fe_multiple_upload_preview">
+        <source>Multiple file upload with show thumbnail [only for frontend editing]</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.name_asc" resname="fe_widget_file_sortBy.name_asc">
+        <source>File name (ascending)</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.name_desc" resname="fe_widget_file_sortBy.name_desc">
+        <source>File name (descending)</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.date_asc" resname="fe_widget_file_sortBy.date_asc">
+        <source>Date (ascending)</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.date_desc" resname="fe_widget_file_sortBy.date_desc">
+        <source>Date (descending)</source>
+      </trans-unit>
+      <trans-unit id="fe_widget_file_sortBy.random" resname="fe_widget_file_sortBy.random">
+        <source>Random order</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

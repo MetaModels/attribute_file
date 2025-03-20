@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/attribute_file.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/attribute_file
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/attribute_file/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,11 +25,8 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\Defau
 use MetaModels\AttributeFileBundle\Attribute\File;
 use MetaModels\AttributeFileBundle\DcGeneral\AttributeFileDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
-use \ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 
-/**
- * Class Attribute
- */
 class BuildAttributeListener
 {
     /**
@@ -41,7 +39,10 @@ class BuildAttributeListener
     public function buildAttribute(BuildAttributeEvent $event)
     {
         $attribute = $event->getAttribute();
-        if (!($attribute instanceof File) || !$attribute->get('file_multiple')) {
+        if (
+            !($attribute instanceof File)
+            || !$attribute->get('file_multiple')
+        ) {
             return;
         }
 
@@ -50,15 +51,14 @@ class BuildAttributeListener
         $name       = $attribute->getColName();
         $nameSort   = \sprintf('%s__sort', $name);
 
-        if ($properties->hasProperty($nameSort)) {
-            $this->addAttributeToDefinition($container, $name);
-            $properties->getProperty($name . '__sort')->setWidgetType('fileTreeOrder');
-
-            return;
+        if (!$properties->hasProperty($nameSort)) {
+            $properties->addProperty(new DefaultProperty($nameSort));
         }
 
-        $properties->addProperty($property = new DefaultProperty($name . '__sort'));
-        $property->setWidgetType('fileTreeOrder');
+        $properties->getProperty($nameSort)
+            ->setWidgetType('fileTreeOrder')
+            ->setLabel($nameSort)
+            ->setExtra(['tl_class' => 'hidden']);
 
         $this->addAttributeToDefinition($container, $name);
     }
@@ -67,17 +67,19 @@ class BuildAttributeListener
      * Add attribute to MetaModels file attributes definition.
      *
      * @param ContainerInterface $container The metamodel data definition.
-     *
      * @param string             $name      The attribute name.
      *
      * @return void
      */
-    private function addAttributeToDefinition(ContainerInterface $container, $name)
+    private function addAttributeToDefinition(ContainerInterface $container, string $name): void
     {
         if (!$container->hasDefinition('metamodels.file-attributes')) {
             $container->setDefinition('metamodels.file-attributes', new AttributeFileDefinition());
         }
 
-        $container->getDefinition('metamodels.file-attributes')->add($name);
+        $definition = $container->getDefinition('metamodels.file-attributes');
+        assert($definition instanceof AttributeFileDefinition);
+
+        $definition->add($name);
     }
 }

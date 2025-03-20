@@ -47,9 +47,7 @@ class FileAttributeTypeFactoryTest extends TestCase
      * Mock a MetaModel.
      *
      * @param string $tableName        The table name.
-     *
      * @param string $language         The language.
-     *
      * @param string $fallbackLanguage The fallback language.
      *
      * @return IMetaModel
@@ -89,8 +87,8 @@ class FileAttributeTypeFactoryTest extends TestCase
 
         $connection
             ->expects(self::any())
-            ->method('getSchemaManager')
-            ->willReturn($schemaManager);
+            ->method('createSchemaManager')
+            ->willReturn($schemaManager ?? $this->mockSchemaManager());
 
         return $connection;
     }

@@ -86,14 +86,14 @@ class AttributeOrderTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        $columnName = ($information['colname'] ?? null);
+        $columnName = (string) ($information['colname'] ?? '');
         $tableName  = $metaModel->getTableName();
 
         if (!isset($this->tableColumns[$tableName])) {
-            $this->tableColumns[$tableName] = $this->connection->getSchemaManager()->listTableColumns($tableName);
+            $this->tableColumns[$tableName] = $this->connection->createSchemaManager()->listTableColumns($tableName);
         }
 
-        if (!$columnName || !\array_key_exists($columnName, $this->tableColumns[$tableName])) {
+        if (('' === $columnName) || !\array_key_exists($columnName, $this->tableColumns[$tableName])) {
             return null;
         }
 
