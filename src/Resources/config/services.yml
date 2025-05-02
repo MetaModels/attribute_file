@@ -13,12 +13,6 @@ services:
         arguments:
             - "%metamodels.attribute_file.cache_dir%"
 
-    metamodels.attribute_file.cache:
-        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-        public: false
-        arguments:
-            - "@metamodels.attribute_file.cache_system"
-
     MetaModels\AttributeFileBundle\Migration\AddSortFieldMigration:
       arguments:
         - '@database_connection'
