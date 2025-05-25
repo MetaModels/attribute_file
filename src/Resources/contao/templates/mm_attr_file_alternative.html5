@@ -7,7 +7,7 @@
 
                 <?php if ($this->settings->get('file_showLink')): ?>
                     <?php if ($this->settings->get('file_showImage')): ?>
-                        <a class="cboxElement" data-lightbox="<?= $arrFile['lb'] ?>" title="<?= $arrFile['alt'] ?>"
+                        <a class="cboxElement" data-lightbox="<?= $arrFile['lb'] ?? '' ?>" title="<?= $arrFile['alt'] ?>"
                            href="<?= $arrFile['imageUrl'] ?>">
                     <?php else: ?>
                         <a title="<?= $arrFile['alt'] ?>" href="<?= $arrFile['url'] ?>">

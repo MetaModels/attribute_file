@@ -1,4 +1,4 @@
-<?php if (is_array($this->src)): ?>
+<?php if (\is_array($this->src)): ?>
     <ul class="file<?= $this->additional_class ?>">
         <?php foreach ($this->src as $arrFile):
             $title =
@@ -12,7 +12,7 @@
 
                     <?php if ($this->settings->get('file_showLink')): ?>
                         <?php if ($this->settings->get('file_showImage')): ?>
-                            <a class="cboxElement" data-lightbox="<?= $arrFile['lb'] ?>" title="<?= $title ?>"
+                            <a class="cboxElement" data-lightbox="<?= $arrFile['lb'] ?? '' ?>" title="<?= $title ?>"
                                href="<?= $arrFile['imageUrl'] ?>">
                         <?php else: ?>
                             <a title="<?= $title ?>" href="<?= $arrFile['url'] ?>">
